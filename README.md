@@ -1,7 +1,7 @@
 
 # project libtuxnbits++ ( my oldbitsnbytes c++ code Libraries )
 
-# Roadmap of this htuxyist project
+# Roadmap of this hobbyist project
 
 ## Classes ( namespace tux ) main directory( for ex.: #include <tuxnbits++/bits/string.h>)
 
