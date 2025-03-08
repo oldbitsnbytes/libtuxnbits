@@ -11,7 +11,7 @@ OPTION(IO           "Build the IO sublib............................[libtuxnbits
 OPTION(LEXER        "Build the lexer sublib.........................[libtuxnbits++.lexer.a]" OFF)
 OPTION(EST          "Build the est (Expression Syntax Tree) sublib..[libtuxnbits++.est.a]" OFF)
 OPTION(TUI          "Build the console ANSI UI  sublib..............[libtuxnbits++.tui.a]" OFF)
-OPTION(TESTS        "Build the tests................................[framework_tests_app/tests.app]" OFF)
+OPTION(TESTS        "Build the tests................................[bitstest/bits.app]" ON)
 
 
 if(BITS)
@@ -42,6 +42,6 @@ endif()
 
 if(TESTS)
     message(STATUS "framework tests:")
-    include(obb.tests.cmake)
+    include(bitstest.cmake)
 endif()
 

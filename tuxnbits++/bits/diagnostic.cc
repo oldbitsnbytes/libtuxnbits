@@ -113,6 +113,7 @@ void diagnostic::out::init_header()
     else
         std::cout << header;
     header = "";
+    header << color::white;
     if(_headercomp_.frame){
         if(_headercomp_.hline){
             for(int x=0; x < width + 13 ; x++)// for(int x=0; x < diagnostic::files[0].page_width; x++)

@@ -12,7 +12,6 @@
 #include <tuxnbits++/bits/geometry.h>
 #include <filesystem>
 #include <fstream>
-#include <tuxnbits++/bits/geometry.h>
 
 
 using tux::ui::color;
@@ -130,6 +129,19 @@ public:
         bool _e_;
         mutable std::string _msg_;
         diagnostic::out _log_;
+    };
+
+
+    struct LIBTUXNBITS Test
+    {
+        std::string name{};
+        using capturable_lambda = std::function<rem::cc(diagnostic::Test&)>;
+
+        template<typename T> rem::cc exec(const std::string& sub_test_name, std::function<T(diagnostic::Test&)> lambda );
+
+        Test(const std::string& test_name):name(test_name){}
+        ~Test() { name.clear(); }
+
     };
 
 private:
