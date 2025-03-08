@@ -20,3 +20,15 @@ template<typename T> rem::cc diagnostic::Test::exec(const std::string& sub_test_
         return rem::cc::success;
     return rem::cc::failed;
 }
+/*
+(en/us): Experimenting a diagnostic::Test approach
+(fr/ca): Experimente une forme de test sous diagnostic::Test
+--------------------------------------------------------------
+    modifié : CMakeLists.txt
+    modifié : tuxnbits++/bits/diagnostic.cc
+    modifié : tuxnbits++/bits/diagnostic.h
+    modifié : tuxnbits++/bits/diagnostic.inc
+    modifié : tuxnbits++/bits/expect.h
+    nouveau fichiers : tuxnbits++/bits/expect.inc, 	bitstest.cmake
+
+ */
