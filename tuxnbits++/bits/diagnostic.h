@@ -69,13 +69,13 @@ public:
         out& operator << (const std::string&);
         out& operator << (const char*);
         out& operator << (std::string_view);
-        out& operator << (tux::string obstr);
+        out& operator << (tux::string tuxstr);
         out& operator << (char c);
         out& operator << (ui::color::code clr);
         out& operator << (rem::cc c);
         out& operator << (rem::type ty);
+        out& operator << (rem::fn f);
         template<typename T> out& operator << (const T& v);
-
     };
 
 
@@ -108,7 +108,7 @@ public:
     static diagnostic::out interrupted (diagnostic::file::handle=0, std::source_location&& src = std::source_location::current());
     static diagnostic::out aborted     (diagnostic::file::handle=0, std::source_location&& src = std::source_location::current());
     static diagnostic::out segfault    (diagnostic::file::handle=0, std::source_location&& src = std::source_location::current());
-    static diagnostic::out jnl         (diagnostic::file::handle=0, std::source_location&& src = std::source_location::current());
+    static diagnostic::out log         (diagnostic::file::handle=0, std::source_location&& src = std::source_location::current());
     //...
     static rem::cc close(diagnostic::file::handle hindex=0);
     static std::optional<diagnostic::file::handle> new_file(const std::string& file_name);

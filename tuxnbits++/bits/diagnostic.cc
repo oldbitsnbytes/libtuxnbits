@@ -33,7 +33,7 @@ diagnostic::out::out(std::ostream* out_, rem::type message, std::source_location
     ofs(out_),
     type(message),
     code(rem::cc::ok),
-    location(std::move(src))
+    location(src)
 {
     init_header();
 }
@@ -52,21 +52,32 @@ diagnostic::out::~out()
 ///
 void diagnostic::out::init_header()
 {
-    int width = 0;
+
+    tux::string dash;
+    tux::string hline;
+    hline << color::r;
+    if(_headercomp_.frame){
+        if(_headercomp_.hline){
+            for(int x=0; x < diagnostic::files[0].page_width ; x++)
+            {
+                hline << tux::cadre()[tux::cadre::Horizontal];
+                dash << "-";
+            }
+            (*ofs) << hline() << std::endl;
+        }
+    }
+
     if(_headercomp_.stamp){
         auto txt{tux::string::now("%H:%M:%S")};
         auto [ic, a] = rem::function_attributes(rem::fn::stamp);
         tux::string acc;
-        width = txt.length() + std::strlen(glyph::data[ic]);
         acc << a.fg << glyph::data[ic]  << txt;
+        header << acc() << color::r << " ";
 
-        header << acc() << " ";
-        width ++;
     }
     if(_headercomp_.type){
         auto [gh,colors] = rem::type_attributes(type);
         header << colors << gh  << ' ' << rem::to_string(type) << color::reset << ' ';
-        width += rem::to_string(type).length() + std::strlen(glyph::data[gh]);
     }
 
     if(_headercomp_.file){
@@ -82,8 +93,7 @@ void diagnostic::out::init_header()
             --i; // parent dir
             header << **i;
             ++i;
-            header << '/' << **i << ' ';
-            width += (**i).length();
+            header << '/' << **i << color::r << ' ';
         }
         words.clear();
     }
@@ -98,30 +108,22 @@ void diagnostic::out::init_header()
     //------------------------------------------------------------------------------------------------------------
     if(_headercomp_.line){
         auto [gh, colors] = rem::function_attributes(rem::fn::line);
-        header << colors << "line: " << std::format("{}", location.line());
-        width += std::format("{}", location.line()).length() + 3;
+        header << colors << "line: " << std::format("{}", location.line()) << color::reset << ' ';
+
+        (*ofs) << header() << std::endl;
     }
+
+
+    header = "";
+    (*ofs) << dash() << std::endl;
     if(_headercomp_.fun){
         auto [gh, colors] = rem::function_attributes(rem::fn::func);
-        header << colors << gh << ' ' << location.function_name();
-        width += std::strlen(location.function_name())+3;
+        header << colors << gh << ' ' << location.function_name()<< color::r;
+
+        (*ofs) << header() << std::endl;
+        header = "";
     }
-    if(ofs){
-        (*ofs) << header();
-        //(*fout) << tux::cadre()[tux::cadre::Horizontal]
-    }
-    else
-        std::cout << header;
-    header = "";
-    header << color::white;
-    if(_headercomp_.frame){
-        if(_headercomp_.hline){
-            for(int x=0; x < width + 13 ; x++)// for(int x=0; x < diagnostic::files[0].page_width; x++)
-                header << tux::cadre()[tux::cadre::Horizontal];
-            (*ofs) << std::endl << header();
-        }
-    }
-    (*ofs) << std::endl;
+    (*ofs) << dash() << std::endl;
 }
 
 
@@ -227,6 +229,93 @@ diagnostic::out& diagnostic::out::operator << ( rem::type ty)
     return *this;
 }
 
+diagnostic::out& diagnostic::out::operator << (rem::fn f)
+{
+    tux::string str;
+
+    switch (f) {
+    case rem::fn::endl:
+        (*ofs) << '\n';
+        //            switch (appbook::format()) ///@todo create book::format(); directly instead.
+        //            {
+        //                case color::format::ansi256:
+        //                    input("\n");
+        //                    break;
+        //                case color::format::html:
+        //                    input("<br />");
+        //                    break;
+        //            }
+        return *this;
+    case rem::fn::stamp: {
+        /*
+                 * %d %f ou %d %m %y
+                 * %r %t %h %m %s
+                 * %a {monday} %a {mon}
+                 * %b {june}   %b {jun}
+            */
+
+
+        //std::chrono::zoned_time date{"america/toronto", std::chrono::system_clock::now()};
+        //const auto tp{std::chrono::system_clock::now()};
+        //auto txt{tux::string::now("{:%h:%m:%s}", tp)};
+        auto [ic, a] = rem::function_attributes(rem::fn::stamp);
+
+        str << a.fg << glyph::data[ic] <<color::reset << tux::string::now("%H:%M:%S");
+        (*ofs) << str() << " ";
+        return *this;
+    }
+
+    case rem::fn::file:
+        (*ofs) << location.file_name();
+        return *this;
+    case rem::fn::weekday: {
+        auto [ic, a] = rem::function_attributes(rem::fn::weekday);
+        //auto today{std::chrono::system_clock::now()};
+        str << a.fg << tux::string::now("%A");
+        (*ofs) << str();
+        return *this;
+    }
+
+    case rem::fn::day : {
+        auto [ic, a] = rem::function_attributes(rem::fn::day);
+        //auto today{std::chrono::system_clock::now()};
+        str << a.fg << tux::string::now("%d");
+        (*ofs) << str();
+        return *this;
+    }
+
+    case rem::fn::month: {
+        auto [ic, a] = rem::function_attributes(rem::fn::month);
+        //auto today{std::chrono::system_clock::now()};
+        str << a.fg << tux::string::now("%m");
+        (*ofs) << str();
+        return *this;
+    }
+    case rem::fn::monthnum: {
+        auto [ic, a] = rem::function_attributes(rem::fn::month);
+        //auto today{std::chrono::system_clock::now()};
+        str << a.fg <<  tux::string::now("%b");
+        (*ofs) << str();
+        return *this;
+    }
+    case rem::fn::year: {
+        auto [ic, a] = rem::function_attributes(rem::fn::year);
+        //auto today{std::chrono::system_clock::now()};
+        tux::string acc;
+        acc << /*utf::glyph::data[ic] <<*/ a.fg << tux::string::now("%y");
+        (*ofs) <<acc();
+        return *this;
+    }
+    case rem::fn::func:
+        auto [gh, colors] = rem::function_attributes(rem::fn::func);
+        str << colors << location.function_name() << color::reset << "\n";
+        (*ofs) << str() << std::endl;
+        break;
+
+        //default: break;
+    }
+    return *this;
+}
 
 
 diagnostic::out& diagnostic::out::endl()
@@ -304,61 +393,60 @@ diagnostic::out diagnostic::status(file::handle h, std::source_location &&src)
 
 
 diagnostic::out diagnostic::warning     (diagnostic::file::handle h, std::source_location&& src){
-    return {diagnostic::files[h].fileptr,rem::type::status, std::move(src)};
+    return {diagnostic::files[h].fileptr,rem::type::status, std::move(src)}; // NOLINT(*-move-const-arg)
 }
 
 diagnostic::out diagnostic::fatal       (diagnostic::file::handle h, std::source_location&& src){
-    return {diagnostic::files[h].fileptr,rem::type::fatal, std::move(src)};
+    return {diagnostic::files[h].fileptr,rem::type::fatal, std::move(src)};// NOLINT(*-move-const-arg)
 }
 
 diagnostic::out diagnostic::except      (diagnostic::file::handle h, std::source_location&& src){
-    return {diagnostic::files[h].fileptr,rem::type::except, std::move(src)};
+    return {diagnostic::files[h].fileptr,rem::type::except, std::move(src)};// NOLINT(*-move-const-arg)
 }
 
 diagnostic::out diagnostic::message     (diagnostic::file::handle h, std::source_location&& src){
-    return {diagnostic::files[h].fileptr,rem::type::message, std::move(src)};
+    return {diagnostic::files[h].fileptr,rem::type::message, std::move(src)};// NOLINT(*-move-const-arg)
 }
 
 diagnostic::out diagnostic::write       (diagnostic::file::handle h, std::source_location&& src){
-    return {diagnostic::files[h].fileptr,rem::type::output, std::move(src)};
+    return {diagnostic::files[h].fileptr,rem::type::output, std::move(src)};// NOLINT(*-move-const-arg)
 }
 
 diagnostic::out diagnostic::debug       (diagnostic::file::handle h, std::source_location&& src){
-    return {diagnostic::files[h].fileptr,rem::type::debug, std::move(src)};
+    return {diagnostic::files[h].fileptr,rem::type::debug, std::move(src)};// NOLINT(*-move-const-arg)
 }
 
 diagnostic::out diagnostic::info        (diagnostic::file::handle h, std::source_location&& src){
-    return {diagnostic::files[h].fileptr,rem::type::info, std::move(src)};
+    return {diagnostic::files[h].fileptr,rem::type::info, std::move(src)};// NOLINT(*-move-const-arg)
 }
 
 diagnostic::out diagnostic::comment     (diagnostic::file::handle h, std::source_location&& src){
-    return {diagnostic::files[h].fileptr,rem::type::comment, std::move(src)};
+    return {diagnostic::files[h].fileptr,rem::type::comment, std::move(src)};// NOLINT(*-move-const-arg)
 }
 
 diagnostic::out diagnostic::syntax      (diagnostic::file::handle h, std::source_location&& src){
-    return {diagnostic::files[h].fileptr,rem::type::syntax, std::move(src)};
+    return {diagnostic::files[h].fileptr,rem::type::syntax, std::move(src)};// NOLINT(*-move-const-arg)
 }
 
 diagnostic::out diagnostic::test        (diagnostic::file::handle h, std::source_location&& src){
-    return {diagnostic::files[h].fileptr,rem::type::test, std::move(src)};
+    return {diagnostic::files[h].fileptr,rem::type::test, std::move(src)};// NOLINT(*-move-const-arg)
 }
 
 diagnostic::out diagnostic::interrupted (diagnostic::file::handle h, std::source_location&& src){
-    return {diagnostic::files[h].fileptr,rem::type::interrupted, std::move(src)};
+    return {diagnostic::files[h].fileptr,rem::type::interrupted, std::move(src)};// NOLINT(*-move-const-arg)
 }
 
 diagnostic::out diagnostic::aborted     (diagnostic::file::handle h, std::source_location&& src){
-    return {diagnostic::files[h].fileptr,rem::type::aborted, std::move(src)};
+    return {diagnostic::files[h].fileptr,rem::type::aborted, std::move(src)};// NOLINT(*-move-const-arg)
 }
 
 diagnostic::out diagnostic::segfault    (diagnostic::file::handle h, std::source_location&& src){
-    return {diagnostic::files[h].fileptr,rem::type::segfault, std::move(src)};
+    return {diagnostic::files[h].fileptr,rem::type::segfault, std::move(src)};// NOLINT(*-move-const-arg)
 }
 
-diagnostic::out diagnostic::jnl         (diagnostic::file::handle h, std::source_location&& src){
-    return {diagnostic::files[h].fileptr,rem::type::book, std::move(src)};
+diagnostic::out diagnostic::log         (diagnostic::file::handle h, std::source_location&& src){
+    return {diagnostic::files[h].fileptr,rem::type::book, std::move(src)};// NOLINT(*-move-const-arg)
 }
-
 
 rem::cc diagnostic::close(file::handle hindex)
 {
@@ -381,7 +469,7 @@ std::optional<diagnostic::file::handle> diagnostic::new_file(const std::string &
     }
 
     tux::string filename;
-    filename << file_id << ".diagnostic";
+    filename << file_id << ".dlog";
     auto * f = new std::ofstream(filename().c_str(),std::ios_base::trunc);
     if(!f->is_open()){
         delete f;
@@ -390,5 +478,3 @@ std::optional<diagnostic::file::handle> diagnostic::new_file(const std::string &
     diagnostic::files.emplace_back(file_id, f);
     return {diagnostic::files.size()-1};
 }
-
-

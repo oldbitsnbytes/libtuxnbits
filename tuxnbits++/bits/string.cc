@@ -266,7 +266,56 @@ std::string string::make_str(const tux::string::list& _list)
 
 
 
+//////////////////////////////////////////////////////////////
+/// \brief string::now
+///
+///     \b time/date format, given by \a str_fmt.
+///
+///     [https://cplusplus.com/reference/ctime/strftime]
+///
+///   \li %a	Abbreviated weekday name
+///   \li %A	Full weekday name
+///   \li %b	Abbreviated month name
+///   \li %B	Full month name
+///   \li %c	Date and time representation (ex.:)	Thu Aug 23 14:55:02 2001
+///   \li %C	Year divided by 100 and truncated to integer (00-99)
+///   \li %d	Day of the month, zero-padded (01-31)
+///   \li %D	Short MM/DD/YY date, equivalent to %m/%d/%y
+///   \li %e	Day of the month, space-padded ( 1-31)
+///   \li %F	Short YYYY-MM-DD date, equivalent to %Y-%m-%d
+///   \li %g	Week-based year, last two digits (00-99)
+///   \li %G	Week-based year
+///   \li %h	Abbreviated month name * (same as %b)
+///   \li %H	Hour in 24h format (00-23)
+///   \li %I	Hour in 12h format (01-12)
+///   \li %j	Day of the year (001-366)
+///   \li %m	Month as a decimal number (01-12)
+///   \li %M	Minute (00-59)
+///   \li %n	New-line character ('\n')	
+///   \li %p	AM or PM designation
+///   \li %r	12-hour clock time
+///   \li %R	24-hour HH:MM time, equivalent to %H:%M
+///   \li %S	Second (00-61)
+///   \li %t	Horizontal-tab character ('\t')	
+///   \li %T	ISO 8601 time format (HH:MM:SS), equivalent to %H:%M:%S
+///   \li %u	ISO 8601 weekday as number with Monday as 1 (1-7)
+///   \li %U	Week number with the first Sunday as the first day of week one (00-53)
+///   \li %V	ISO 8601 week number (01-53)
+///   \li %w	Weekday as a decimal number with Sunday as 0 (0-6)
+///   \li %W	Week number with the first Monday as the first day of week one (00-53)
+///   \li %x	Date representation
+///   \li %X	Time representation
+///   \li %y	Year, last two digits (00-99)
+///   \li %Y	Year
+///   \li %z	ISO 8601 offset from UTC in timezone (1 minute=1, 1 hour=100)
+///   \li %Z	Timezone name or abbreviation
+///
 
+/// \param str_fmt
+/// \return
+///
+///
+///
 std::string string::now(const std::string& str_fmt)
 {
     // Old archaic Code...

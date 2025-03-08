@@ -32,7 +32,9 @@ rem::cc test::run()
     auto r = Testest.exec<std::string>("auto", [&](diagnostic::Test& Tst)->auto {
         return std::make_pair<rem::cc, std::string>(rem::cc::success,"allo");
     });
-    l << "Test result: " << r << l;
+    l << rem::fn::weekday << color::r << " : Test result: " << r << l;
+    l = dlog::status(h) << color::lime << " - fin";
+    l << l;
     terminate();
     return rem::cc::ok;
 }
@@ -58,4 +60,3 @@ auto main(int argc, char** argv, char** env) -> int
     tux::test tests("obb tests", tux::string::string_view_list(argc,argv,1));
     return static_cast<int>(tests.run());
 }
-
