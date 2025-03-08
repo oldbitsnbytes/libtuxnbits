@@ -29,9 +29,10 @@ rem::cc test::run()
     auto l = dlog::message(h) << color::r << " - The Great Beginning of the tux::bitsnbytes++ !\n";
     l << color::yellow << "More to come!" << l;
     dlog::Test Testest("Testing the diangostic::Test object...");
-    auto r = Testest.exec<std::string>("auto", [&](diagnostic::Test& Tst)->std::string {
-        return "allo";
+    auto r = Testest.exec<std::string>("auto", [&](diagnostic::Test& Tst)->auto {
+        return std::make_pair<rem::cc, std::string>(rem::cc::success,"allo");
     });
+    l << "Test result: " << r << l;
     terminate();
     return rem::cc::ok;
 }

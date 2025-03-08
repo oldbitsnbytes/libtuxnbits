@@ -24,7 +24,7 @@ rem::cc diagnostic::file::close()
 }
 
 ////////////////////////////////////////////////////
-/// \brief diagnostic::out::out constructor
+/// \brief diagnostic::out constructor
 /// \param out_ can be nullptr if it is required to use the default std::cout stream.
 /// \param message diagnostic output message type
 /// \param src implicit / automatic source location.
@@ -124,44 +124,118 @@ void diagnostic::out::init_header()
     (*ofs) << std::endl;
 }
 
+
+/////////////////////////////////////////////////////////////////////////////
+/// \brief diagnostic::out::operator <<
+/// \param txt
+/// \return
+///
 diagnostic::out &diagnostic::out::operator <<(const std::string &txt)
 {
     (*ofs) << txt;
     return *this;
 }
 
+
+/////////////////////////////////////////////////////////////////////////
+/// \brief diagnostic::out::operator <<
+/// \param cstr
+/// \return
+///
 diagnostic::out& diagnostic::out::operator << (const char* cstr)
 {
     ofs->write(cstr,std::strlen(cstr));
     return *this;
 }
+
+
+////////////////////////////////////////////////////////////////////
+/// \brief diagnostic::out::operator <<
+/// \param cstr
+/// \return
+///
 diagnostic::out& diagnostic::out::operator << (std::string_view cstr)
 {
     ofs->write(cstr.data(),cstr.length());
     return *this;
 }
+
+////////////////////////////////////////////////////////////////////
+/// \brief diagnostic::out::operator <<
+/// \param obstr
+/// \return
+///
 diagnostic::out& diagnostic::out::operator << (tux::string obstr)
 {
     ofs->write(obstr().c_str(),obstr().length());
     return *this;
 }
+
+//////////////////////////////////////////////////////////////////
+/// \brief diagnostic::out::operator <<
+/// \param c
+/// \return
+///
 diagnostic::out& diagnostic::out::operator << (char c)
 {
     ofs->write(&c,1);
     return *this;
 }
 
+
+////////////////////////////////////////////////////////////////////////
+/// \brief diagnostic::out::operator <<
+///     Render the given color enum (color::code) in ansi encoded out.
+/// \param clr
+/// \return
+///
 diagnostic::out& diagnostic::out::operator << (ui::color::code clr)
 {
     (*ofs) << ui::color::render(clr);
     return *this;
 }
 
+
+
+//////////////////////////////////////////////////////////////////////
+/// \brief diagnostic::out::operator <<
+///         Transdlates to ansi encoded string the given rem::cc enum value
+/// \param c
+/// \return self& for chaining call
+///
+diagnostic::out& diagnostic::out::operator << ( rem::cc c)
+{
+    auto [ic,col] = rem::return_code_attributes(c);
+    tux::string str;
+    str << col << ic << rem::to_string(c);
+    (*ofs) <<str();
+    return *this;
+}
+
+////////////////////////////////////////////////////////////////////////
+/// \brief diagnostic::out::operator <<
+///         Transdlates to ansi encoded string the given rem::type enum value
+/// \param ty
+/// \return self& for chaining call
+///
+diagnostic::out& diagnostic::out::operator << ( rem::type ty)
+{
+    auto [ic,col] = rem::type_attributes(ty);
+    tux::string str;
+    str << col << ic << rem::to_string(ty);
+    (*ofs) << str();
+    return *this;
+}
+
+
+
 diagnostic::out& diagnostic::out::endl()
 {
     *ofs << std::endl;
     return *this;
 }
+
+
 
 
 /////////////////////////////////////////////////////////////

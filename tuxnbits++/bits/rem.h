@@ -104,7 +104,7 @@ enum class type : tux::integers::U8{
         commit           , ///< Commit...
         begin            , ///< Begin (sel)Section or augment indent level
         end              , ///< End   Loop/Action or End selection or Unindent one level; or end inputs on the current bookentry then flush to file.
-        cont          , ///< Continue Loop and/or continue Signals::Action iteration.
+        cont             , ///< Continue Loop and/or continue Signals::Action iteration.
         dismiss          , ///< The current action or iteration has been dismissed : break run or actual action.
     };
 

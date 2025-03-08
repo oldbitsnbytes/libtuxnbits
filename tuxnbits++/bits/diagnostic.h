@@ -33,7 +33,7 @@ class diagnostic
 public:
     struct  out
     {
-        std::ostream* ofs{nullptr};
+        std::ostream* ofs{&std::cout};
         struct header_component
         {
             integers::U8 type  : 1;
@@ -55,9 +55,11 @@ public:
         tux::string  header{};
 
         header_component _headercomp_{1,1,1,1,1,1,1,1,1};
-
         out() = default;
+    private:
         out(std::ostream* file_ptr, rem::type message, std::source_location&& src={});
+        friend class diagnostic;
+    public:
         ~out();
 
         void init_header();
@@ -70,6 +72,8 @@ public:
         out& operator << (tux::string obstr);
         out& operator << (char c);
         out& operator << (ui::color::code clr);
+        out& operator << (rem::cc c);
+        out& operator << (rem::type ty);
         template<typename T> out& operator << (const T& v);
 
     };
@@ -135,9 +139,7 @@ public:
     struct LIBTUXNBITS Test
     {
         std::string name{};
-        using capturable_lambda = std::function<rem::cc(diagnostic::Test&)>;
-
-        template<typename T> rem::cc exec(const std::string& sub_test_name, std::function<T(diagnostic::Test&)> lambda );
+        template<typename T> rem::cc exec(const std::string& sub_test_name, std::function<std::pair<rem::cc, T>(diagnostic::Test&)> lambda );
 
         Test(const std::string& test_name):name(test_name){}
         ~Test() { name.clear(); }
