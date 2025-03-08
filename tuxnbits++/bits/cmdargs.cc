@@ -34,7 +34,7 @@ cmd_switch::iterator line::query(std::string_view SwitchData)
 line::~line()
 {
     arguments.clear(); // doh ...
-    //rem::info() << rem::fn::func << "arguments switches infos are cleared.";
+
 }
 
 

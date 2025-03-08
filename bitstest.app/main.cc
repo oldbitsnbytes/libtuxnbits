@@ -1,11 +1,11 @@
-#include <tuxnbits++/bits/diagnostic.h>
+#include <tuxnbits++/bits/appbits.h>
 
 using dlog = diagnostic;
 namespace tux
 {
 
 
-class test
+class test : public appbits
 {
     //io::terminal term{nullptr,"tests",{}};
     tux::string::view_list _args{};

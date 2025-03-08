@@ -20,7 +20,7 @@
 
 #include <tuxnbits++/bits/diagnostic.h>
 #include <tuxnbits++/bits/object.h>
-
+#include <tuxnbits++/bits/cmdargs.h>
 
 namespace tux
 {
@@ -28,6 +28,30 @@ namespace tux
 class LIBTUXNBITS appbits : public object
 {
     tux::string::view_list _args{};
+    cmd::line              _proc{};
+    signals::notify_action<diagnostic::exception&, appbits&> on_exception{"exception signal"};
+    signals::notify_action<diagnostic::exception&, appbits&> on_terminate_request{"terminate request signal"};
+
+    diagnostic::file::handle _dlog{0};
+    static void sig_crash(int);
+    static void sig_aborted(int);
+    static void sig_interrupted(int);
+
+    std::map<const std::string, diagnostic::file::handle> _diagnostic_handles{};
+public:
+    appbits(const std::string& app_name, tux::string::view_list&& arguments, object* parent_obj=nullptr);
+    appbits()=default;
+    ~appbits() override;
+
+    virtual rem::cc run();
+    virtual rem::cc setup();
+    rem::cc add_diagnostic(const std::string& diag_name);
+    virtual rem::cc terminate(rem::type reason);
+    virtual rem::cc system_signals();
+    virtual rem::action commands();
+    cmd::line& command_line() { return _proc; }
+
+
 
 };
 
