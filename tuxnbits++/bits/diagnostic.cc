@@ -102,7 +102,7 @@ void diagnostic::out::init_header()
     //------------------------------------------------------------------------------------------------------------
     //    if(headercomp.fun)
     //    {
-    //        auto [gh, colors] = book::functionattributes(rem::fn::fun);
+    //        auto [gh, colors] = diagnostic::functionattributes(rem::fn::fun);
     //        header << colors << gh << ' ' << location.function_name() << color::reset;
     //    }
     //------------------------------------------------------------------------------------------------------------
@@ -236,7 +236,7 @@ diagnostic::out& diagnostic::out::operator << (rem::fn f)
     switch (f) {
     case rem::fn::endl:
         (*ofs) << '\n';
-        //            switch (appbook::format()) ///@todo create book::format(); directly instead.
+        //            switch (appbook::format()) ///@todo create diagnostic::format(); directly instead.
         //            {
         //                case color::format::ansi256:
         //                    input("\n");

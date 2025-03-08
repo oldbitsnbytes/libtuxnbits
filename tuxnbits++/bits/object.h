@@ -1,12 +1,12 @@
 /******************************************************************************************
-*   Copyright (C) ...,2025,... by luxe Lussier                                          *
- *   luxe.lussier@oldlonecoder.club / lussier.luxe@gmail.com                            *
+*   Copyright (C) ...,2025,... by Serge Lussier                                          *
+ *   serge.lussier@oldbitsnbytes.club / lussier.serge@gmail.com                            *
  *   ----------------------------------------------------------------------------------   *
  *   Unless otherwise specified, all Codes ands files in this project is written          *
- *   by the author and owned by the auther (luxe Lussier), unless otherwise specified.   *
+ *   by the author and owned by the auther (Serge Lussier), unless otherwise specified.   *
  *   ----------------------------------------------------------------------------------   *
- *   Copyrights from authors other than luxe Lussier also apply here.                    *
- *   Open source FREE licences also apply To the Code from the author (luxe Lussier)     *
+ *   Copyrights from authors other than Serge Lussier also apply here.                    *
+ *   Open source FREE licences also apply To the Code from the author (Serge Lussier)     *
  *   ----------------------------------------------------------------------------------   *
  *   Usual GNU FREE GPL-1,2, MIT... or whatever -  apply to this project.                 *
  *   ----------------------------------------------------------------------------------   *
@@ -53,7 +53,7 @@ public:
     object::iterator get_child_iterator(object* obj);
     [[maybe_unused]] object::iterator get_child_iteratorby_id(const std::string& aid);
 
-    ////book::Enums::Code detach();
+    ////diagnostic::Enums::Code detach();
     rem::cc detach(object* obj_ptr=nullptr);
     // -- All does the same, ...as a different name lol!
 

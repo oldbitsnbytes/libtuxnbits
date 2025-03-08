@@ -1,12 +1,12 @@
 /******************************************************************************************
-*   Copyright (C) ...,2025,... by luxe Lussier                                          *
-*   luxe.lussier@oldlonecoder.club / lussier.luxe@gmail.com                            *
+*   Copyright (C) ...,2025,... by Serge Lussier                                          *
+*   serge.lussier@oldbitsnbytes.club / lussier.serge@gmail.com                            *
 *   ----------------------------------------------------------------------------------   *
 *   Unless otherwise specified, all Codes ands files in this project is written          *
-*   by the author and owned by the auther (luxe Lussier), unless otherwise specified.   *
+*   by the author and owned by the auther (Serge Lussier), unless otherwise specified.   *
 *   ----------------------------------------------------------------------------------   *
-*   Copyrights from authors other than luxe Lussier also apply here.                    *
-*   Open source FREE licences also apply To the Code from the author (luxe Lussier)     *
+*   Copyrights from authors other than Serge Lussier also apply here.                    *
+*   Open source FREE licences also apply To the Code from the author (Serge Lussier)     *
 *   ----------------------------------------------------------------------------------   *
 *   Usual GNU FREE GPL-1,2, MIT... or whatever -  apply to this project.                 *
 *   ----------------------------------------------------------------------------------   *
@@ -79,7 +79,7 @@ public:
     cmd_switch::iterator query(std::string_view cmd_switch);
     cmd_switch& operator<<(const cmd_switch& Arg);
     cmd_switch& operator [] (const std::string& ArgName);
-    ////book::Enums::Code InputCmdLineData(int argc, char** argv);
+    ////diagnostic::Enums::Code InputCmdLineData(int argc, char** argv);
     rem::cc     input(const std::vector<std::string_view>& StrArray);
     cmd_switch& add_cmd(const std::string& cId);
     rem::action process();

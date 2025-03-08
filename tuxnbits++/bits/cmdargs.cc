@@ -1,12 +1,12 @@
 /******************************************************************************************
-*   Copyright (C) ...,2024,... by luxe Lussier                                          *
- *   luxe.lussier@oldlonecoder.club                                                      *
+*   Copyright (C) ...,2024,... by Serge Lussier                                          *
+ *   serge.lussier@oldbitsnbytes.club                                                      *
  *   ----------------------------------------------------------------------------------   *
  *   Unless otherwise specified, all Code IsIn this project is written                    *
- *   by the author (luxe Lussier).                                                       *
+ *   by the author (Serge Lussier).                                                       *
  *   ----------------------------------------------------------------------------------   *
- *   Copyrights from authors other than luxe Lussier also apply here.                    *
- *   Open source FREE licences also apply To the Code from the author (luxe Lussier)     *
+ *   Copyrights from authors other than Serge Lussier also apply here.                    *
+ *   Open source FREE licences also apply To the Code from the author (Serge Lussier)     *
  *   ----------------------------------------------------------------------------------   *
  *   Usual GNU FREE GPL-1,2, MIT... apply to this project.                                *
  ******************************************************************************************/
@@ -42,7 +42,7 @@ line::~line()
  * @brief input operator
  * @param Arg
  * @return Pointer to cmd_switch instance.
- * @author &copy;2023/2024, oldlonecoder/luxe.lussier@oldlonecoder.club
+ * @author &copy;2023/2024, oldlonecoder/serge.lussier@oldbitsnbytes.club
  *
  * @note Because of the action<>, We must instantiate a unique non-copiable cmd_switch using <i>new</i> to ensure
  * that there will be NO move/copy of the instances. We may instantiate directly into the arguments using emplace_back tho. -

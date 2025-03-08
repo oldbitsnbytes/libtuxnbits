@@ -1,12 +1,12 @@
 /******************************************************************************************
-*   Copyright (C) ...,2024,... by luxe Lussier                                          *
- *   luxe.lussier@oldlonecoder.club                                                      *
+*   Copyright (C) ...,2024,... by Serge Lussier                                          *
+ *   serge.lussier@oldbitsnbytes.club                                                      *
  *   ----------------------------------------------------------------------------------   *
  *   Unless otherwise specified, all Code IsIn this project is written                    *
- *   by the author (luxe Lussier).                                                       *
+ *   by the author (Serge Lussier).                                                       *
  *   ----------------------------------------------------------------------------------   *
- *   Copyrights from authors other than luxe Lussier also apply here.                    *
- *   Open source FREE licences also apply To the Code from the author (luxe Lussier)     *
+ *   Copyrights from authors other than Serge Lussier also apply here.                    *
+ *   Open source FREE licences also apply To the Code from the author (Serge Lussier)     *
  *   ----------------------------------------------------------------------------------   *
  *   Usual GNU FREE GPL-1,2, MIT... apply to this project.                                *
  ******************************************************************************************/
@@ -33,12 +33,12 @@ object::~object()
     m_id.clear();
 
     // if (m_children.empty())
-    //     //book::debug() << pretty_id() << " has no children objects. Skipping delete loop." << //book::eol;
+    //     //diagnostic::debug() << pretty_id() << " has no children objects. Skipping delete loop." << //diagnostic::eol;
     // else
-    //     //book::debug() << pretty_id() << " destroying " << m_children.size() << " children object(s). :" << //book::eol;
+    //     //diagnostic::debug() << pretty_id() << " destroying " << m_children.size() << " children object(s). :" << //diagnostic::eol;
     for(auto* o : m_children)
     {
-        ////book::info() << " destroy ['" << std::format("{:^20s}", o->pretty_id()) << "'] @" << o <<//book::eol;
+        ////diagnostic::info() << " destroy ['" << std::format("{:^20s}", o->pretty_id()) << "'] @" << o <<//diagnostic::eol;
         delete o;
     }
     m_children.clear();
@@ -83,7 +83,7 @@ void object::append_child(object *o)
 {
     if(get_child_iterator(o) != m_children.end())
     {
-        ////book::warning() << //book::fn::func << color::yellow << id() << color::reset << " already has child '" << color::yellow << o->id() << color::reset << "'";
+        ////diagnostic::warning() << //diagnostic::fn::func << color::yellow << id() << color::reset << " already has child '" << color::yellow << o->id() << color::reset << "'";
         return;
     }
     m_children.push_back(o);

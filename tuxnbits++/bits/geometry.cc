@@ -45,7 +45,7 @@ string2d& string2d::operator<<(cxy xy)
 {
     if(!r[xy])
     {
-        ////book::error() << //book::code::oob << r << "; <-" << xy;
+        ////diagnostic::error() << //diagnostic::code::oob << r << "; <-" << xy;
         return *this;
     }
     r.goto_xy(xy);
@@ -304,7 +304,7 @@ bool rectangle::operator++()
         if (cursor.y > b.y) {
             cursor.y = b.y;
             //cursor.x = dwh.w-1;
-            ////book::status() << " cursor wraps to home.";
+            ////diagnostic::status() << " cursor wraps to home.";
             //cursor = a;
             return false;
         }
@@ -373,7 +373,7 @@ bool rectangle::operator--(int)
 bool rectangle::goto_xy(cxy xy)
 {
     if (!in(xy + a)) {
-        ////book::error() << "rejected at" << xy;
+        ////diagnostic::error() << "rejected at" << xy;
         return false;
     }
     cursor = xy;
@@ -504,7 +504,7 @@ bool rectangle::operator == (const rectangle& rhs) const
  * \param pt
  * \return true if within, false otherwise.
 
- * \author oldlonecoder (luxe.lussier@oldlonecoder.club; lussier.luxe@gmail.com)
+ * \author oldlonecoder (serge.lussier@oldbitsnbytes.club; lussier.serge@gmail.com)
  *
  * \note to test the internal cursor, pt must be set explicitely to cursor + a.
  */

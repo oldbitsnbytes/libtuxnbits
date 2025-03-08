@@ -1,12 +1,12 @@
 /******************************************************************************************
-*   Copyright (C) ...,2025,... by luxe Lussier                                          *
- *   luxe.lussier@oldlonecoder.club / lussier.luxe@gmail.com                            *
+*   Copyright (C) ...,2025,... by Serge Lussier                                          *
+ *   serge.lussier@oldbitsnbytes.club / lussier.serge@gmail.com                            *
  *   ----------------------------------------------------------------------------------   *
  *   Unless otherwise specified, all Codes ands files in this project is written          *
- *   by the author and owned by the auther (luxe Lussier), unless otherwise specified.   *
+ *   by the author and owned by the auther (Serge Lussier), unless otherwise specified.   *
  *   ----------------------------------------------------------------------------------   *
- *   Copyrights from authors other than luxe Lussier also apply here.                    *
- *   Open source FREE licences also apply To the Code from the author (luxe Lussier)     *
+ *   Copyrights from authors other than Serge Lussier also apply here.                    *
+ *   Open source FREE licences also apply To the Code from the author (Serge Lussier)     *
  *   ----------------------------------------------------------------------------------   *
  *   Usual GNU FREE GPL-1,2, MIT... or whatever -  apply to this project.                 *
  *   ----------------------------------------------------------------------------------   *
@@ -137,7 +137,7 @@ struct LIBTUXNBITS size {
         else if constexpr (std::is_same_v<T, u32>)          return static_cast<u32>(w           );
         else if constexpr (std::is_same_v<T, i64>)          return static_cast<u64>(w           );
         else if constexpr (std::is_same_v<T, std::string>)  return std::to_string(w             );
-        ////book::error() << //book::cc::expected << " compatible left-value type";
+        ////diagnostic::error() << //diagnostic::cc::expected << " compatible left-value type";
         return {};
     }
     template<typename T=int> std::optional<T> height() const
@@ -160,7 +160,7 @@ struct LIBTUXNBITS size {
         else if constexpr (std::is_same_v<T, u32>)          return static_cast<u32>(h);
         else if constexpr (std::is_same_v<T, i64>)          return static_cast<u64>(h);
         else if constexpr (std::is_same_v<T, std::string>)  return std::to_string(h);
-        ////book::error() << //book::cc::expected << " compatible left-value type";
+        ////diagnostic::error() << //diagnostic::cc::expected << " compatible left-value type";
         return {};
     }
 };
@@ -173,7 +173,7 @@ struct LIBTUXNBITS size {
  * @li Provides internal Cursor relative coordinates
  * @li Still needs more limit implementations (min-max restrictions helpers)
  *
- * @author oldlonecoder (lussier.luxe@gmail.com)
+ * @author oldlonecoder (lussier.serge@gmail.com)
  *
  */
 struct LIBTUXNBITS rectangle {
@@ -240,7 +240,7 @@ struct LIBTUXNBITS rectangle {
         else if constexpr (std::is_same_v<T, u32>)          return static_cast<u32>(dwh.w           );
         else if constexpr (std::is_same_v<T, i64>)          return static_cast<u64>(dwh.w           );
         else if constexpr (std::is_same_v<T, std::string>)  return std::to_string(dwh.w             );
-        ////book::error() << //book::cc::expected << " compatible left-value type";
+        ////diagnostic::error() << //diagnostic::cc::expected << " compatible left-value type";
         return {};
     }
     template<typename T=int> std::optional<T> height() const
@@ -263,7 +263,7 @@ struct LIBTUXNBITS rectangle {
         else if constexpr (std::is_same_v<T, u32>)          return static_cast<u32>(dwh.h);
         else if constexpr (std::is_same_v<T, i64>)          return static_cast<u64>(dwh.h);
         else if constexpr (std::is_same_v<T, std::string>)  return std::to_string(dwh.h);
-        ////book::error() << //book::cc::expected << " compatible left-value type";
+        ////diagnostic::error() << //diagnostic::cc::expected << " compatible left-value type";
         return {};
     }
 

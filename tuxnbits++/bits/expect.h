@@ -1,12 +1,12 @@
 /******************************************************************************************
- *   Copyright (C) ...,2025,... by luxe Lussier                                           *
- *   luxe.lussier@oldlonecoder.club / lussier.luxe@gmail.com                              *
+ *   Copyright (C) ...,2025,... by Serge Lussier                                           *
+ *   serge.lussier@oldbitsnbytes.club / lussier.serge@gmail.com                              *
  *   ----------------------------------------------------------------------------------   *
  *   Unless otherwise specified, all Codes ands files in this project is written          *
- *   by the author and owned by the auther (luxe Lussier), unless otherwise specified.    *
+ *   by the author and owned by the auther (Serge Lussier), unless otherwise specified.    *
  *   ----------------------------------------------------------------------------------   *
- *   Copyrights from authors other than luxe Lussier also apply here.                     *
- *   Open source FREE licences also apply To the Code from the author (luxe Lussier)      *
+ *   Copyrights from authors other than Serge Lussier also apply here.                     *
+ *   Open source FREE licences also apply To the Code from the author (Serge Lussier)      *
  *   ----------------------------------------------------------------------------------   *
  *   Usual GNU FREE GPL-1,2, MIT... or whatever -  apply to this project.                 *
  *   ----------------------------------------------------------------------------------   *
@@ -29,7 +29,7 @@ namespace tux
 /*!
  * @brief Trying to implement my own very specific expect return value class using std::any and std::optional.
 
- * @author luxe Lussier (luxe.lussier@oldlonecoder.club)
+ * @author Serge Lussier (serge.lussier@oldbitsnbytes.club)
  *
  */
 template <typename T=rem::cc> class expect

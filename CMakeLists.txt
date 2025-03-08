@@ -7,7 +7,7 @@ project(libtuxnbits++
     LANGUAGES CXX)
 
 OPTION(BITS         "Build the the bits and bytes support...........[libtuxnbits++.a]"     ON)
-OPTION(IO           "Build the IO sublib............................[libtuxnbits++.io.a]"  OFF)
+OPTION(IO           "Build the IO sublib............................[libtuxnbits++.io.a]"  ON)
 OPTION(LEXER        "Build the lexer sublib.........................[libtuxnbits++.lexer.a]" OFF)
 OPTION(EST          "Build the est (Expression Syntax Tree) sublib..[libtuxnbits++.est.a]" OFF)
 OPTION(TUI          "Build the console ANSI UI  sublib..............[libtuxnbits++.tui.a]" OFF)
@@ -21,7 +21,7 @@ endif()
 
 if(IO)
     message(STATUS "Building libobb.io.a")
-    include(obb.io.cmake)
+    include(io.cmake)
 
 endif()
 
@@ -44,4 +44,3 @@ if(TESTS)
     message(STATUS "framework tests:")
     include(bitstest.cmake)
 endif()
-

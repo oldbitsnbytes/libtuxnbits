@@ -23,6 +23,7 @@ set(HEADERS
     ${TARGET_DIR}/object.h
     ${TARGET_DIR}/rem.h
     ${TARGET_DIR}/string.h
+    ${TARGET_DIR}/appbits.h
 )
 
 
@@ -38,6 +39,7 @@ add_library( ${PROJECT_NAME} STATIC
     ${TARGET_DIR}/rem.cc
     ${TARGET_DIR}/cmdargs.cc
     ${TARGET_DIR}/string.cc
+    ${TARGET_DIR}/appbits.cc
 
 )
 target_include_directories(${PROJECT_NAME} PUBLIC
