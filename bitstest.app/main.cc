@@ -33,7 +33,7 @@ rem::cc test::run()
         return std::make_pair<rem::cc, std::string>(rem::cc::success,"allo");
     });
     l << rem::fn::weekday << color::r << " : Test result: " << r << l;
-    l = dlog::status(h) << color::lime << " - fin";
+    l = dlog::status(h) << color::lime << " - 🦀 fin";
     l << l;
     terminate();
     return rem::cc::ok;

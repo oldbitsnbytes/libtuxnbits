@@ -250,6 +250,8 @@ glyph::data_array glyph::data =
     c_sqpixel                ,
     c_fbox                   ,
     c_dnpixel                ,
+    c_rust_lang              ,
+     c_rust_crab             ,
 };
 
 std::map<glyph::type, std::string> glyph_dict =
@@ -364,6 +366,9 @@ std::map<glyph::type, std::string> glyph_dict =
     {glyph::sqpixel            ,"sqpixel"},
     {glyph::fbox               ,"fbox"},
     {glyph::dnpixel            ,"dnpixel"},
+    {glyph::rust_lang          ,"rust-lang"},
+    {glyph::rust_crab          ,"rust-crab"},
+
 };
 
 

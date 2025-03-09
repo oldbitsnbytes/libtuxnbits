@@ -144,6 +144,8 @@ struct LIBTUXNBITS glyph
     static constexpr T c_sqpixel               = "▀";       // Pixel
     static constexpr T c_fbox                  = "█";
     static constexpr T c_dnpixel               = "▄";
+    static constexpr T c_rust_lang             = " "; // rust-lang symbol
+    static constexpr T c_rust_crab             = "🦀"; //
 
     static constexpr type ok                 = 0;
     static constexpr type comment            = 1;
@@ -255,6 +257,8 @@ struct LIBTUXNBITS glyph
     static constexpr type sqpixel            = 107;
     static constexpr type fbox               = 108;
     static constexpr type dnpixel            = 109;
+    static constexpr type rust_lang          = 110;
+    static constexpr type rust_crab          = 111;
     static glyph::data_array data;
 
     static glyph::type scan(const std::string& glyph_name);
