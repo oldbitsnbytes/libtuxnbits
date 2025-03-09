@@ -9,6 +9,7 @@ diagnostic::file::list diagnostic::files
 {
     {"std::out", &std::cout}
 };
+diagnostic::file::handle diagnostic::_default_file_handle=0; ///< std::cout by default.
 //////////////////////////////////////////////
 
 
@@ -153,7 +154,6 @@ void diagnostic::out::init_header()
     }
     (*ofs) << dash() << std::endl;
 }
-
 
 /////////////////////////////////////////////////////////////////////////////
 /// \brief diagnostic::out::operator <<
@@ -521,4 +521,12 @@ std::optional<diagnostic::file::handle> diagnostic::new_file(const std::string &
     }
     diagnostic::files.emplace_back(file_id, f);
     return {diagnostic::files.size()-1};
+}
+
+
+rem::cc diagnostic::use_default(diagnostic::file::handle h)
+{
+    if (h < 0 || h >= diagnostic::files.size()) return rem::cc::rejected;
+    diagnostic::_default_file_handle = h;
+    return rem::cc::accepted;
 }

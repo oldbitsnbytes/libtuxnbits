@@ -59,6 +59,7 @@ rem::cc appbits::setup()
     auto h = diagnostic::new_file("application");
     _dlog = *h;
     _diagnostic_handles["application"] = _dlog;
+    diagnostic::use_default(_dlog);
     auto log = diagnostic::status(_dlog);
     log << "Successfully opened the application diagnostic file" << log;
     return rem::cc::done;
@@ -84,7 +85,8 @@ rem::cc appbits::add_diagnostic(const std::string& diag_name)
 
 rem::cc appbits::terminate(rem::type _reason)
 {
-    diagnostic::status(_dlog) << "terminate: " << _reason << "\n";
+    diagnostic::status(_dlog) << "terminate reason: " << _reason << "\n";
+    diagnostic::use_default(0);
     return rem::cc::terminate;
 }
 

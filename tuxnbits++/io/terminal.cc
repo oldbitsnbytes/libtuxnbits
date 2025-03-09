@@ -77,7 +77,7 @@ terminal::terminal(terminal *parent_term, const std::string &_name_id, rectangle
 
     @author  Serge Lussier ( serge.lussier@oldbitsnbytes.club )
 */
-rem::cc terminal::begin(std::string_view name_id)
+rem::cc terminal::begin()
 {
     tcgetattr(STDIN_FILENO, &_saved);
     _this = _saved;
@@ -94,12 +94,10 @@ rem::cc terminal::begin(std::string_view name_id)
     _this.c_cc[VSTOP] = 0;
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &_this);
 
-    //switch_alternate();
-
     //diagnostic::write() << " terminal set to raw mode..." << //diagnostic::endl;
 
     //::signal(SIGWINCH, &terminal::resize_signal); // --> Must be Handled in the thread/proc/ env
-    if(_flags & terminal::use_double_buffer)
+    //if(_flags & terminal::use_double_buffer)
         switch_alternate();
     //cursor_off();
     terminal::enable_mouse();
@@ -110,7 +108,7 @@ rem::cc terminal::begin(std::string_view name_id)
 
 rem::cc terminal::end()
 {
-    if(_flags & terminal::use_double_buffer)
+    //if(_flags & terminal::use_double_buffer)
         switch_back();
     //diagnostic::info() << "closing terminal state:" << //diagnostic::eol;
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &_saved);

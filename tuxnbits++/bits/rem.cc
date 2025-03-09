@@ -37,7 +37,8 @@ std::map<rem::type, const char*> enums_type_dictionary = {
     {rem::type::interrupted, "interrupted"},
     {rem::type::aborted,     "aborted"},
     {rem::type::segfault,    "segmentation fault"},
-    {rem::type::book,         "book"}
+    {rem::type::book,         "book"},
+    {rem::type::normal,       "normal state"}
 };
 
 
@@ -151,10 +152,11 @@ std::map<rem::type, std::pair<tux::glyph::type, color::pair>> types_database={
     {rem::type::syntax,      {tux::glyph::handwrite, {color::lighcoreateblue     , color::reset }}},
     {rem::type::status,      {tux::glyph::admin,     {color::lightcyan3          , color::reset }}},
     {rem::type::test,        {tux::glyph::file,      {color::aquamarine3         , color::reset }}},
-    {rem::type::interrupted, {tux::glyph::circle_x,     {color::khaki3              , color::reset }}},
+    {rem::type::interrupted, {tux::glyph::circle_x,  {color::khaki3              , color::reset }}},
     {rem::type::aborted,     {tux::glyph::stop,      {color::red4                , color::reset }}},
     {rem::type::segfault,    {tux::glyph::bomb,      {color::sandybrown          , color::reset }}},
-    {rem::type::book,         {tux::glyph::book,       {color::orangered1          , color::reset }}}
+    {rem::type::book,        {tux::glyph::book,      {color::orangered1          , color::reset }}},
+    {rem::type::normal,      {tux::glyph::school,    {color::orangered1          , color::reset }}}
     //...
 };
 
@@ -165,7 +167,7 @@ std::map<rem::action      , std::pair<tux::glyph::type, color::pair>> actions_co
     {rem::action::begin   , {tux::glyph::chronos      , {color::white               , color::reset}}},
     {rem::action::end     , {tux::glyph::dead_head    , {color::white               , color::reset}}},
     {rem::action::commit  , {tux::glyph::pencil_dr    , {color::white               , color::reset}}},
-    {rem::action::cont , {tux::glyph::success      , {color::white               , color::reset}}},
+    {rem::action::cont    , {tux::glyph::success      , {color::white               , color::reset}}},
     {rem::action::dismiss , {tux::glyph::arrow_dhead_right , {color::yellow         , color::reset}}},
 };
 

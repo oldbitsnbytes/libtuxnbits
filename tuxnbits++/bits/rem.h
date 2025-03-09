@@ -29,7 +29,7 @@ namespace rem
 
 
 enum class type : tux::integers::U8{
-    none, err, warning, fatal, except, message, output, debug, info, comment, syntax, status, test, interrupted, aborted, segfault, book
+    none, err, warning, fatal, except, message, output, debug, info, comment, syntax, status, test, interrupted, aborted, segfault, book, normal
 };
 
     enum class cc : tux::integers::U8

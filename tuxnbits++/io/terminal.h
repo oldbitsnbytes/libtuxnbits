@@ -92,14 +92,14 @@ public:
     static constexpr auto CSI_UNDERLINE_DECREMENT   = "\x1b[94m";
 
     terminal() = default;
-    terminal(terminal* parent_term, const std::string& _name_id, ui::rectangle dim /* , ... */);
+    terminal(terminal* parent_term, const std::string& _name_id, ui::rectangle dim={} /* , ... */);
     ~terminal() override;
 
     rectangle geometry();
     rem::cc enable_mouse();
     rem::cc stop_mouse();
     rem::cc query_winch();
-    rem::cc begin(std::string_view name_id);
+    rem::cc begin();
     rem::cc end();
 
     void switch_alternate();
