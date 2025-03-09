@@ -27,6 +27,7 @@ namespace tux
 
 class LIBTUXNBITS appbits : public object
 {
+protected:
     tux::string::view_list _args{};
     cmd::line              _proc{};
     signals::notify_action<diagnostic::exception&, appbits&> on_exception{"exception signal"};
@@ -43,7 +44,7 @@ public:
     appbits()=default;
     ~appbits() override;
 
-    virtual rem::cc run();
+    virtual rem::cc run() = 0; ///< appbits is an abstract base app class.
     virtual rem::cc setup();
     rem::cc add_diagnostic(const std::string& diag_name);
     virtual rem::cc terminate(rem::type reason);
@@ -51,7 +52,8 @@ public:
     virtual rem::action commands();
     cmd::line& command_line() { return _proc; }
 
-
+protected:
+    static appbits& app();
 
 };
 

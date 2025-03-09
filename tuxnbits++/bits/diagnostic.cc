@@ -38,6 +38,21 @@ diagnostic::out::out(std::ostream* out_, rem::type message, std::source_location
     init_header();
 }
 
+diagnostic::out::out(std::ostream *file_ptr, rem::type message, header_component hc, std::source_location &&src):
+    ofs(file_ptr),
+    type(message),
+    _headercomp_(hc),
+    code(rem::cc::ok),
+    location(src)
+{
+    if(!hc.type) {
+        hc.type = 1; hc.col  = 1; hc.frame = 1; hc.file = 1; hc.stamp = 1; hc.fun = 0;
+        _headercomp_ = hc;
+    }
+
+    init_header();
+}
+
 diagnostic::out::~out()
 {
     header.clear();
@@ -287,7 +302,7 @@ diagnostic::out& diagnostic::out::operator << (rem::fn f)
     case rem::fn::month: {
         auto [ic, a] = rem::function_attributes(rem::fn::month);
         //auto today{std::chrono::system_clock::now()};
-        str << a.fg << tux::string::now("%m");
+        str << a.fg << tux::string::now("%M");
         (*ofs) << str();
         return *this;
     }
@@ -302,7 +317,7 @@ diagnostic::out& diagnostic::out::operator << (rem::fn f)
         auto [ic, a] = rem::function_attributes(rem::fn::year);
         //auto today{std::chrono::system_clock::now()};
         tux::string acc;
-        acc << /*utf::glyph::data[ic] <<*/ a.fg << tux::string::now("%y");
+        acc << /*utf::glyph::data[ic] <<*/ a.fg << tux::string::now("%Y");
         (*ofs) <<acc();
         return *this;
     }
@@ -429,7 +444,7 @@ diagnostic::out diagnostic::syntax      (diagnostic::file::handle h, std::source
 }
 
 diagnostic::out diagnostic::test        (diagnostic::file::handle h, std::source_location&& src){
-    return {diagnostic::files[h].fileptr,rem::type::test, std::move(src)};// NOLINT(*-move-const-arg)
+    return {diagnostic::files[h].fileptr,rem::type::test, {0,0,0,0,0,0,0,0,0}, std::move(src)};// NOLINT(*-move-const-arg)
 }
 
 diagnostic::out diagnostic::interrupted (diagnostic::file::handle h, std::source_location&& src){

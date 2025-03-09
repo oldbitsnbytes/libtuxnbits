@@ -58,6 +58,7 @@ public:
         out() = default;
     private:
         out(std::ostream* file_ptr, rem::type message, std::source_location&& src={});
+        out(std::ostream* file_ptr, rem::type message, diagnostic::out::header_component hc, std::source_location&& src={});
         friend class diagnostic;
     public:
         ~out();
