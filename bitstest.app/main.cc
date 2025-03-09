@@ -8,10 +8,9 @@ namespace tux
 class test : public appbits
 {
     //io::terminal term{nullptr,"tests",{}};
-    tux::string::view_list _args{};
 public:
     test(const std::string& tname, tux::string::view_list&& vargs);
-    ~test(){ _args.clear(); }
+    ~test() override = default;
 
     rem::cc terminate(rem::type reason) override;
     //est::alu expr();
@@ -31,12 +30,12 @@ rem::cc test::run()
     auto l = dlog::message(h) << color::r << " - The Great Beginning of the tux::bitsnbytes++ !\n";
     l << color::yellow << "More to come!" << l;
     dlog::Test Test("[diagnostic::Test]");
+
     auto r = Test.exec<std::string>("auto", [&](diagnostic::Test& Tst)->auto {
         return std::make_pair<rem::cc, std::string>(rem::cc::success,"allo");
     });
     l << rem::fn::weekday << color::r << " : Test result: " << r << l;
-    l = dlog::status(h) << color::lime << " - 🦀 fin";
-    l << l;
+    l = dlog::status(h) << color::lime << " - " << glyph::rust_crab << " fin." << l;
     return terminate(rem::type::status);
 }
 
@@ -50,17 +49,13 @@ rem::cc test::setup()
 
 
 
-test::test(const std::string &tname, string::view_list &&vargs):appbits(tname, std::move(vargs), nullptr),
-    _args(std::move(vargs))
-{
-
-}
+test::test(const std::string &tname, string::view_list &&vargs):appbits(tname, std::move(vargs), nullptr){}
 
 
 rem::cc test::terminate(rem::type reason)
 {
     appbits::terminate(reason);
-    dlog::close(h);
+    dlog::close_all();
     return rem::cc::ok;
 }
 

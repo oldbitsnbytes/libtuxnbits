@@ -11,6 +11,13 @@ diagnostic::file::list diagnostic::files
 };
 //////////////////////////////////////////////
 
+
+
+////////////////////////////////////////////////
+/// \brief diagnostic::file::close
+///        closes the opened file by this file struct is the descriptor is not stdout (fd:#1)
+/// \return accepted or rejected
+///
 rem::cc diagnostic::file::close()
 {
     if(fileptr){
@@ -33,11 +40,17 @@ diagnostic::out::out(std::ostream* out_, rem::type message, std::source_location
     ofs(out_),
     type(message),
     code(rem::cc::ok),
-    location(src)
-{
+    location(src){
     init_header();
 }
 
+
+////////////////////////////////////////////////////
+/// \brief diagnostic::out constructor specific for the header components
+/// \param out_ can be nullptr if it is required to use the default std::cout stream.
+/// \param message diagnostic output message type
+/// \param src implicit / automatic source location.
+///
 diagnostic::out::out(std::ostream *file_ptr, rem::type message, header_component hc, std::source_location &&src):
     ofs(file_ptr),
     type(message),
@@ -131,7 +144,7 @@ void diagnostic::out::init_header()
 
     header = "";
     (*ofs) << dash() << std::endl;
-    if(_headercomp_.fun){
+    if(_headercomp_.fun && type != rem::type::test){
         auto [gh, colors] = rem::function_attributes(rem::fn::func);
         header << colors << gh << ' ' << location.function_name()<< color::r;
 
@@ -153,6 +166,13 @@ diagnostic::out &diagnostic::out::operator <<(const std::string &txt)
     return *this;
 }
 
+
+
+diagnostic::out& diagnostic::out::operator << (glyph::type f)
+{
+    (*ofs) << glyph::data[f];
+    return *this;
+}
 
 /////////////////////////////////////////////////////////////////////////
 /// \brief diagnostic::out::operator <<
@@ -444,7 +464,7 @@ diagnostic::out diagnostic::syntax      (diagnostic::file::handle h, std::source
 }
 
 diagnostic::out diagnostic::test        (diagnostic::file::handle h, std::source_location&& src){
-    return {diagnostic::files[h].fileptr,rem::type::test, {0,0,0,0,0,0,0,0,0}, std::move(src)};// NOLINT(*-move-const-arg)
+    return {diagnostic::files[h].fileptr,rem::type::test, std::move(src)};// NOLINT(*-move-const-arg)
 }
 
 diagnostic::out diagnostic::interrupted (diagnostic::file::handle h, std::source_location&& src){
@@ -466,6 +486,15 @@ diagnostic::out diagnostic::log         (diagnostic::file::handle h, std::source
 rem::cc diagnostic::close(file::handle hindex)
 {
     return diagnostic::files[hindex].close();
+}
+
+rem::cc diagnostic::close_all()
+{
+    for(auto f : diagnostic::files){
+        f.close();
+    }
+    diagnostic::files.clear();
+    return rem::cc::ok;
 }
 
 

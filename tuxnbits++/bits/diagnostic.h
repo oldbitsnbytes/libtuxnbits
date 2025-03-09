@@ -76,6 +76,7 @@ public:
         out& operator << (rem::cc c);
         out& operator << (rem::type ty);
         out& operator << (rem::fn f);
+        out& operator << (glyph::type f);
         template<typename T> out& operator << (const T& v);
     };
 
@@ -112,6 +113,7 @@ public:
     static diagnostic::out log         (diagnostic::file::handle=0, std::source_location&& src = std::source_location::current());
     //...
     static rem::cc close(diagnostic::file::handle hindex=0);
+    static rem::cc close_all();
     static std::optional<diagnostic::file::handle> new_file(const std::string& file_name);
 
 
