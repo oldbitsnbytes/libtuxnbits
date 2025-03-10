@@ -24,6 +24,7 @@ rem::cc terminal::enque(event &&ev)
 
 void terminal::push_event(event&& ev)
 {
+    auto l = diagnostic::debug(); l << "ev: " << (ev.is<mouse>() ? ev.data.mev() : ev.data.kev.name) << l;
     _terminal->_events.push_back(std::move(ev));
 }
 
@@ -308,22 +309,12 @@ rem::cc terminal::stdin_proc()
 
     while(!_fd0.empty())
     {
-        //diagnostic::status() << " Test kbhit: terminal::events queue : " << _events.size() << " awaiting events to process..." << //diagnostic::eol;
         if(auto rcc = kbhit::test(_fd0); !!rcc){
             if(_events.back().data.kev.mnemonic == kbhit::ESCAPE){
-                //diagnostic::debug() << "stdin empty:" << !_fd0.empty() << //diagnostic::eol;
                 return rem::cc::ready;
             }
             continue;
         }
-        u8 b;
-        _fd0 >> b;
-        if(b != 27){
-            //diagnostic::warning() << "non-csi byte after kbhit test: rejected and no terminal::event." << color::red4 << std::format("0x{:02x}", b) << color::z << //diagnostic::eol;
-            continue;
-        }
-
-        //diagnostic::status() << " Test mouse:" << //diagnostic::eol;
         if(auto rcc = mouse::test(_fd0); !!rcc){
             auto& e = _events.back();
             if(!e.is<mouse>()){

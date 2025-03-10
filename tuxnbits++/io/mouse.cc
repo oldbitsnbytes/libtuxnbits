@@ -47,12 +47,23 @@ rem::cc mouse::test(lfd &_fd)
     u8 b{0};
     int arg{0};
     std::vector<int> args{};
-    //auto l = diagnostic::status(); l << "csi begin: @'" << color::yellow << (char)*_fd << color::z  << l;
+    auto l = diagnostic::status(); l << "csi begin: " << color::yellow << std::format("0x{:02X}",*_fd) << color::z  << l;
+    if(b = *_fd;b != 27)
+    {
+        l = diagnostic::error() << rem::cc::expected << color::r << " ESCape start sequence - got '" << color::hotpink4 << (int)b << color::r << " instead." << l;
+        return rem::cc::rejected;
+    }
+    _fd >> b;
+    if(b != '[')
+    {
+        l = diagnostic::error() << rem::cc::expected << color::r << " CSI sequence - got '" << color::hotpink4 << (int)b << color::r << " instead." << l;
+        return rem::cc::rejected;
+    }
     do{
         _fd >> b;
-        //l << "['" << color::yellow << (char)*_fd << color::z << "']" << l;
+        //l << "next:['" << color::yellow << (char)*_fd << color::z << "']" << l;
         if(b == '<'){
-            //l << "Altered [ ignored as of now ]" << l;
+            l << "Altered [ ignored as of now ]" << l;
             //...
             continue;
         }

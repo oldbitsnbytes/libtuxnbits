@@ -36,10 +36,9 @@ rem::cc test::run()
         return std::make_pair<rem::cc, std::string>(rem::cc::success,"allo");
     });
 
-    l << rem::fn::weekday << color::r << " : Test result: " << r << l;
-
+    l << rem::fn::month << rem::fn::weekday << color::r << " : Test result: " << r << l;
     l = diagnostic::info(h) << " Starting the terminal input events loop"  << l;
-
+    rem::action ac{rem::action::cont};
     do{
         auto r = term.poll_in();
         if(!r){
@@ -49,23 +48,24 @@ rem::cc test::run()
 
         while(!term.events().empty()){
             auto evc = term.events().front();
+            term.events().pop_front();
             if(evc.is<io::kbhit>()){
                 if(evc.data.kev.mnemonic == io::kbhit::ESCAPE){
                     l << "ESCAPE KEY hit - Terminating!." << l;
-                    terminate(rem::type::normal);
-                    return rem::cc::terminate;
+                    term.events().clear();
+                    ac = rem::action::end;
+                    break;//return rem::cc::terminate;
                 }
                 else{
                     auto l = dlog::message(h);
-                    l << "CHARACTER or command: " << evc.data.kev.name << " | " << (char)evc.data.kev.code << l;
+                    l << "CHARACTER or command: '" << evc.data.kev.name << "' | (char)'" << (char)evc.data.kev.code << '\'' << l;
                 }
             }
             else if(evc.is<io::mouse>()){
                 l << "mouse event: " << evc.data.mev() << l;
             }
-            term.events().pop_front();
         }
-    }while(1);
+    }while(ac == rem::action::cont);
 
     l = dlog::status(h) << color::lime << " - " << glyph::rust_crab << " fin." << l;
     return terminate(rem::type::normal);

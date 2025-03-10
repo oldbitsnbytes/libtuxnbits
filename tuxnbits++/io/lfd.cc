@@ -53,6 +53,7 @@ lfd& lfd::operator>>(u8& u)
     if(empty())
     {
         u = 0;
+        auto l = diagnostic::warning(); l << "buffer is empty." << l;
         return *this;
     }
     u = *_tail++;

@@ -160,41 +160,43 @@ kbhit kbhit::query(std::string_view s)
 rem::cc kbhit::test(lfd &_fd)
 {
     auto * b = _fd.tail();
-    u64 code =0;
+    auto l = diagnostic::debug(); l << "buffer size:" << color::lime << _fd.size() << color::r << "..." << l;
+    u64 code = *b;
     kbhit kb{};
-    if(_fd.size() == 1)
-    {
-        ////diagnostic::debug() << " CHAR or CMD : " << (int)*b << //diagnostic::eol;
-        if(*b == 27)
-        {
-            kb = kbhit::query((u64)0x1b);
-            ////diagnostic::debug() << "code: " << color::yellow << std::format("0x{:02x}",kb.code) << color::z << "; name:" << color::yellow << kb.name <<  //diagnostic::eol;
+    if(_fd.size() == 1){
+        if(kb = kbhit::query(code); !kb){
+            kb.mnemonic = kbhit::CHARACTER;
+            kb.code = code;
             _fd >> *b; // OOps N'oubliez surtout point de con-sommer le byte! MIAM!
-            //terminal::event e = {.type = terminal::event::evt::KEV, .data={.kev=kb}};
-            terminal::push_event({.type = terminal::event::evt::KEV, .data={.kev=kb}});
-            return rem::cc::ready;
         }
-
-        kb.mnemonic = kbhit::CHARACTER;
-        kb.code = *b;
-        _fd >> *b;
+        _fd.clear();
         terminal::push_event({.type = terminal::event::evt::KEV, .data={.kev=kb}});
         return rem::cc::ready;
     }
-
-    code = code << 8 | *b;
-    ++b;
-    do{
-        code = code << 8 | *b;
-        if(kb = kbhit::query(code); kb.mnemonic != kbhit::NO_KEY)
-        {
-            ////diagnostic::debug() << "query code :" << color::yellow << std::format("0x{:016X}", code) << color::z << //diagnostic::eol;
-            _fd.sync_tail(b);
-            terminal::push_event({.type = terminal::event::evt::KEV, .data={.kev=kb}});
-            return rem::cc::ready;
-        }
+    if(code==0x1b) // CSI start
+    {
+        code = 0x1b;
+        auto n = std::min((size_t)7,_fd.size()-1);
         ++b;
-    }while((b - _fd.tail()) < 8 );
+        // CSI
+        do{
+            code = code << 8 | *b++;
+            if(kb = kbhit::query(code); kb.mnemonic != kbhit::NO_KEY)
+            {
+                ////diagnostic::debug() << "query code :" << color::yellow << std::format("0x{:016X}", code) << color::z << //diagnostic::eol;
+                _fd.sync_tail(b);
+                terminal::push_event({.type = terminal::event::evt::KEV, .data={.kev=kb}});
+                return rem::cc::ready;
+            }
+            --n;
+            l << "remaining bytes to scan:" << color::lime << n << color::r << l;
+        }while(n);
+        l << rem::cc::rejected << " kbhit::test scan." << l;
+        return rem::cc::rejected;
+    }
+    _fd >> *b;
+    kb.mnemonic = kbhit::CHARACTER;
+    kb.code = *b;
     return rem::cc::rejected;
 }
 
