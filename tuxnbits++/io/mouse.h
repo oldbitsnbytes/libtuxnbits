@@ -85,7 +85,7 @@ struct LIBTUXNBITSIO mouse
     operator bool();
     std::string operator()();
 private:
-    static rem::cc parse(std::vector<int>&& args_);
+    static rem::cc parse(std::vector<int> args_);
 };
 
 } // namespace tux::io

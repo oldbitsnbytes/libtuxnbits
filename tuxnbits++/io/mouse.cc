@@ -47,12 +47,12 @@ rem::cc mouse::test(lfd &_fd)
     u8 b{0};
     int arg{0};
     std::vector<int> args{};
-    ////diagnostic::status() << "csi begin: @'" << color::yellow << (char)*_fd << color::z << '\'' << //diagnostic::eol;
+    //auto l = diagnostic::status(); l << "csi begin: @'" << color::yellow << (char)*_fd << color::z  << l;
     do{
         _fd >> b;
-        ////diagnostic::status() << "@'" << color::yellow << (char)*_fd << color::z << '\'' << //diagnostic::eol;
+        //l << "['" << color::yellow << (char)*_fd << color::z << "']" << l;
         if(b == '<'){
-            //diagnostic::write() << "Altered [ ignored as of now ]" << //diagnostic::eol;
+            //l << "Altered [ ignored as of now ]" << l;
             //...
             continue;
         }
@@ -75,11 +75,12 @@ rem::cc mouse::test(lfd &_fd)
         // To handle F1-F4, we exclude '['.
         if ((b >= '@') && (b <= '~') && (b != '<') && (b != '[')){
             args.push_back(arg);
-            ////diagnostic::status() << "end csi sequence on '" << color::yellow << (int)b << color::z << "' :" << //diagnostic::eol;
+            //diagnostic::status() << "end csi sequence on '" << color::yellow << (int)b << color::z << "' :\n";
             switch(b)
             {
                 case 'M' : case 'm':
-                    return parse(std::move(args));
+                   // l << "end of sequence :'" << color::yellow << (char)b << color::r << "' args = [" << color::hotpink4 << tux::string::bytes(args) << color::r << "]" << l;
+                    return parse(args);
                 case 'R':
                     //diagnostic::warning() <<" R :Caret report - ignored" << //diagnostic::eol;
                     break;
@@ -116,9 +117,9 @@ std::string mouse::operator()()
          << color::reset << ','
          << color::orangered1 << std::format("{:<3d}", pos.y)
          << color::reset << "]"
-         << (button.left   ? color::orangered1 : color::reset)  << (button.left    ?'L' : 'l') << color::reset << "|"
-         << (button.mid ? color::lime : color::reset)   << (button.mid  ?'M' : 'm') << color::reset << "|"
-         << (button.right  ? color::red4 : color::reset)   << (button.right   ?'R' : 'r') << color::reset << "|"
+         << (button.left   ? color::orangered1 : color::reset)  << (button.left == mouse::BUTTON_PRESSED    ?'L' : 'l')  << color::r << "|"
+         << (button.mid ? color::lime : color::reset)           << (button.mid == mouse::BUTTON_PRESSED     ?'M' : 'm')  << color::r << "|"
+         << (button.right  ? color::red4 : color::reset)        << (button.right == mouse::BUTTON_PRESSED   ?'R' : 'r')  << color::r << "|"
          << (dxy != ui::cxy{0,0}          ? color::yellow : color::reset) << dir()
          << color::reset << "["
          << color::orangered1 << std::format("{:>3d}",dxy.x)
@@ -127,15 +128,16 @@ std::string mouse::operator()()
     return text();
 }
 
-rem::cc mouse::parse(std::vector<int> &&args_)
+rem::cc mouse::parse(std::vector<int> args_)
 {
     // pressed 'flag' ignored. Relying on the XTerm Button and meta state byte which reports buttons on the lasts two bits:
-    ////diagnostic::debug() << //diagnostic::endl;
+    //auto l = diagnostic::debug();
+    //l << "parsing seuqence : " << color::lightskyblue4 << args_.size() << color::r << " arguments [" << color::yellow << tux::string::bytes(args_) << "]" << l;
     mouse mev{};
 
     if (args_.size() != 3){
         //diagnostic::error() << " missing or extra arguments : expected 3, got " << color::yellow << args_.size() << //diagnostic::eol;
-        return rem::cc::rejected;;
+        return rem::cc::rejected;
     }
 
     //////////////////////////////////////////////////////////////////////
@@ -150,11 +152,12 @@ rem::cc mouse::parse(std::vector<int> &&args_)
     mev.state.alt       = (args_[0] & 8   ) != 0;
     mev.state.win       = (args_[0] & 0x10) != 0;
 
-    if(mev.state.alt)
-        //diagnostic::info() << color::pair({.fg=color::grey100, .bg=color::red4}) << "meta" << //diagnostic::endl;
+    //if(mev.state.alt)
+     //   l << color::pair({.fg=color::grey100, .bg=color::red4}) << "meta" << l;
+
     // Subtract 1 from the coords. Because the terminal starts at 1,1 and our ui system starts 0,0
-    mev.pos.x = args_[1]-1;
-    mev.pos.y = args_[2]-1;
+    mev.pos.x = args_[1] - 1; //l << " x coord: " << color::yellow << mev.pos.x << color::r << "|" << args_[1] << l;
+    mev.pos.y = args_[2] - 1; //l << " y coord: " << color::yellow << mev.pos.y << color::r << "|" << args_[2] << l;
     ////diagnostic::info() << "mouse position:" << color::yellow << mev.pos << color::z << //diagnostic::eol;
     terminal::push_event({.type = terminal::event::evt::MEV, .data={.mev=mev}});
     return rem::cc::ready;

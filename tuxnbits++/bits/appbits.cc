@@ -62,6 +62,7 @@ rem::cc appbits::setup()
     diagnostic::use_default(_dlog);
     auto log = diagnostic::status(_dlog);
     log << "Successfully opened the application diagnostic file" << log;
+    system_signals();
     return rem::cc::done;
 }
 

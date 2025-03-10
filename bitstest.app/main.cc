@@ -51,7 +51,6 @@ rem::cc test::run()
             auto evc = term.events().front();
             if(evc.is<io::kbhit>()){
                 if(evc.data.kev.mnemonic == io::kbhit::ESCAPE){
-                    auto l = diagnostic::message(h);
                     l << "ESCAPE KEY hit - Terminating!." << l;
                     terminate(rem::type::normal);
                     return rem::cc::terminate;
@@ -62,7 +61,7 @@ rem::cc test::run()
                 }
             }
             else if(evc.is<io::mouse>()){
-                auto l = dlog::message(); l << "mouse event: " << evc.data.mev() << l;
+                l << "mouse event: " << evc.data.mev() << l;
             }
             term.events().pop_front();
         }

@@ -73,6 +73,7 @@ public:
         out& operator << (tux::string tuxstr);
         out& operator << (char c);
         out& operator << (ui::color::code clr);
+        out& operator << (ui::color::pair clr);
         out& operator << (rem::cc c);
         out& operator << (rem::type ty);
         out& operator << (rem::fn f);

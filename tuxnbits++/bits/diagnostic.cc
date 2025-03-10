@@ -233,6 +233,17 @@ diagnostic::out& diagnostic::out::operator << (ui::color::code clr)
 }
 
 
+/////////////////////////////////////////////////////////////////////////
+/// \brief diagnostic::out::operator <<
+/// \param clr
+/// \return
+///
+diagnostic::out& diagnostic::out::operator << (ui::color::pair clr)
+{
+    (*ofs) << ui::color::render(clr);
+    return *this;
+}
+
 
 //////////////////////////////////////////////////////////////////////
 /// \brief diagnostic::out::operator <<
