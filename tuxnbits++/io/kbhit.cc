@@ -160,7 +160,7 @@ kbhit kbhit::query(std::string_view s)
 rem::cc kbhit::test(lfd &_fd)
 {
     auto * b = _fd.tail();
-    auto l = diagnostic::debug(); l << "buffer size:" << color::lime << _fd.size() << color::r << "..." << l;
+    //auto l = diagnostic::debug(); l << "buffer size:" << color::lime << _fd.size() << color::r << "..." << l;
     u64 code = *b;
     kbhit kb{};
     if(_fd.size() == 1){
@@ -189,9 +189,9 @@ rem::cc kbhit::test(lfd &_fd)
                 return rem::cc::ready;
             }
             --n;
-            l << "remaining bytes to scan:" << color::lime << n << color::r << l;
+            //l << "remaining bytes to scan:" << color::lime << n << color::r << l;
         }while(n);
-        l << rem::cc::rejected << " kbhit::test scan." << l;
+        //l << rem::cc::rejected << " kbhit::test scan." << l;
         return rem::cc::rejected;
     }
     _fd >> *b;

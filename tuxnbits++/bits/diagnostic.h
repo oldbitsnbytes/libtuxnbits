@@ -78,6 +78,11 @@ public:
         out& operator << (rem::type ty);
         out& operator << (rem::fn f);
         out& operator << (glyph::type f);
+        out& operator << (ui::cxy xy);
+        out& operator << (ui::size z);
+        out& operator << (ui::rectangle r);
+        out& operator << (ui::string2d s2d);
+
         template<typename T> out& operator << (const T& v);
     };
 

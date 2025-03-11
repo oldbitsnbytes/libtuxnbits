@@ -28,7 +28,7 @@ mouse& mouse::operator &(const mouse &mev)
         button.mid = mev.button.mid == 1 ? mouse::BUTTON_PRESSED : mouse::BUTTON_RELEASE;
     }
 
-    dxy = pos - mev.pos;
+    //dxy = pos - mev.pos;
 
     // todo : Where do I put mouse move event ??
     return *this;
@@ -47,23 +47,24 @@ rem::cc mouse::test(lfd &_fd)
     u8 b{0};
     int arg{0};
     std::vector<int> args{};
-    auto l = diagnostic::status(); l << "csi begin: " << color::yellow << std::format("0x{:02X}",*_fd) << color::z  << l;
-    if(b = *_fd;b != 27)
+    //auto l = diagnostic::status(); l << "csi begin: " << color::yellow << std::format("0x{:02X}",*_fd) << color::z  << l;
+    if(_fd >> b;b != 27)
     {
-        l = diagnostic::error() << rem::cc::expected << color::r << " ESCape start sequence - got '" << color::hotpink4 << (int)b << color::r << " instead." << l;
+        auto l = diagnostic::error(); l << rem::cc::expected << color::r << " ESCape start sequence - got '" << color::hotpink4 << (int)b << color::r << " instead." << l;
         return rem::cc::rejected;
     }
     _fd >> b;
+    //l << "csi seq #2 :['" << color::yellow << (int)b << color::z << "|" << color::hotpink4 << (char)b << color::r << "']" << l;
     if(b != '[')
     {
-        l = diagnostic::error() << rem::cc::expected << color::r << " CSI sequence - got '" << color::hotpink4 << (int)b << color::r << " instead." << l;
+        auto l = diagnostic::error(); l << rem::cc::expected << color::r << " CSI sequence - got '" << color::hotpink4 << (int)b << color::r << " instead." << l;
         return rem::cc::rejected;
     }
     do{
         _fd >> b;
-        //l << "next:['" << color::yellow << (char)*_fd << color::z << "']" << l;
+        //l << "next:['" << color::yellow << (int)b << color::z << "']" << l;
         if(b == '<'){
-            l << "Altered [ ignored as of now ]" << l;
+            //l << "Altered [ ignored as of now ]" << l;
             //...
             continue;
         }

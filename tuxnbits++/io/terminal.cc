@@ -319,7 +319,7 @@ rem::cc terminal::stdin_proc()
             auto& e = _events.back();
             if(!e.is<mouse>()){
                 _fd0.clear(); // discard and dismiss the rest of the input data because it is not parsable.
-                return rem::cc::failed;
+                return rem::cc::rejected;
             }
             auto& m = e.data.mev;
 
@@ -344,7 +344,7 @@ rem::cc terminal::stdin_proc()
 
             m.dxy = m.pos - mouse::mev.pos;
             mouse::mev = m;
-            //diagnostic::info() << "mouse delta: " << color::yellow << m.dxy << //diagnostic::eol;
+            auto l  = diagnostic::info(); l << "mouse delta: " << color::yellow << m.dxy << color::r << "| mouse::mev::dxy: " << color::yellow << mouse::mev.dxy << l;
         }
     }
 

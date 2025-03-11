@@ -275,6 +275,41 @@ diagnostic::out& diagnostic::out::operator << ( rem::type ty)
     return *this;
 }
 
+diagnostic::out& diagnostic::out::operator << (ui::cxy xy)
+{
+    tux::string str;
+    (*ofs) << (std::string)xy;
+    return *this;
+}
+
+diagnostic::out& diagnostic::out::operator << (ui::size z)
+{
+    tux::string str;
+    str << z;
+    (*ofs) << (std::string)z;
+    return *this;
+}
+
+diagnostic::out& diagnostic::out::operator << (ui::rectangle r)
+{
+    tux::string str;
+    str << r;
+    (*ofs) << (std::string)r;
+    return *this;
+}
+
+diagnostic::out& diagnostic::out::operator << (ui::string2d s2d)
+{
+    tux::string str;
+    (*ofs) << s2d.win();
+    return *this;
+}
+
+
+
+
+
+
 diagnostic::out& diagnostic::out::operator << (rem::fn f)
 {
     tux::string str;
