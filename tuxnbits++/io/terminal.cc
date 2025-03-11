@@ -303,7 +303,10 @@ rem::cc terminal::poll_in()
 
     throw diagnostic::exception()[ diagnostic::except() << "epoll_wait seems unable to address the registered STDIN_FILENO. "];
 }
-
+//////////////////////////////////////////////////////////////////////
+/// \brief terminal::stdin_proc
+/// \return rejected or ready;
+///
 rem::cc terminal::stdin_proc()
 {
 
@@ -350,7 +353,6 @@ rem::cc terminal::stdin_proc()
 
     return rem::cc::ready;
 }
-
 
 
 } // namespace tux::io
