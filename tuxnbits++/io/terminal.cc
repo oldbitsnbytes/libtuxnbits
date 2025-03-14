@@ -22,11 +22,12 @@ rem::cc terminal::enque(event &&ev)
     return rem::cc::accepted;
 }
 
-void terminal::push_event(event&& ev)
-{
-    auto l = diagnostic::debug(); l << "ev: " << (ev.is<mouse>() ? ev.data.mev() : ev.data.kev.name) << l;
-    _terminal->_events.push_back(std::move(ev));
-}
+//////////////////////////////////////////////////////////////////////////////////////
+/// \brief terminal::push_event
+/// \param ev
+/// \todo Guard and unlock _events queue with a mutex and signal/notify threads pool with condition variable.
+///
+void terminal::push_event(event&& ev) { _terminal->_events.push_back(std::move(ev)); }
 
 
 rem::cc terminal::query_winch()
@@ -324,30 +325,9 @@ rem::cc terminal::stdin_proc()
                 _fd0.clear(); // discard and dismiss the rest of the input data because it is not parsable.
                 return rem::cc::rejected;
             }
-            auto& m = e.data.mev;
 
-            m.button.left = (
-                mouse::mev.button.left != m.button.left ? (
-                  m.button.left ? io::mouse::BUTTON_PRESSED
-                                : io::mouse::BUTTON_RELEASE
-                  ) : m.button.left
-            );
-            m.button.right = (
-                mouse::mev.button.right != m.button.right ? (
-                m.button.right ? io::mouse::BUTTON_PRESSED
-                               : io::mouse::BUTTON_RELEASE
-                ) : m.button.right
-            );
-            m.button.mid = (
-                mouse::mev.button.mid != m.button.mid ? (
-                    m.button.mid ? io::mouse::BUTTON_PRESSED
-                                 : io::mouse::BUTTON_RELEASE
-                    ) : m.button.mid
-            );
-
-            m.dxy = m.pos - mouse::mev.pos;
-            mouse::mev = m;
-            auto l  = diagnostic::info(); l << "mouse delta: " << color::yellow << m.dxy << color::r << "| mouse::mev::dxy: " << color::yellow << mouse::mev.dxy << l;
+            mouse::prev_mev = e.data.mev;
+            auto l = diagnostic::status();l << " mouse event: " << e.data.mev() << l;
         }
     }
 

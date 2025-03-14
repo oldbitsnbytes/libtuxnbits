@@ -39,7 +39,7 @@ struct LIBTUXNBITSIO mouse
     ///////////////////////////////////////////////////////////////////////////////////////
     /// \brief BUTTON_PRESSED
     /// ex.: button.left == BUTTON_PRESSED;
-    static constexpr u8 BUTTON_PRESSED = 2;
+    static constexpr u8 BUTTON_PRESSED = 3;
     ///////////////////////////////////////////////////////////////////////////////////////
     /// \brief BUTTON_DOWN
     /// ex.: button.left == mouse::BUTTON_DOWN;
@@ -47,7 +47,7 @@ struct LIBTUXNBITSIO mouse
     ///////////////////////////////////////////////////////////////////////////////////////
     /// \brief BUTTON_RELEASE
     /// ex : button.left == BUTTON_RELEASE;
-    static constexpr u8 BUTTON_RELEASE = 3;
+    static constexpr u8 BUTTON_RELEASE = 2;
 
     mouse()=default;
     ~mouse() = default;
@@ -55,7 +55,7 @@ struct LIBTUXNBITSIO mouse
     mouse(const mouse& cpy) = default;
     mouse(mouse&& mref) noexcept = default;
 
-    mouse& operator=(const mouse& cpy) = default;
+    mouse& operator=(const mouse& cpy);
     mouse& operator=(mouse&& mref) noexcept = default;
 
     struct LIBTUXNBITSIO buttons
@@ -81,11 +81,11 @@ struct LIBTUXNBITSIO mouse
 
     mouse& operator & (const mouse& mev);
     static rem::cc test(lfd& _fd);
-    static mouse mev;
+    static mouse prev_mev;
     operator bool();
     std::string operator()();
 private:
-    static rem::cc parse(std::vector<int> args_);
+    static rem::cc parse(bool brel,std::vector<int> args_);
 };
 
 } // namespace tux::io

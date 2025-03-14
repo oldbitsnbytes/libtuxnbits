@@ -47,7 +47,7 @@ rem::cc test::run()
         }
 
         while(!term.events().empty()){
-            auto evc = term.events().front();
+            auto evc = std::move(term.events().front());
             term.events().pop_front();
             if(evc.is<io::kbhit>()){
                 if(evc.data.kev.mnemonic == io::kbhit::ESCAPE){

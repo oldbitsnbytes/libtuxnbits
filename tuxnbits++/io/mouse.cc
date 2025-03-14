@@ -5,37 +5,25 @@
 namespace tux::io
 {
 
+/////////////////////////////////////////////////////////////////////////
+/// \brief mouse::mev
+///
+mouse mouse::prev_mev{};
 
-
-
-////////////////////////////////////////////////////////////////////////
-/// \brief mouse::operator &
-/// \param mev
-/// \return
-/// \note This method is called once the latest mouse data is assigned to this instance so we can evaluate the mouse events according to the comparison against mev
-mouse& mouse::operator &(const mouse &mev)
+mouse &mouse::operator=(const mouse &cpy)
 {
-    if(std::bitset<2>(mev.button.left) != std::bitset<2>(button.left)){
-        // event on left button:
-        button.left = mev.button.left == 1 ? mouse::BUTTON_PRESSED : mouse::BUTTON_RELEASE;
-    }
-    if(std::bitset<2>(mev.button.right) != std::bitset<2>(button.right)){
-        // event on right button:
-        button.right = mev.button.right == 1 ? mouse::BUTTON_PRESSED : mouse::BUTTON_RELEASE;
-    }
-    if(std::bitset<2>(mev.button.mid) != std::bitset<2>(button.mid)){
-        // event on middle button:
-        button.mid = mev.button.mid == 1 ? mouse::BUTTON_PRESSED : mouse::BUTTON_RELEASE;
-    }
-
-    //dxy = pos - mev.pos;
-
-    // todo : Where do I put mouse move event ??
+    pos = cpy.pos;
+    dxy = cpy.dxy;
+    button = cpy.button;
+    state = cpy.state;
     return *this;
 }
 
 
-mouse mouse::mev{};
+
+
+
+
 ///////////////////////////////////////////////////////////////////
 /// \brief mouse::test
 /// \param _fd
@@ -44,6 +32,7 @@ mouse mouse::mev{};
 ///
 rem::cc mouse::test(lfd &_fd)
 {
+
     u8 b{0};
     int arg{0};
     std::vector<int> args{};
@@ -91,8 +80,10 @@ rem::cc mouse::test(lfd &_fd)
             switch(b)
             {
                 case 'M' : case 'm':
-                   // l << "end of sequence :'" << color::yellow << (char)b << color::r << "' args = [" << color::hotpink4 << tux::string::bytes(args) << color::r << "]" << l;
-                    return parse(args);
+                {
+                    //auto l = diagnostic::debug(); l << "end of sequence :'" << color::yellow << (char)b << color::r << "' args = [" << color::hotpink4 << tux::string::bytes(args) << color::r << "]" << l;
+                    return parse(false,args);
+                }
                 case 'R':
                     //diagnostic::warning() <<" R :Caret report - ignored" << //diagnostic::eol;
                     break;
@@ -105,7 +96,7 @@ rem::cc mouse::test(lfd &_fd)
 
     }while(!_fd.empty());
     _fd.clear();
-    return rem::cc::ready;
+    return rem::cc::rejected;
 }
 
 mouse::operator bool()
@@ -113,6 +104,50 @@ mouse::operator bool()
     return true;
 }
 
+
+rem::cc mouse::parse(bool brel, std::vector<int> args_)
+{
+
+
+    // pressed 'flag' ignored. Relying on the XTerm Button and meta state byte which reports buttons on the lasts two bits:
+    //auto l = diagnostic::debug();
+    //l << "parsing seuqence : " << color::lightskyblue4 << args_.size() << color::r << " arguments [" << color::yellow << tux::string::bytes(args_) << "]" << l;
+    mouse mev{};
+    static mouse prev_mev{};
+    if (args_.size() != 3){
+        //diagnostic::error() << " missing or extra arguments : expected 3, got " << color::yellow << args_.size() << //diagnostic::eol;
+        return rem::cc::rejected;
+    }
+
+    //////////////////////////////////////////////////////////////////////
+    /// Assign the current buttons state, Adjust the button event by the previous mouse data
+    mev.button.left   = (args_[0] & 3) == 0 ? 1 :0;
+    mev.button.mid    = (args_[0] & 3) == 1 ? 1 :0;
+    mev.button.right  = (args_[0] & 3) == 2 ? 1 :0;
+    ///@todo Handle the other buttons...
+    /// ...
+
+    mev.state.shift     = (args_[0] & 4   ) != 0;
+    mev.state.alt       = (args_[0] & 8   ) != 0;
+    mev.state.win       = (args_[0] & 0x10) != 0;
+
+    // Subtract 1 from the coords. Because the terminal starts at 1,1 and our ui system starts 0,0
+    mev.pos.x = args_[1] - 1; //l << " x coord: " << color::yellow << mev.pos.x << color::r << "|" << args_[1] << l;
+    mev.pos.y = args_[2] - 1; //l << " y coord: " << color::yellow << mev.pos.y << color::r << "|" << args_[2] << l;
+    mev.dxy = mev.pos - prev_mev.pos;
+    prev_mev.pos = mev.pos;
+    mev = mev & prev_mev;
+    //auto l = diagnostic::status(); l << " local test: " << prev_mev() << l;
+    terminal::push_event({.type = terminal::event::evt::MEV, .data={.mev=mev}});
+    return rem::cc::ready;
+}
+
+
+
+//////////////////////////////////////////////////////////////////////
+/// \brief mouse::operator () - put current state in a std::string/
+/// \return std::string containing current mouse infos.
+///
 std::string mouse::operator()()
 {
     tux::string text{};
@@ -129,9 +164,9 @@ std::string mouse::operator()()
          << color::reset << ','
          << color::orangered1 << std::format("{:<3d}", pos.y)
          << color::reset << "]"
-         << (button.left   ? color::orangered1 : color::reset)  << (button.left == mouse::BUTTON_PRESSED    ?'L' : 'l')  << color::r << "|"
-         << (button.mid ? color::lime : color::reset)           << (button.mid == mouse::BUTTON_PRESSED     ?'M' : 'm')  << color::r << "|"
-         << (button.right  ? color::red4 : color::reset)        << (button.right == mouse::BUTTON_PRESSED   ?'R' : 'r')  << color::r << "|"
+         << (button.left   ? color::orangered1 : color::reset)  << (button.left     ?'L' : 'l')  << color::r << "|"
+         << (button.mid ? color::lime : color::reset)           << (button.mid      ?'M' : 'm')  << color::r << "|"
+         << (button.right  ? color::red4 : color::reset)        << (button.right    ?'R' : 'r')  << color::r << "|"
          << (dxy != ui::cxy{0,0}          ? color::yellow : color::reset) << dir()
          << color::reset << "["
          << color::orangered1 << std::format("{:>3d}",dxy.x)
@@ -140,41 +175,26 @@ std::string mouse::operator()()
     return text();
 }
 
-rem::cc mouse::parse(std::vector<int> args_)
+////////////////////////////////////////////////////////////////////////
+/// \brief mouse::operator &
+/// \param mev
+/// \return
+/// \note This method is called once the latest mouse data is assigned to this instance so we can evaluate the mouse events according to the comparison against mev
+mouse& mouse::operator &(const mouse &mev)
 {
-    // pressed 'flag' ignored. Relying on the XTerm Button and meta state byte which reports buttons on the lasts two bits:
-    //auto l = diagnostic::debug();
-    //l << "parsing seuqence : " << color::lightskyblue4 << args_.size() << color::r << " arguments [" << color::yellow << tux::string::bytes(args_) << "]" << l;
-    mouse mev{};
-
-    if (args_.size() != 3){
-        //diagnostic::error() << " missing or extra arguments : expected 3, got " << color::yellow << args_.size() << //diagnostic::eol;
-        return rem::cc::rejected;
+    if(std::bitset<2>(mev.button.left) != std::bitset<2>(button.left)){
+        // event on left button:
+        button.left = mev.button.left == 1 ? mouse::BUTTON_PRESSED : mouse::BUTTON_RELEASE;
     }
-
-    //////////////////////////////////////////////////////////////////////
-    /// Assign the current buttons state, Adjust the button event on the previous mouse data
-    mev.button.left   = (args_[0] & 3) == 0 ? 1 :0;
-    mev.button.mid    = (args_[0] & 3) == 1 ? 1 :0;
-    mev.button.right  = (args_[0] & 3) == 2 ? 1 :0;
-    ///@todo Handle the other buttons...
-    /// ...
-
-    mev.state.shift     = (args_[0] & 4   ) != 0;
-    mev.state.alt       = (args_[0] & 8   ) != 0;
-    mev.state.win       = (args_[0] & 0x10) != 0;
-
-    //if(mev.state.alt)
-     //   l << color::pair({.fg=color::grey100, .bg=color::red4}) << "meta" << l;
-
-    // Subtract 1 from the coords. Because the terminal starts at 1,1 and our ui system starts 0,0
-    mev.pos.x = args_[1] - 1; //l << " x coord: " << color::yellow << mev.pos.x << color::r << "|" << args_[1] << l;
-    mev.pos.y = args_[2] - 1; //l << " y coord: " << color::yellow << mev.pos.y << color::r << "|" << args_[2] << l;
-    ////diagnostic::info() << "mouse position:" << color::yellow << mev.pos << color::z << //diagnostic::eol;
-    terminal::push_event({.type = terminal::event::evt::MEV, .data={.mev=mev}});
-    return rem::cc::ready;
+    if(std::bitset<2>(mev.button.right) != std::bitset<2>(button.right)){
+        // event on right button:
+        button.right = mev.button.right == 1 ? mouse::BUTTON_PRESSED : mouse::BUTTON_RELEASE;
+    }
+    if(std::bitset<2>(mev.button.mid) != std::bitset<2>(button.mid)){
+        // event on middle button:
+        button.mid = mev.button.mid == 1 ? mouse::BUTTON_PRESSED : mouse::BUTTON_RELEASE;
+    }
+    return *this;
 }
-
-
 
 } // namespace tux::io
