@@ -28,6 +28,11 @@ using tux::ui::size;
 
 using namespace tux;
 
+
+
+///////////////////////////////////////////////////////////////////////
+/// \brief The diagnostic class
+/// \note IMPORTANT! file outputs have to be managed in specific diagnostic::file instance instead of new individual diagnotic::out instance
 class diagnostic
 {
 public:
@@ -94,36 +99,64 @@ public:
         int page_width{80}; ///< For the frame line.
         using list = std::vector<diagnostic::file>;
         rem::cc close();
-    };
 
+        void init_header();
+        file& write();
+        file& endl();
+        file& operator << (out&);
+        file& operator << (const std::string&);
+        file& operator << (const char*);
+        file& operator << (std::string_view);
+        file& operator << (tux::string tuxstr);
+        file& operator << (char c);
+        file& operator << (ui::color::code clr);
+        file& operator << (ui::color::pair clr);
+        file& operator << (rem::cc c);
+        file& operator << (rem::type ty);
+        file& operator << (rem::fn f);
+        file& operator << (glyph::type f);
+        file& operator << (ui::cxy xy);
+        file& operator << (ui::size z);
+        file& operator << (ui::rectangle r);
+        file& operator << (ui::string2d s2d);
+
+        template<typename T> file& operator << (const T& v);
+
+
+    };
+    // diagnostic::push(current diagnostic::file is 'A');
+    //...auto & out = diagnostic::select(diagnostic::handle B);
+    // ...
+    // diagnostic::error() << " error text..." << out; // .. << out; = new line and flush to out file...
+    // diangostic::pop(previous diagnostic::file is now back to 'A');
 
     diagnostic()=delete;
     ~diagnostic() = default;
 
 
-    static diagnostic::out error       (diagnostic::file::handle=diagnostic::_default_file_handle, std::source_location&& src=std::source_location::current());
-    static diagnostic::out status      (diagnostic::file::handle=diagnostic::_default_file_handle, std::source_location&& src=std::source_location::current());
-    static diagnostic::out warning     (diagnostic::file::handle=diagnostic::_default_file_handle, std::source_location&& src = std::source_location::current());
-    static diagnostic::out fatal       (diagnostic::file::handle=diagnostic::_default_file_handle, std::source_location&& src = std::source_location::current());
-    static diagnostic::out except      (diagnostic::file::handle=diagnostic::_default_file_handle, std::source_location&& src = std::source_location::current());
-    static diagnostic::out message     (diagnostic::file::handle=diagnostic::_default_file_handle, std::source_location&& src = std::source_location::current());
-    static diagnostic::out write       (diagnostic::file::handle=diagnostic::_default_file_handle, std::source_location&& src = std::source_location::current());
-    static diagnostic::out debug       (diagnostic::file::handle=diagnostic::_default_file_handle, std::source_location&& src = std::source_location::current());
-    static diagnostic::out info        (diagnostic::file::handle=diagnostic::_default_file_handle, std::source_location&& src = std::source_location::current());
-    static diagnostic::out comment     (diagnostic::file::handle=diagnostic::_default_file_handle, std::source_location&& src = std::source_location::current());
-    static diagnostic::out syntax      (diagnostic::file::handle=diagnostic::_default_file_handle, std::source_location&& src = std::source_location::current());
-    static diagnostic::out test        (diagnostic::file::handle=diagnostic::_default_file_handle, std::source_location&& src = std::source_location::current());
-    static diagnostic::out interrupted (diagnostic::file::handle=diagnostic::_default_file_handle, std::source_location&& src = std::source_location::current());
-    static diagnostic::out aborted     (diagnostic::file::handle=diagnostic::_default_file_handle, std::source_location&& src = std::source_location::current());
-    static diagnostic::out segfault    (diagnostic::file::handle=diagnostic::_default_file_handle, std::source_location&& src = std::source_location::current());
-    static diagnostic::out log         (diagnostic::file::handle=diagnostic::_default_file_handle, std::source_location&& src = std::source_location::current());
+    static diagnostic::file& error       (std::source_location&& src=std::source_location::current());
+    static diagnostic::file& status      (std::source_location&& src=std::source_location::current());
+    static diagnostic::file& warning     (std::source_location&& src = std::source_location::current());
+    static diagnostic::file& fatal       (std::source_location&& src = std::source_location::current());
+    static diagnostic::file& except      (std::source_location&& src = std::source_location::current());
+    static diagnostic::file& message     (std::source_location&& src = std::source_location::current());
+    static diagnostic::file& write       (std::source_location&& src = std::source_location::current());
+    static diagnostic::file& debug       (std::source_location&& src = std::source_location::current());
+    static diagnostic::file& info        (std::source_location&& src = std::source_location::current());
+    static diagnostic::file& comment     (std::source_location&& src = std::source_location::current());
+    static diagnostic::file& syntax      (std::source_location&& src = std::source_location::current());
+    static diagnostic::file& t1est        (std::source_location&& src = std::source_location::current());
+    static diagnostic::file& interrupted (std::source_location&& src = std::source_location::current());
+    static diagnostic::file& aborted     (std::source_location&& src = std::source_location::current());
+    static diagnostic::file& segfault    (std::source_location&& src = std::source_location::current());
+    static diagnostic::file& log         (std::source_location&& src = std::source_location::current());
     //...
     static rem::cc close(diagnostic::file::handle hindex=-1);
     static rem::cc close_all();
     static std::optional<diagnostic::file::handle> new_file(const std::string& file_name);
     static rem::cc use_default(diagnostic::file::handle h=-1);
     static diagnostic::file::handle _default_file_handle; ///< std::cout by default.
-
+    static diagnostic::file& get(diagnostic::file::handle h);
     class exception :  public std::exception
     {
     public:
