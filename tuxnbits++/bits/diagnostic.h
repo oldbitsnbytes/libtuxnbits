@@ -26,8 +26,8 @@ using tux::ui::size;
 
 
 
-using namespace tux;
-
+using namespace tux::integers;
+using namespace tux::ui;
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -36,20 +36,23 @@ using namespace tux;
 class diagnostic
 {
 public:
+
+    static constexpr int indent_width=4;
+
     struct  out
     {
         std::ostream* ofs{&std::cout};
         struct header_component
         {
-            integers::U8 type  : 1;
-            integers::U8 stamp : 1;
-            integers::U8 fun   : 1;
-            integers::U8 file  : 1;
-            integers::U8 line  : 1;
-            integers::U8 col   : 1;
-            integers::U8 hline : 1;
-            integers::U8 vline : 1;
-            integers::U8 frame : 1; ///< 1 = enable vline|hline|corners and joints.
+            U8 type  : 1;
+            U8 stamp : 1;
+            U8 fun   : 1;
+            U8 file  : 1;
+            U8 line  : 1;
+            U8 col   : 1;
+            U8 hline : 1;
+            U8 vline : 1;
+            U8 frame : 1; ///< 1 = enable vline|hline|corners and joints.
             //...
         };
         rem::type type{};
@@ -77,16 +80,16 @@ public:
         out& operator << (std::string_view);
         out& operator << (tux::string tuxstr);
         out& operator << (char c);
-        out& operator << (ui::color::code clr);
-        out& operator << (ui::color::pair clr);
+        out& operator << (color::code clr);
+        out& operator << (color::pair clr);
         out& operator << (rem::cc c);
         out& operator << (rem::type ty);
         out& operator << (rem::fn f);
         out& operator << (glyph::type f);
-        out& operator << (ui::cxy xy);
-        out& operator << (ui::size z);
-        out& operator << (ui::rectangle r);
-        out& operator << (ui::string2d s2d);
+        out& operator << (cxy xy);
+        out& operator << (size z);
+        out& operator << (rectangle r);
+        out& operator << (string2d s2d);
 
         template<typename T> out& operator << (const T& v);
     };
@@ -94,33 +97,35 @@ public:
 
     struct file{
         using handle = int; ///< straight vector index.
-        std::string name{};
+        std::string name{}; ///< filename
         std::ostream *fileptr{nullptr}; ///< Either a file or the stdout file stream ( std::cout ).
         int page_width{80}; ///< For the frame line.
-        using list = std::vector<diagnostic::file>;
+        using list = std::vector<diagnostic::file>; ///< storage location of the  of diagnostic::file list.
         rem::cc close();
 
-        void init_header();
-        file& write();
-        file& endl();
-        file& operator << (out&);
-        file& operator << (const std::string&);
-        file& operator << (const char*);
-        file& operator << (std::string_view);
-        file& operator << (tux::string tuxstr);
-        file& operator << (char c);
-        file& operator << (ui::color::code clr);
-        file& operator << (ui::color::pair clr);
-        file& operator << (rem::cc c);
-        file& operator << (rem::type ty);
-        file& operator << (rem::fn f);
-        file& operator << (glyph::type f);
-        file& operator << (ui::cxy xy);
-        file& operator << (ui::size z);
-        file& operator << (ui::rectangle r);
-        file& operator << (ui::string2d s2d);
+        int inden{0};
 
-        template<typename T> file& operator << (const T& v);
+        // void init_header();
+        // file& write();
+        // file& endl();
+        // file& operator << (out&);
+        // file& operator << (const std::string&);
+        // file& operator << (const char*);
+        // file& operator << (std::string_view);
+        // file& operator << (tux::string tuxstr);
+        // file& operator << (char c);
+        // file& operator << (color::code clr);
+        // file& operator << (color::pair clr);
+        // file& operator << (rem::cc c);
+        // file& operator << (rem::type ty);
+        // file& operator << (rem::fn f);
+        // file& operator << (glyph::type f);
+        // file& operator << (cxy xy);
+        // file& operator << (size z);
+        // file& operator << (rectangle r);
+        // file& operator << (string2d s2d);
+
+        // template<typename T> file& operator << (const T& v);
 
 
     };
@@ -134,22 +139,22 @@ public:
     ~diagnostic() = default;
 
 
-    static diagnostic::file& error       (std::source_location&& src=std::source_location::current());
-    static diagnostic::file& status      (std::source_location&& src=std::source_location::current());
-    static diagnostic::file& warning     (std::source_location&& src = std::source_location::current());
-    static diagnostic::file& fatal       (std::source_location&& src = std::source_location::current());
-    static diagnostic::file& except      (std::source_location&& src = std::source_location::current());
-    static diagnostic::file& message     (std::source_location&& src = std::source_location::current());
-    static diagnostic::file& write       (std::source_location&& src = std::source_location::current());
-    static diagnostic::file& debug       (std::source_location&& src = std::source_location::current());
-    static diagnostic::file& info        (std::source_location&& src = std::source_location::current());
-    static diagnostic::file& comment     (std::source_location&& src = std::source_location::current());
-    static diagnostic::file& syntax      (std::source_location&& src = std::source_location::current());
-    static diagnostic::file& t1est        (std::source_location&& src = std::source_location::current());
-    static diagnostic::file& interrupted (std::source_location&& src = std::source_location::current());
-    static diagnostic::file& aborted     (std::source_location&& src = std::source_location::current());
-    static diagnostic::file& segfault    (std::source_location&& src = std::source_location::current());
-    static diagnostic::file& log         (std::source_location&& src = std::source_location::current());
+    static diagnostic::out error       (diagnostic::file::handle h=0,std::source_location&& src = std::source_location::current());
+    static diagnostic::out status      (diagnostic::file::handle h=0,std::source_location&& src = std::source_location::current());
+    static diagnostic::out warning     (diagnostic::file::handle h=0,std::source_location&& src = std::source_location::current());
+    static diagnostic::out fatal       (diagnostic::file::handle h=0,std::source_location&& src = std::source_location::current());
+    static diagnostic::out except      (diagnostic::file::handle h=0,std::source_location&& src = std::source_location::current());
+    static diagnostic::out message     (diagnostic::file::handle h=0,std::source_location&& src = std::source_location::current());
+    static diagnostic::out write       (diagnostic::file::handle h=0,std::source_location&& src = std::source_location::current());
+    static diagnostic::out debug       (diagnostic::file::handle h=0,std::source_location&& src = std::source_location::current());
+    static diagnostic::out info        (diagnostic::file::handle h=0,std::source_location&& src = std::source_location::current());
+    static diagnostic::out comment     (diagnostic::file::handle h=0,std::source_location&& src = std::source_location::current());
+    static diagnostic::out syntax      (diagnostic::file::handle h=0,std::source_location&& src = std::source_location::current());
+    static diagnostic::out test        (diagnostic::file::handle h=0,std::source_location&& src = std::source_location::current());
+    static diagnostic::out interrupted (diagnostic::file::handle h=0,std::source_location&& src = std::source_location::current());
+    static diagnostic::out aborted     (diagnostic::file::handle h=0,std::source_location&& src = std::source_location::current());
+    static diagnostic::out segfault    (diagnostic::file::handle h=0,std::source_location&& src = std::source_location::current());
+    static diagnostic::out log         (diagnostic::file::handle h=0,std::source_location&& src = std::source_location::current());
     //...
     static rem::cc close(diagnostic::file::handle hindex=-1);
     static rem::cc close_all();

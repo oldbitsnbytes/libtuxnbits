@@ -118,7 +118,11 @@ public:
     string& operator << (int  c) { _d_ += std::to_string(c); return *this;}
     string& operator << (float  c) { _d_ += std::to_string(c); return *this;}
     string& operator << (std::string_view sv) { _d_ += sv; return *this; }
+    string& operator << (const string& tstr) { _d_ += tstr(); return *this; }
     //-----------------------------------------------------------------------------
+
+    string& fill(size_t n, char c=0x20);
+    static std::string fill(char c, size_t n);
 
     std::string operator()()const  { return _d_; }
     explicit operator std::string() { return _d_; }
@@ -153,7 +157,7 @@ public:
 
 
     static constexpr const char* s_default_separators = "\\%(){}[]`$#@!;,~?^&<>=+-*/:.";
-    size_t words(string::word::list& a_list,  bool a_keep_as_word=true, const char* a_sep = string::s_default_separators);
+    size_t words(string::word::list& a_list,  bool a_keep_as_word=true, const char* a_sep = tux::string::s_default_separators);
     template<typename In> string& hex(In& d)
     {
         std::istringstream in(_d_.c_str()+2); // bypass mandatory '0x/X"

@@ -29,14 +29,14 @@ rem::cc test::run()
     (void)setup();
     h = *dlog::new_file("tests");
     auto l = dlog::message(h) << color::r << " - The Great Beginning of the tux::bitsnbytes++ !\n";
-    l << color::yellow << "More to come!" << l;
+    l << color::yellow << "ready" << l;
 
-    dlog::Test Test("[diagnostic::Test]");
-    auto r = Test.exec<std::string>("auto", [&](diagnostic::Test& Tst)->auto {
-        return std::make_pair<rem::cc, std::string>(rem::cc::success,"allo");
-    });
+    // dlog::Test Test("[diagnostic::Test]");
+    // auto r = Test.exec<std::string>("auto", [&](diagnostic::Test& Tst)->auto {
+    //     return std::make_pair<rem::cc, std::string>(rem::cc::success,"allo");
+    // });
 
-    l << rem::fn::month << rem::fn::weekday << color::r << " : Test result: " << r << l;
+    //l << rem::fn::month << rem::fn::weekday << color::r << " : Test result: " << r << l;
     l = diagnostic::info(h) << " Starting the terminal input events loop"  << l;
     rem::action ac{rem::action::cont};
     do{
@@ -57,7 +57,6 @@ rem::cc test::run()
                     break;//return rem::cc::terminate;
                 }
                 else{
-                    auto l = dlog::message(h);
                     l << "CHARACTER or command: '" << evc.data.kev.name << "' | (char)'" << (char)evc.data.kev.code << '\'' << l;
                 }
             }

@@ -327,7 +327,7 @@ rem::cc terminal::stdin_proc()
             }
 
             mouse::prev_mev = e.data.mev;
-            auto l = diagnostic::status();l << " mouse event: " << e.data.mev() << l;
+            //auto l = diagnostic::status();l << " mouse event: " << e.data.mev() << l;
         }
     }
 

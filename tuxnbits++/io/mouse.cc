@@ -22,6 +22,17 @@ mouse &mouse::operator=(const mouse &cpy)
 
 
 
+int direction_arrows[3][3]={
+    {tux::glyph::arrow_up_left, tux::glyph::arrow_up,   tux::glyph::arrow_up_right},
+    {tux::glyph::arrow_left,    tux::glyph::stop,       tux::glyph::arrowright},
+    {tux::glyph::arrow_up_left, tux::glyph::arrow_up,   tux::glyph::arrow_up_right}
+};
+
+ui::cxy indexes[3][3]={
+    {{-1,-1},{0,-1},{1,-1}},
+    {{-1, 0},{0, 0},{1, 0}},
+    {{-1, 1},{0, 1},{1, 1}}
+};
 
 
 ///////////////////////////////////////////////////////////////////

@@ -64,6 +64,38 @@ string::~string()
 
 
 string& string::operator=(const string& a_str) { _d_ = a_str._d_; return *this; }
+
+
+/////////////////////////////////////////////////////////////////////
+/// \brief string::fill
+///     Fills with \arg c n times at the end of _d_ ( begin or end-1 ).
+/// \param n
+/// \param c
+/// \return ref-to-self
+///
+string &string::fill(size_t n, char c)
+{
+    if(!_d_.empty())
+        std::fill_n(_d_.end()-1, n, c);
+    else
+        std::fill_n(_d_.begin(),n,c);
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////
+/// \brief string::fill
+///     static version that creates and return pre-filled std::string with \arg c
+///     usage: Mostly for indentation with spaces
+/// \param c
+/// \param n
+/// \return
+///
+std::string string::fill(char c, size_t n)
+{
+    return std::string(n,c);
+}
+
+
 string& string::operator=(const char* a_str)   { _d_ = a_str; return *this; }
 string& string::operator=(char a_ch)           { _d_ = a_ch; return *this; }
 string& string::operator=(integers::u8 v)      num_assign(v)
@@ -291,12 +323,12 @@ std::string string::make_str(const tux::string::list& _list)
 ///   \li %j	Day of the year (001-366)
 ///   \li %m	Month as a decimal number (01-12)
 ///   \li %M	Minute (00-59)
-///   \li %n	New-line character ('\n')	
+///   \li %n	New-line character ('\n')
 ///   \li %p	AM or PM designation
 ///   \li %r	12-hour clock time
 ///   \li %R	24-hour HH:MM time, equivalent to %H:%M
 ///   \li %S	Second (00-61)
-///   \li %t	Horizontal-tab character ('\t')	
+///   \li %t	Horizontal-tab character ('\t')
 ///   \li %T	ISO 8601 time format (HH:MM:SS), equivalent to %H:%M:%S
 ///   \li %u	ISO 8601 weekday as number with Monday as 1 (1-7)
 ///   \li %U	Week number with the first Sunday as the first day of week one (00-53)
