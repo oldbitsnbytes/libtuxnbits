@@ -22,4 +22,5 @@ add_dependencies(bitstest.app tuxnbits io)
 target_link_libraries(bitstest.app
     tuxnbits++.io
     tuxnbits++.bits
+    tuxnbits++.tui
 )

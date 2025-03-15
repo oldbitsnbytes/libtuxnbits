@@ -221,9 +221,9 @@ terminal::~terminal()
 rem::cc terminal::render(vchar::bloc* blk, ui::cxy xy)
 {
 
-    for (int y=0; y < blk->dim.height<int>(); y++){
+    for (int y=0; y < blk->geometry.height<int>(); y++){
         terminal::cursor({xy.x, xy.y+1+y});
-        std::cout << vchar::render_line(blk->buffer->begin() + (*blk->dim.width<>() * y), *blk->dim.width<>());
+        std::cout << vchar::render_line(blk->buffer->begin() + (*blk->geometry.width<>() * y), *blk->geometry.width<>());
     }
     std::cout << std::flush;
     return rem::cc::done;

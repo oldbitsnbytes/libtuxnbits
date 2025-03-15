@@ -62,7 +62,7 @@ struct LIBTUXNBITS cadre
         glyph::T CDT;///< Cross Down-towards-Top
         cadre::frame_data& operator = (cadre::frame_matrix FrameModel);
 
-    }frame{ "┏", "┓", "┗", "┛", "━", "┃", "╋", "┫", "┣", "┳", "┻" }; ///< By ...default, hardcode the ...default model.
+    }frame{ "╭", "╮", "╰", "╯", "─", "│", "┼", "┤", "├", "┬", "┴" }; ///< By ...default, hardcode the ...default model.
 /*           ┃    ┃    ┃    ┃    ┃    ┃    ┃    ┃    ┃    ┃    ┃
              ┃    ┃    ┃    ┃    ┃    ┃    ┃    ┃    ┃    ┃    ┗━━{x,x,x,0,0}
              ┃    ┃    ┃    ┃    ┃    ┃    ┃    ┃    ┃    ┗━━━━━━━{x,0,x,x,0}

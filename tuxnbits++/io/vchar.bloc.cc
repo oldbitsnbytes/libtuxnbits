@@ -10,7 +10,7 @@ namespace tux::io
 
 vchar::bloc& vchar::bloc::cursor(ui::cxy _pos)
 {
-    if (!dim.goto_xy(_pos))
+    if (!geometry.goto_xy(_pos))
     {
         state = rem::cc::oob;
         return *this;
@@ -22,13 +22,13 @@ vchar::bloc& vchar::bloc::cursor(ui::cxy _pos)
 
 int vchar::bloc::line() const
 {
-    return dim.cursor.y;
+    return geometry.cursor.y;
 }
 
 
 int vchar::bloc::column() const
 {
-    return dim.cursor.x;
+    return geometry.cursor.x;
 }
 
 
@@ -79,7 +79,7 @@ vchar::bloc& vchar::bloc::operator<<(cadre::index _frameindex)
  */
 bool vchar::bloc::operator++()
 {
-    if (++dim)
+    if (++geometry)
     {
         ++_c_;
         return true;
@@ -95,7 +95,7 @@ bool vchar::bloc::operator++()
  */
 bool vchar::bloc::operator++(int)
 {
-    if (++dim)
+    if (++geometry)
     {
         ++_c_;
         return true;
@@ -112,7 +112,7 @@ bool vchar::bloc::operator++(int)
  */
 bool vchar::bloc::operator--()
 {
-    if (--dim)
+    if (--geometry)
     {
         --_c_;
         return true;
@@ -129,7 +129,7 @@ bool vchar::bloc::operator--()
  */
 bool vchar::bloc::operator--(int)
 {
-    if (--dim)
+    if (--geometry)
     {
         --_c_;
         return true;
@@ -147,23 +147,33 @@ vchar::bloc::~bloc()
 
 vchar::bloc::operator bool() const
 {
-    return !buffer->empty() && dim;
+    return !buffer->empty() && geometry;
 }
 
 
 vchar::back_buffer vchar::bloc::create(const ui::size& _dim, color::pair _colours)
 {
     auto sp = std::make_shared<vchar::string>(_dim.area(), vchar(color::pair(_colours)));
-    dim = {{0,0},_dim};
+    geometry = {{0,0},_dim};
     return sp;
+}
+
+rem::cc vchar::bloc::set_pos(cxy xy)
+{
+    if(!geometry.in(xy)){
+        auto l = diagnostic::error(); l << rem::cc::oob << ":{" << color::hotpink4 << xy << color::r << "}" << l;
+        return rem::cc::rejected;
+    }
+    geometry.moveat(xy);
+    return rem::cc::accepted;
 }
 
 
 void vchar::bloc::sync_cursors()
 {
     auto  w = _c_ - buffer->begin();
-    dim.cursor = {static_cast<int>(w) % *dim.width(),static_cast<int>(w) / *dim.width()};
-    end_pos = dim.cursor;
+    geometry.cursor = {static_cast<int>(w) % *geometry.width(),static_cast<int>(w) / *geometry.width()};
+    end_pos = geometry.cursor;
 }
 
 

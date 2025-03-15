@@ -75,7 +75,7 @@
      {
          // --- CONFIGS AND INTERNAL DATA--------------
          color::pair             colours{};
-         ui::rectangle           dim{};
+         ui::rectangle           geometry{};
          vchar::back_buffer      buffer{};
          ui::cxy                 end_pos{};
          rem::cc                 state{rem::cc::empty};
@@ -97,12 +97,13 @@
          bool         operator --();
          bool         operator --(int);
          //...
-
+         rem::cc draw_frame();
          ~bloc();
          explicit operator bool() const;
          vchar::back_buffer create(const ui::size& _dim, color::pair _colours);
-         void set_pos(ui::cxy xy) { dim.a = xy;}
+         rem::cc set_pos(ui::cxy xy);
          void sync_cursors();
+
      };
 
 

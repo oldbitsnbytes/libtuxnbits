@@ -10,7 +10,7 @@ OPTION(BITS         "Build the the bits and bytes support...........[libtuxnbits
 OPTION(IO           "Build the IO sublib............................[libtuxnbits++.io.a]"  ON)
 OPTION(LEXER        "Build the lexer sublib.........................[libtuxnbits++.lexer.a]" OFF)
 OPTION(EST          "Build the est (Expression Syntax Tree) sublib..[libtuxnbits++.est.a]" OFF)
-OPTION(TUI          "Build the console ANSI UI  sublib..............[libtuxnbits++.tui.a]" OFF)
+OPTION(TUI          "Build the console ANSI UI  sublib..............[libtuxnbits++.tui.a]" ON)
 OPTION(TESTS        "Build the tests................................[bitstest/bits.app]" ON)
 
 
@@ -36,7 +36,12 @@ endif()
 
 if(TUI)
     message(STATUS "Building libobb.tui.a")
-    add_subdirectory(tuxnbits++/bits/tui)
+    include(tui.cmake)
+
+target_sources(tui
+  PRIVATE
+  tuxnbits++/tui/pencil.h tuxnbits++/tui/pencil.cc
+)
 endif()
 
 if(TESTS)

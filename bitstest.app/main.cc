@@ -1,5 +1,6 @@
 #include <tuxnbits++/bits/appbits.h>
 #include <tuxnbits++/io/terminal.h>
+#include <tuxnbits++/io/vchar.h>
 
 using dlog = diagnostic;
 namespace tux
