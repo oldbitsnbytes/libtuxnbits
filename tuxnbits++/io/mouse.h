@@ -84,6 +84,8 @@ struct LIBTUXNBITSIO mouse
     static mouse prev_mev;
     operator bool();
     std::string operator()();
+    static std::string get_direction_arrow(ui::cxy xy);
+
 private:
     static rem::cc parse(bool brel,std::vector<int> args_);
 };

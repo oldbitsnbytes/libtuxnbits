@@ -167,22 +167,22 @@ rem::action lfd::_read()
         return _zero_read(*this);
     }
 
-    auto b = _head;
+    //auto b = _head;
     ::read(_fd, _head, nbytes);
     _head += nbytes;
-    {
-        u64 bytes{0};
-        std::vector<int> strv{};
-        while(b <= _head)
-        {
-            strv.push_back(*b);
-            if(strv.size() <= 8)
-                bytes = bytes << 8 | *b;
-            ++b;
-        }
-        auto s = tux::string::bytes(strv);
-        //diagnostic::debug() << color::yellow << nbytes << color::r << " bytes: {" << color::lighcoreateblue << s << color::r << "}" << //diagnostic::eol;
-    }
+    // {
+    //     u64 bytes{0};
+    //     std::vector<int> strv{};
+    //     while(b <= _head)
+    //     {
+    //         strv.push_back(*b);
+    //         if(strv.size() <= 8)
+    //             bytes = bytes << 8 | *b;
+    //         ++b;
+    //     }
+    //     auto s = tux::string::bytes(strv);
+    //     //diagnostic::debug() << color::yellow << nbytes << color::r << " bytes: {" << color::lighcoreateblue << s << color::r << "}" << //diagnostic::eol;
+    // }
 
     //...
     return rem::action::cont;

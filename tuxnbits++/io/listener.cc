@@ -89,21 +89,15 @@ rem::cc listener::run()
         auto nevents = epoll_wait(_epoll_fd, _poll_events, listener::max_events,-1);
         //diagnostic::info() << color::yellow << nevents << color::z << " events:" << //diagnostic::endl;
         refresh_fds();
-        if ((nevents <= 0) && (errno != EINTR))
-        {
+        if ((nevents <= 0) && (errno != EINTR)){
             //diagnostic::error() << "epoll_wait() failed: (events count = " << color::yellow << nevents << color::z << "): " << color::deeppink8 <<  strerror(errno) << //diagnostic::endl;
             return rem::cc::failed;
         }
-        for (int n = 0; n < nevents; n++)
-        {
-            for (auto&fd : _fds)
-            {
-                if (fd._fd ==_poll_events[n].data.fd)
-                {
-                    if (_poll_events[n].events & EPOLLIN)
-                    {
-                        if (fd._flags.active)
-                        {
+        for (int n = 0; n < nevents; n++){
+            for (auto&fd : _fds){
+                if (fd._fd ==_poll_events[n].data.fd){
+                    if (_poll_events[n].events & EPOLLIN){
+                        if (fd._flags.active){
                             auto a = fd._read();
                             ////diagnostic::debug() << color::aqua << fd._id << color::z << ": [" << static_cast<int>(a) << "] " << rem::to_string(a) << //diagnostic::endl;
                             if (a != rem::action::cont){
@@ -114,8 +108,7 @@ rem::cc listener::run()
                         else
                             ;//diagnostic::debug() << " invoked lfd is NOT active." << //diagnostic::endl;
                     }
-                    if ((_poll_events[n].events & EPOLLHUP) || (_poll_events[n].events & EPOLLERR))
-                    {
+                    if ((_poll_events[n].events & EPOLLHUP) || (_poll_events[n].events & EPOLLERR)){
                         //diagnostic::info() << " broken link on '" << color::aqua << fd._id << color::z <<  //diagnostic::endl;
                         fd.kill();
                         continue;
@@ -133,8 +126,7 @@ rem::cc listener::run()
 rem::cc listener::poll(int _fd)
 {
     auto [r, f] = query_lfd(_fd);
-    if(!r)
-    {
+    if(!r){
         //diagnostic::error() << " file descriptor #" << color::red4 << _fd << color::z << " is not registered into this listener's group." << //diagnostic::eol;
         return r;
     }
@@ -143,14 +135,12 @@ rem::cc listener::poll(int _fd)
     //diagnostic::info() <<  color::yellow << nevents << color::z << " event(s):" << //diagnostic::endl;
     refresh_fds();
 
-    if ((nevents <= 0) && (errno != EINTR))
-    {
+    if ((nevents <= 0) && (errno != EINTR)){
         //diagnostic::error() << "epoll_wait() failed: (events count = " << color::yellow << nevents << color::z << "): " << color::deeppink8 <<  strerror(errno) << //diagnostic::endl;
         return rem::cc::failed;
     }
     rem::action A{};
-    if(f._fd == _poll_events[0].data.fd)
-    {
+    if(f._fd == _poll_events[0].data.fd){
         if (_poll_events[0].events & EPOLLIN)
         {
             if (f._flags.active)

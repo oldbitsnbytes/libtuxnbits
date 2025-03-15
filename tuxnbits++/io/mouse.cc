@@ -22,17 +22,17 @@ mouse &mouse::operator=(const mouse &cpy)
 
 
 
-int direction_arrows[3][3]={
+glyph::type direction_arrows[3][3]={
     {tux::glyph::arrow_up_left, tux::glyph::arrow_up,   tux::glyph::arrow_up_right},
     {tux::glyph::arrow_left,    tux::glyph::stop,       tux::glyph::arrowright},
-    {tux::glyph::arrow_up_left, tux::glyph::arrow_up,   tux::glyph::arrow_up_right}
+    {tux::glyph::arrow_down_left, tux::glyph::arrow_down,   tux::glyph::arrow_down_right}
 };
 
-ui::cxy indexes[3][3]={
-    {{-1,-1},{0,-1},{1,-1}},
-    {{-1, 0},{0, 0},{1, 0}},
-    {{-1, 1},{0, 1},{1, 1}}
-};
+// ui::cxy indexes[3][3]={
+//     {{-1,-1},{0,-1},{1,-1}},
+//     {{-1, 0},{0, 0},{1, 0}},
+//     {{-1, 1},{0, 1},{1, 1}}
+// };
 
 
 ///////////////////////////////////////////////////////////////////
@@ -48,15 +48,13 @@ rem::cc mouse::test(lfd &_fd)
     int arg{0};
     std::vector<int> args{};
     //auto l = diagnostic::status(); l << "csi begin: " << color::yellow << std::format("0x{:02X}",*_fd) << color::z  << l;
-    if(_fd >> b;b != 27)
-    {
+    if(_fd >> b;b != 27){
         auto l = diagnostic::error(); l << rem::cc::expected << color::r << " ESCape start sequence - got '" << color::hotpink4 << (int)b << color::r << " instead." << l;
         return rem::cc::rejected;
     }
     _fd >> b;
     //l << "csi seq #2 :['" << color::yellow << (int)b << color::z << "|" << color::hotpink4 << (char)b << color::r << "']" << l;
-    if(b != '[')
-    {
+    if(b != '['){
         auto l = diagnostic::error(); l << rem::cc::expected << color::r << " CSI sequence - got '" << color::hotpink4 << (int)b << color::r << " instead." << l;
         return rem::cc::rejected;
     }
@@ -88,10 +86,8 @@ rem::cc mouse::test(lfd &_fd)
         if ((b >= '@') && (b <= '~') && (b != '<') && (b != '[')){
             args.push_back(arg);
             //diagnostic::status() << "end csi sequence on '" << color::yellow << (int)b << color::z << "' :\n";
-            switch(b)
-            {
-                case 'M' : case 'm':
-                {
+            switch(b){
+                case 'M' : case 'm':{
                     //auto l = diagnostic::debug(); l << "end of sequence :'" << color::yellow << (char)b << color::r << "' args = [" << color::hotpink4 << tux::string::bytes(args) << color::r << "]" << l;
                     return parse(false,args);
                 }
@@ -152,8 +148,31 @@ rem::cc mouse::parse(bool brel, std::vector<int> args_)
     terminal::push_event({.type = terminal::event::evt::MEV, .data={.mev=mev}});
     return rem::cc::ready;
 }
+//if(dxy.x < 0) dir << glyph::arrow_left;
+// else if(dxy.x > 0) dir << glyph::data[glyph::arrowright];
+// else if(dxy.y < 0) dir << glyph::data[glyph::arrow_up];
+// else if(dxy.y > 0) dir << glyph::data[glyph::arrow_down];
+// else
+//     dir << glyph::data[glyph::big_dot];
 
 
+
+std::string mouse::get_direction_arrow(ui::cxy dxy)
+{
+    tux::string arrow{};
+    bool m[3][3]={
+        {dxy.x < 0 && dxy.y < 0, dxy.x == 0 && dxy.y < 0, dxy.x > 0 && dxy.y < 0},
+        {dxy.x < 0 && dxy.y == 0, dxy.x == 0 && dxy.y == 0, dxy.x > 0 && dxy.y == 0},
+        {dxy.x < 0 && dxy.y > 0, dxy.x == 0 && dxy.y > 0, dxy.x > 0 && dxy.y > 0}
+    };
+    for(int y = 0; y < 3; y++)
+        for(int x=0; x < 3; x++)
+            if(m[y][x]){
+                arrow << direction_arrows[y][x];
+                return arrow();
+            }
+    return " ";
+}
 
 //////////////////////////////////////////////////////////////////////
 /// \brief mouse::operator () - put current state in a std::string/
@@ -163,13 +182,6 @@ std::string mouse::operator()()
 {
     tux::string text{};
     tux::string dir{};
-    if(dxy.x < 0) dir << glyph::arrow_left;
-    else if(dxy.x > 0) dir << glyph::data[glyph::arrowright];
-    else if(dxy.y < 0) dir << glyph::data[glyph::arrow_up];
-    else if(dxy.y > 0) dir << glyph::data[glyph::arrow_down];
-    else
-        dir << glyph::data[glyph::big_dot];
-
     text << "["
          << color::orangered1 << std::format("{:>3d}", pos.x)
          << color::reset << ','
@@ -178,7 +190,7 @@ std::string mouse::operator()()
          << (button.left   ? color::orangered1 : color::reset)  << (button.left     ?'L' : 'l')  << color::r << "|"
          << (button.mid ? color::lime : color::reset)           << (button.mid      ?'M' : 'm')  << color::r << "|"
          << (button.right  ? color::red4 : color::reset)        << (button.right    ?'R' : 'r')  << color::r << "|"
-         << (dxy != ui::cxy{0,0}          ? color::yellow : color::reset) << dir()
+         << (dxy != ui::cxy{0,0}          ? color::yellow : color::reset) << get_direction_arrow(dxy)
          << color::reset << "["
          << color::orangered1 << std::format("{:>3d}",dxy.x)
          << color::reset << ','
@@ -207,5 +219,22 @@ mouse& mouse::operator &(const mouse &mev)
     }
     return *this;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 } // namespace tux::io

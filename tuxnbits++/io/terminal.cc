@@ -276,7 +276,7 @@ rem::cc terminal::poll_in()
     ////diagnostic::debug() << " number of event(s) = " << color::yellow << nev << color::z << //diagnostic::eol;
     if (nev <= 0)// && (errno != EINTR))
     {
-        ////diagnostic::error() << "epoll_wait() failed: (events count = " << color::yellow << nev << color::z << "): " << color::deeppink8 <<  strerror(errno) << //diagnostic::endl;
+        auto l = diagnostic::error(); l << "epoll_wait() failed: (events count = " << color::yellow << nev << color::z << "): " << color::deeppink8 <<  strerror(errno) << l;
         return rem::cc::rejected;
     }
     for(int n = 0; n < nev; n++){
@@ -291,12 +291,12 @@ rem::cc terminal::poll_in()
             }
             if (_poll_events[n].events & EPOLLERR)
             {
-                //diagnostic::error() << "epoll_wait() failed: (events count = " << color::yellow << nev << color::z << "): " << color::deeppink8 <<  strerror(errno) << //diagnostic::endl;
+                auto l = diagnostic::error(); l << "epoll_wait() failed: (events count = " << color::yellow << nev << color::z << "): " << color::deeppink8 <<  strerror(errno) << l;
                 return rem::cc::failed;
             }
             if (_poll_events[n].events & EPOLLERR)
             {
-                //diagnostic::error() << "epoll_wait() hangup event" << //diagnostic::endl;
+                auto l = diagnostic::error(); l << "epoll_wait() hangup event" << l;
                 return rem::cc::failed;
             }
         }
