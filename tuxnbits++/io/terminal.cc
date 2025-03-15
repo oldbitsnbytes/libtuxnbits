@@ -310,7 +310,6 @@ rem::cc terminal::poll_in()
 ///
 rem::cc terminal::stdin_proc()
 {
-
     while(!_fd0.empty())
     {
         if(auto rcc = kbhit::test(_fd0); !!rcc){

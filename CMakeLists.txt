@@ -22,7 +22,6 @@ endif()
 if(IO)
     message(STATUS "Building libobb.io.a")
     include(io.cmake)
-
 endif()
 
 if(LEXER)

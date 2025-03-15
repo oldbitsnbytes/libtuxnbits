@@ -36,6 +36,7 @@ add_library(${TARGETNAME} STATIC
     ${TARGET_DIR}/mouse.cc
     ${TARGET_DIR}/terminal.cc
     ${TARGET_DIR}/vchar.cc
+    ${TARGET_DIR}/vchar.bloc.cc
 )
 
 
