@@ -73,7 +73,8 @@
 
      struct LIBTUXNBITSIO bloc
      {
-         // --- CONFIGS AND INTERNAL DATA--------------
+
+        // --- CONFIGS AND INTERNAL DATA--------------
          color::pair             colours{};
          ui::rectangle           geometry{};
          vchar::back_buffer      buffer{};
@@ -100,9 +101,18 @@
          rem::cc draw_frame();
          ~bloc();
          explicit operator bool() const;
-         vchar::back_buffer create(const ui::size& _dim, color::pair _colours);
+         static vchar::bloc* create(const ui::size& _dim, color::pair _colours);
          rem::cc set_pos(ui::cxy xy);
+         void clear();
          void sync_cursors();
+
+         rem::cc home();
+         rem::cc gotoxy(ui::cxy xy);
+         void set_foreground(ui::color::code fg);
+         void set_background(ui::color::code bg);
+         color::code fg();
+         color::code bg();
+
 
      };
 

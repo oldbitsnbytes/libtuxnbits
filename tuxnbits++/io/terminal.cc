@@ -100,8 +100,9 @@ rem::cc terminal::begin()
 
     //::signal(SIGWINCH, &terminal::resize_signal); // --> Must be Handled in the thread/proc/ env
     //if(_flags & terminal::use_double_buffer)
-        switch_alternate();
-    //cursor_off();
+    switch_alternate();
+    cursor_off();
+    query_winch();
     terminal::enable_mouse();
     terminal::init_stdinput();
 
@@ -196,8 +197,11 @@ void terminal::cursor_on()
 
 bool terminal::cursor(ui::cxy xy)
 {
+    auto l = diagnostic::debug(1);
     if(_geometry.goto_xy(xy))
-        std::cout << std::format("\x1b[{:d};{:d}H", xy.y+1,xy.x+1);
+        std::cout << "\x1b[" << xy.y+1 << ';' << xy.x+1 << 'H'<< std::flush;
+    else
+        l << rem::type::err << color::hotpink3 << " term geometry [" << color::yellow << _geometry << color::hotpink3 << "] rejected positionning at:" << color::yellow << xy << l;
     return true;
 }
 
@@ -222,7 +226,7 @@ rem::cc terminal::render(vchar::bloc* blk, ui::cxy xy)
 {
 
     for (int y=0; y < blk->geometry.height<int>(); y++){
-        terminal::cursor({xy.x, xy.y+1+y});
+        terminal::cursor({xy.x+1, xy.y+1+y});
         std::cout << vchar::render_line(blk->buffer->begin() + (*blk->geometry.width<>() * y), *blk->geometry.width<>());
     }
     std::cout << std::flush;

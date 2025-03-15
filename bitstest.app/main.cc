@@ -10,6 +10,7 @@ namespace tux
 class test : public appbits
 {
     io::terminal term{nullptr,"tests",{}};
+    io::vchar::bloc *blk{nullptr};
 public:
     test(const std::string& tname, tux::string::view_list&& vargs);
     ~test() override = default;
@@ -31,6 +32,10 @@ rem::cc test::run()
     h = *dlog::new_file("tests");
     auto l = dlog::message(h) << color::r << " - The Great Beginning of the tux::bitsnbytes++ !\n";
     l << color::yellow << "ready" << l;
+    //blk->home();
+    blk->set_foreground(color::yellow);
+    *blk << "Hello, world!";
+    term.render(blk,{1,1});
 
     // dlog::Test Test("[diagnostic::Test]");
     // auto r = Test.exec<std::string>("auto", [&](diagnostic::Test& Tst)->auto {
@@ -78,6 +83,7 @@ rem::cc test::setup()
     term.begin();
     term.init_stdinput();
     log << "terminal is ready" << log;
+    blk = io::vchar::bloc::create({40,3}, {color::yellow, color::code::blueviolet});
     return rem::cc::ok;
 }
 
@@ -91,6 +97,7 @@ rem::cc test::terminate(rem::type reason)
     appbits::terminate(reason);
     term.end();
     dlog::close_all();
+    if(blk) delete blk;
     return rem::cc::ok;
 }
 

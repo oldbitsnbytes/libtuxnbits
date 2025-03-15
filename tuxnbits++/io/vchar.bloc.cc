@@ -34,12 +34,17 @@ int vchar::bloc::column() const
 
 vchar::bloc& vchar::bloc::operator<<(const std::string& _str)
 {
-    if (_str.length() >= (buffer->end()-_c_))
-        throw diagnostic::exception()[ diagnostic::except() << rem::type::fatal << rem::cc::oob];
+    if (_str.length() >= (buffer->end() - _c_))
+        throw diagnostic::exception()[
+            diagnostic::except(1) << rem::type::fatal << rem::cc::oob << rem::fn::endl
+                                                            << "\nstrlen:" << color::yellow << _str.length() << color::r
+                                                            << "\nbuffer length from end() pointer: " << color::yellow << (buffer->end() - buffer->begin())
+                                                            << "\nlogical cursor: " << color::yellow << geometry.cursor
+        ];
 
     for (auto c: _str)
     {
-        **_c_++ << c;
+        **_c_++ << colours << c;
     }
     return *this;
 }
@@ -47,7 +52,7 @@ vchar::bloc& vchar::bloc::operator<<(const std::string& _str)
 
 vchar::bloc& vchar::bloc::operator<<(glyph::type _glyph)
 {
-    **_c_ << _glyph;
+    **_c_ << colours << _glyph;
     return *this;
 }
 
@@ -61,7 +66,7 @@ vchar::bloc& vchar::bloc::operator<<(color::code _color)
 
 vchar::bloc& vchar::bloc::operator<<(color::pair _colors)
 {
-    **_c_ << _colors;
+    colours =  _colors;
     return *this;
 }
 
@@ -151,11 +156,15 @@ vchar::bloc::operator bool() const
 }
 
 
-vchar::back_buffer vchar::bloc::create(const ui::size& _dim, color::pair _colours)
+vchar::bloc* vchar::bloc::create(const ui::size& _dim, color::pair _colours)
 {
-    auto sp = std::make_shared<vchar::string>(_dim.area(), vchar(color::pair(_colours)));
-    geometry = {{0,0},_dim};
-    return sp;
+    vchar::bloc* blk = new vchar::bloc;
+    blk->buffer = std::make_shared<vchar::string>(_dim.area(), vchar(color::pair(_colours)));
+    blk->colours = _colours;
+    blk->geometry = {{0,0},_dim};
+    blk->home();
+    auto l = diagnostic::debug(1); l << " Confirm bloc buffer size:" << color::yellow << blk->buffer->size() << l;
+    return blk;
 }
 
 rem::cc vchar::bloc::set_pos(cxy xy)
@@ -168,6 +177,11 @@ rem::cc vchar::bloc::set_pos(cxy xy)
     return rem::cc::accepted;
 }
 
+void vchar::bloc::clear()
+{
+    std::fill_n(buffer->begin(),geometry.dwh.area(), vchar(color::pair(colours)));
+}
+
 
 void vchar::bloc::sync_cursors()
 {
@@ -175,6 +189,31 @@ void vchar::bloc::sync_cursors()
     geometry.cursor = {static_cast<int>(w) % *geometry.width(),static_cast<int>(w) / *geometry.width()};
     end_pos = geometry.cursor;
 }
+
+rem::cc vchar::bloc::home()
+{
+    if(geometry.goto_xy({0,0})){
+        _c_ = buffer->begin();
+        return rem::cc::accepted;
+    }
+    return rem::cc::rejected;
+}
+
+rem::cc vchar::bloc::gotoxy(cxy xy)
+{
+    if(geometry.goto_xy(xy)){
+        _c_ = buffer->begin() + (*geometry.width() * geometry.cursor.y + geometry.cursor.x);
+        return rem::cc::accepted;
+    }
+    return rem::cc::rejected;
+}
+
+void vchar::bloc::set_foreground(color::code fg) { colours.fg = fg; }
+void vchar::bloc::set_background(color::code bg) { colours.bg = bg; }
+color::code vchar::bloc::fg() { return colours.fg; }
+color::code vchar::bloc::bg() { return colours.bg; }
+
+
 
 
 #pragma endregion char32-bloc

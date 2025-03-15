@@ -149,7 +149,12 @@ vchar::operator std::string() const { return details(); }
 
 
 
-
+//////////////////////////////////////////////////////////////////////////////
+/// \brief vchar::render_line
+/// \param _it
+/// \param count
+/// \return string bloc of the ansi codes and text
+///
 std::string vchar::render_line(vchar::string::iterator _it, std::size_t count)
 {
     color::pair current_colors = _it->colors();

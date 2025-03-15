@@ -27,13 +27,13 @@ namespace tux::ui
 
 class pencil : public object
 {
-    io::vchar::bloc*        _bf{nullptr}; ///< drawing canva.
+    io::vchar::bloc        _bf{}; ///< drawing canva.
     rectangle               _rect{};      ///< For now it is the bloc's subregion ( by default it is the same dimensions, local/relative to the bloc's geometry )..
     color::pair             _colors{};    ///< Current colors. ( fallback/reset colors are stored in _bf ).
 
 public:
     pencil();
-    pencil(io::vchar::back_buffer bf, rectangle subregion_);
+    pencil(io::vchar::bloc bf, rectangle subregion_);
     ~pencil();
 
 
