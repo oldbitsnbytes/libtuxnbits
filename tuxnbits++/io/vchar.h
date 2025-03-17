@@ -108,8 +108,9 @@
 
          rem::cc home();
          rem::cc gotoxy(ui::cxy xy);
-         void set_foreground(ui::color::code fg);
-         void set_background(ui::color::code bg);
+         void set_foreground_color(ui::color::code fg);
+         void set_background_color(ui::color::code bg);
+         void set_colors(ui::color::pair cp);
          color::code fg();
          color::code bg();
 

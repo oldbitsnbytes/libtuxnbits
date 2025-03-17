@@ -33,7 +33,7 @@ rem::cc test::run()
     auto l = dlog::message(h) << color::r << " - The Great Beginning of the tux::bitsnbytes++ !\n";
     l << color::yellow << "ready" << l;
     //blk->home();
-    blk->set_foreground(color::yellow);
+    blk->set_foreground_color(color::yellow);
     *blk << "Hello, world!";
     term.render(blk,{1,1});
 

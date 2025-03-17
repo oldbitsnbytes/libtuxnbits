@@ -208,10 +208,47 @@ rem::cc vchar::bloc::gotoxy(cxy xy)
     return rem::cc::rejected;
 }
 
-void vchar::bloc::set_foreground(color::code fg) { colours.fg = fg; }
-void vchar::bloc::set_background(color::code bg) { colours.bg = bg; }
+
+
+#pragma region colors
+////////////////////////////////////////
+/// \defgroup bloc-colors
+///     Just copying into the current colors member vchar::bloc::colours
+///
+
+
+///////////////////////////////////////////////////////////////////////////////
+/// \brief vchar::bloc::set_foreground_color
+/// \param fg
+/// \group bloc-colors
+void vchar::bloc::set_foreground_color(color::code fg) { colours.fg = fg; }
+
+///////////////////////////////////////////////////////////////////////////////
+/// \brief vchar::bloc::set_background_color
+/// \param bg
+/// \group bloc-colors
+void vchar::bloc::set_background_color(color::code bg) { colours.bg = bg; }
+
+///////////////////////////////////////////////////////
+/// \brief vchar::bloc::set_colors
+/// \param cp
+/// \group bloc-colors
+void vchar::bloc::set_colors(color::pair cp) { colours = cp; }
+
+////////////////////////////////////////////////////////////
+/// \brief vchar::bloc::fg
+/// \return
+/// \group bloc-colors
+///
 color::code vchar::bloc::fg() { return colours.fg; }
+
+////////////////////////////////////////////////////////////
+/// \brief vchar::bloc::bg
+/// \return
+/// \group bloc-colors
+///
 color::code vchar::bloc::bg() { return colours.bg; }
+#pragma endregion colors
 
 
 

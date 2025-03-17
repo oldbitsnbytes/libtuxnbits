@@ -48,3 +48,5 @@ if(TESTS)
     message(STATUS "framework tests:")
     include(bitstest.cmake)
 endif()
+
+include(GNUInstallDirs)
