@@ -39,7 +39,7 @@ glyph::type direction_arrows[3][3]={
 /// \brief mouse::parse
 /// \param _fd
 /// \return
-/// \note Requiers that the first byte in _fd must be 0x1b and consumed.
+/// \note Requires that the first byte in _fd must be 0x1b and consumed.
 ///
 rem::cc mouse::parse(lfd &_fd)
 {
@@ -118,7 +118,7 @@ rem::cc mouse::parse(bool brel, std::vector<int> args_)
 
     // pressed 'flag' ignored. Relying on the XTerm Button and meta state byte which reports buttons on the lasts two bits:
     //auto l = diagnostic::debug();
-    //l << "parsing seuqence : " << color::lightskyblue4 << args_.size() << color::r << " arguments [" << color::yellow << tux::string::bytes(args_) << "]" << l;
+    //l << "parsing sequence : " << color::lightskyblue4 << args_.size() << color::r << " arguments [" << color::yellow << tux::string::bytes(args_) << "]" << l;
     mouse mev{};
     static mouse prev_mev{};
     if (args_.size() != 3){

@@ -20,19 +20,16 @@
 #pragma once
 
 
-#include <tuxvision/ui/events.h>
+#include <tuxnbits++/bits/appbits.h>
 #include <csignal>
 //#include <memory>
-#include <tuxvision/cadres.h>
-#include <tuxvision/ui/widgets/screen.h>
-#include <tuxvision/io/ipoll.h>
-//#include <tuxvision/ui/io/ansi_parser.h>
-//#include <tuxvision/ui/io/ansi_colours_parser.h>
-
-namespace tux::ui
+#include <tuxnbits++/bits/cadres.h>
+#include <tuxnbits++/io/terminal.h>
+#include <tuxnbits++/tui/export.h>
+namespace tux::tui
 {
 
-class TUXVISION_API application
+class LIBTUXNBITSTUI application
 {
 
     CLASSNAME_START(application)
