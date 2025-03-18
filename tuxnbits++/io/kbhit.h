@@ -217,7 +217,7 @@ struct LIBTUXNBITSIO kbhit
 
     static kbhit query(u64 bytes_seq);
     static kbhit query(std::string_view s);
-    static rem::cc test(lfd& _fd);
+    static rem::cc parse(lfd& _fd);
     static kbhit NONE;
     operator bool();
 

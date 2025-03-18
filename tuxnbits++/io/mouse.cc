@@ -36,12 +36,12 @@ glyph::type direction_arrows[3][3]={
 
 
 ///////////////////////////////////////////////////////////////////
-/// \brief mouse::test
+/// \brief mouse::parse
 /// \param _fd
 /// \return
 /// \note Requiers that the first byte in _fd must be 0x1b and consumed.
 ///
-rem::cc mouse::test(lfd &_fd)
+rem::cc mouse::parse(lfd &_fd)
 {
 
     u8 b{0};
@@ -156,7 +156,12 @@ rem::cc mouse::parse(bool brel, std::vector<int> args_)
 //     dir << glyph::data[glyph::big_dot];
 
 
-
+/////////////////////////////////////////////////////////////////////
+/// \brief mouse::get_direction_arrow
+///    Just for fun when "stringify" the mouse states in a string: obtain the arrow glyph to illustrate the direction of the mouse move...lol
+/// \param dxy
+/// \return
+///
 std::string mouse::get_direction_arrow(ui::cxy dxy)
 {
     tux::string arrow{};
@@ -165,6 +170,7 @@ std::string mouse::get_direction_arrow(ui::cxy dxy)
         {dxy.x < 0 && dxy.y == 0, dxy.x == 0 && dxy.y == 0, dxy.x > 0 && dxy.y == 0},
         {dxy.x < 0 && dxy.y > 0, dxy.x == 0 && dxy.y > 0, dxy.x > 0 && dxy.y > 0}
     };
+    // There can be only one true value:
     for(int y = 0; y < 3; y++)
         for(int x=0; x < 3; x++)
             if(m[y][x]){
@@ -175,8 +181,8 @@ std::string mouse::get_direction_arrow(ui::cxy dxy)
 }
 
 //////////////////////////////////////////////////////////////////////
-/// \brief mouse::operator () - put current state in a std::string/
-/// \return std::string containing current mouse infos.
+/// \brief mouse::operator () - put current state in a std::string.
+/// \return std::string representing current mouse state values.
 ///
 std::string mouse::operator()()
 {
@@ -219,22 +225,6 @@ mouse& mouse::operator &(const mouse &mev)
     }
     return *this;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 } // namespace tux::io

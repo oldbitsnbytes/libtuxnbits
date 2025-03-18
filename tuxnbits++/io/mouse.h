@@ -80,7 +80,7 @@ struct LIBTUXNBITSIO mouse
     bool right  (){return button.right;}
 
     mouse& operator & (const mouse& mev);
-    static rem::cc test(lfd& _fd);
+    static rem::cc parse(lfd& _fd);
     static mouse prev_mev;
     operator bool();
     std::string operator()();

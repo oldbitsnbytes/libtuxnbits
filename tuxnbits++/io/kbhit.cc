@@ -157,7 +157,7 @@ kbhit kbhit::query(std::string_view s)
 /// \return
 /// \note \note Requiers that the first byte in _fd must not be consumed.
 ///
-rem::cc kbhit::test(lfd &_fd)
+rem::cc kbhit::parse(lfd &_fd)
 {
     auto * b = _fd.tail();
     //auto l = diagnostic::debug(); l << "buffer size:" << color::lime << _fd.size() << color::r << "..." << l;

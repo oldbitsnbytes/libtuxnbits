@@ -316,13 +316,13 @@ rem::cc terminal::stdin_proc()
 {
     while(!_fd0.empty())
     {
-        if(auto rcc = kbhit::test(_fd0); !!rcc){
+        if(auto rcc = kbhit::parse(_fd0); !!rcc){
             if(_events.back().data.kev.mnemonic == kbhit::ESCAPE){
                 return rem::cc::ready;
             }
             continue;
         }
-        if(auto rcc = mouse::test(_fd0); !!rcc){
+        if(auto rcc = mouse::parse(_fd0); !!rcc){
             auto& e = _events.back();
             if(!e.is<mouse>()){
                 _fd0.clear(); // discard and dismiss the rest of the input data because it is not parsable.

@@ -248,6 +248,29 @@ color::code vchar::bloc::fg() { return colours.fg; }
 /// \group bloc-colors
 ///
 color::code vchar::bloc::bg() { return colours.bg; }
+
+
+
+////////////////////////////////////////////////////////////////////////
+/// \brief vchar::bloc::operator &
+///     Intersect the rectangular geometry of this bloc with \arg rhs.
+/// \param rhs
+/// \return resulting of the intersection.
+/// \note \arg rhs origin must be on the same origin of this bloc.
+///
+rectangle vchar::bloc::operator &(const rectangle rhs) { return geometry & rhs; }
+
+
+////////////////////////////////////////////////////////////////////////
+/// \brief vchar::bloc::operator /
+///     Intersect the rectangular inner geometry ( origin at {0,0} ) of this bloc with \arg rhs.
+/// \param rhs
+/// \return resulting of the intersection shifted to the inner origin {0,0}.
+/// \note \arg rhs must be on the same origin scale of this bloc. So the resulting rectangle will have its offset moved to the relative geometry of this bloc
+///
+rectangle vchar::bloc::operator /(const rectangle rhs) { return geometry / rhs; }
+
+
 #pragma endregion colors
 
 
