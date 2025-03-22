@@ -93,6 +93,14 @@
         vchar::bloc& operator << (color::code _color);
         vchar::bloc& operator << (color::pair _colors);
         vchar::bloc& operator << (cadre::index _frameindex);
+        vchar::bloc& operator << (ui::cxy xy);
+        vchar::bloc& operator << (const vchar::bloc& blk);
+        vchar::bloc& operator << (char c);
+
+
+        rem::cc clear(ui::rectangle r, color::pair cp);
+
+
         bool         operator ++();
         bool         operator ++(int);
         bool         operator --();
@@ -102,11 +110,11 @@
         ~bloc();
         explicit operator bool() const;
         static vchar::bloc* create(const ui::size& _dim, color::pair _colours);
-        rem::cc set_pos(ui::cxy xy);
+        void set_pos(ui::cxy xy);
         void clear();
         void sync_cursors();
 
-        rem::cc home();
+        void home();
         rem::cc gotoxy(ui::cxy xy);
         void set_foreground_color(ui::color::code fg);
         void set_background_color(ui::color::code bg);
@@ -115,6 +123,8 @@
         color::code bg();
         rectangle operator & (const rectangle rhs);
         rectangle operator / (const rectangle rhs);
+        vchar::string::iterator operator *();
+
 
     };
 

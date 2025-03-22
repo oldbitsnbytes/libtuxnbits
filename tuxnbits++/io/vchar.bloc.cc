@@ -15,6 +15,7 @@ vchar::bloc& vchar::bloc::cursor(ui::cxy _pos)
         state = rem::cc::oob;
         return *this;
     }
+
     state = rem::cc::accepted;
     return *this;
 }
@@ -36,23 +37,22 @@ vchar::bloc& vchar::bloc::operator<<(const std::string& _str)
 {
     if (_str.length() >= (buffer->end() - _c_))
         throw diagnostic::exception()[
-            diagnostic::except(1) << rem::type::fatal << rem::cc::oob << rem::fn::endl
-                                                            << "\nstrlen:" << color::yellow << _str.length() << color::r
-                                                            << "\nbuffer length from end() pointer: " << color::yellow << (buffer->end() - buffer->begin())
-                                                            << "\nlogical cursor: " << color::yellow << geometry.cursor
+            diagnostic::except(1) << rem::type::fatal << rem::cc::oob
+                                                            << rem::fn::endl << "strlen:" << color::yellow << _str.length() << color::r
+                                                            << rem::fn::endl << "buffer length from end() pointer: " << color::yellow << (buffer->end() - buffer->begin())
+                                                            << rem::fn::endl << "logical cursor: " << color::yellow << geometry.cursor
         ];
 
     for (auto c: _str)
-    {
         **_c_++ << colours << c;
-    }
+    sync_cursors(); // We must sync internal cursors before further inputs.
     return *this;
 }
 
 
 vchar::bloc& vchar::bloc::operator<<(glyph::type _glyph)
 {
-    **_c_ << colours << _glyph;
+    **_c_++ << colours << _glyph;
     return *this;
 }
 
@@ -73,9 +73,58 @@ vchar::bloc& vchar::bloc::operator<<(color::pair _colors)
 
 vchar::bloc& vchar::bloc::operator<<(cadre::index _frameindex)
 {
-    **_c_ << _frameindex;
+    **_c_++ << _frameindex;
     return *this;
 }
+
+
+vchar::bloc& vchar::bloc::operator<<(ui::cxy xy)
+{
+    gotoxy(xy);
+    // Handle result...
+    return *this;
+}
+
+
+vchar::bloc& vchar::bloc::operator<<(const vchar::bloc& blk)
+{
+    return *this;
+}
+
+
+vchar::bloc& vchar::bloc::operator<<(char c)
+{
+    **_c_ << c;
+    return *this;
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+/// \brief vchar::bloc::clear
+///     Clears sub-area given by \arg r using colors attributes \arg cp
+/// \param r
+/// \param cp
+/// \return accepted if all of the clear went ok, rem::cc::rejected otherwise
+///
+rem::cc vchar::bloc::clear(ui::rectangle r, color::pair cp)
+{
+    auto rw = geometry.tolocal() & (r);
+    if(!rw){
+        auto l = diagnostic::status(); l << rem::cc::oob << " : request area:" << r << "; within " << geometry.dwh << l;
+        return rem::cc::rejected;
+    }
+
+    for(int y=0; y < rw.height<int>(); y++){
+        if(auto c = gotoxy({rw.a.x, rw.a.y+y}); !c)
+            return c;
+        for(int x=0; x < rw.width<int>(); x++){
+            ***this << cp << ' ';
+            if(!++*this)
+                return rem::cc::rejected;
+        }
+    }
+    return rem::cc::accepted;
+}
+
 
 /*!
  * @note bypasses natural increment-decrement because this method is the convenient way to advance the internal cursor with our boundaries.
@@ -167,38 +216,53 @@ vchar::bloc* vchar::bloc::create(const ui::size& _dim, color::pair _colours)
     return blk;
 }
 
-rem::cc vchar::bloc::set_pos(cxy xy)
+
+
+/**
+ * @brief vchar::bloc::set_pos
+ *      Set this bloc's geometry's topleft position to \arg xy
+ * @param xy
+ * @return always rem::cc::accepted.
+ */
+void vchar::bloc::set_pos(cxy xy)
 {
-    if(!geometry.in(xy)){
-        auto l = diagnostic::error(); l << rem::cc::oob << ":{" << color::hotpink4 << xy << color::r << "}" << l;
-        return rem::cc::rejected;
-    }
     geometry.moveat(xy);
-    return rem::cc::accepted;
 }
 
+
+//////////////////////////////////////////////////////////////
+/// \brief vchar::bloc::clear
+///        Clears the buffer with the current colors attributes
 void vchar::bloc::clear()
 {
     std::fill_n(buffer->begin(),geometry.dwh.area(), vchar(color::pair(colours)));
 }
 
-
+/////////////////////////////////////////////////////////////
+/// \brief vchar::bloc::sync_cursors
+///     Sync's the internal cursor at the cooridantes from the offset of _c_.
+///
 void vchar::bloc::sync_cursors()
 {
-    auto  w = _c_ - buffer->begin();
-    geometry.cursor = {static_cast<int>(w) % *geometry.width(),static_cast<int>(w) / *geometry.width()};
+    const auto  w = _c_ - buffer->begin();
+    geometry.cursor = {static_cast<int>(w) % *geometry.width(), static_cast<int>(w) / *geometry.width()};
     end_pos = geometry.cursor;
 }
 
-rem::cc vchar::bloc::home()
-{
-    if(geometry.goto_xy({0,0})){
-        _c_ = buffer->begin();
-        return rem::cc::accepted;
-    }
-    return rem::cc::rejected;
-}
 
+//////////////////////////////////////////////////////////////////////
+/// \brief vchar::bloc::home
+///     Resets iterator and internal cursor at {0,0};
+///
+void vchar::bloc::home() { geometry.goto_xy({0,0});_c_ = buffer->begin(); }
+
+
+///////////////////////////////////////////////////////////////////////
+/// \brief vchar::bloc::gotoxy
+///     Set internal coursor position to xy and set _c_ to the corresponding linear offset value.
+/// \param xy
+/// \return
+///
 rem::cc vchar::bloc::gotoxy(cxy xy)
 {
     if(geometry.goto_xy(xy)){
@@ -269,6 +333,8 @@ rectangle vchar::bloc::operator &(const rectangle rhs) { return geometry & rhs; 
 /// \note \arg rhs must be on the same origin scale of this bloc. So the resulting rectangle will have its offset moved to the relative geometry of this bloc
 ///
 rectangle vchar::bloc::operator /(const rectangle rhs) { return geometry / rhs; }
+
+vchar::string::iterator vchar::bloc::operator *() { return _c_; }
 
 
 #pragma endregion colors

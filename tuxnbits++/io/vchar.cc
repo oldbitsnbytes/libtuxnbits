@@ -40,9 +40,7 @@ vchar &vchar::set_bg(color::code bg) { d = d & ~BGMask | static_cast<U8>(bg) << 
 }
 
 vchar &vchar::operator=(U32 Ch) { d = Ch; return *this; }
-
 vchar &vchar::operator=(const U32* Ch) { d = *Ch; return *this; }
-
 
 std::string vchar::get_utf_string() const
 {

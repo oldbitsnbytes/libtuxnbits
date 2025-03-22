@@ -450,6 +450,12 @@ rectangle &rectangle::operator+=(const cxy &dx)
     return *this;
 }
 
+
+/**
+ * @brief rectangle::operator -=
+ * @param dx
+ * @return
+ */
 rectangle &rectangle::operator-=(const cxy &dx)
 {
     a -= dx;
@@ -458,6 +464,13 @@ rectangle &rectangle::operator-=(const cxy &dx)
     return *this;
 }
 
+
+/**
+ * @brief rectangle::operator |=
+ *     Assign-Or operator ( union )
+ * @param rhs
+ * @return
+ */
 rectangle &rectangle::operator|=(const rectangle &rhs)
 {
     if(!rhs) return *this;
@@ -465,11 +478,24 @@ rectangle &rectangle::operator|=(const rectangle &rhs)
     return *this;
 }
 
+
+/**
+ * @brief rectangle::resize
+ *      Assign new dimensions to this recangle.
+ * @param new_sz
+ */
 void rectangle::resize(const size &new_sz)
 {
     assign({a.x, a.y}, new_sz);
 }
 
+
+
+/**
+ * @brief rectangle::moveat
+ *      Move this reclangle to the new position \arg p
+ * @param p
+ */
 void rectangle::moveat(const cxy &p)
 {
     a.x = p.x;
@@ -478,11 +504,24 @@ void rectangle::moveat(const cxy &p)
     b.y = a.y + dwh.h - 1;
 }
 
+
+/**
+ * @brief rectangle::in
+ *      Check if \arg pt is within this rectangle's boundaries.
+ * @param pt
+ * @return
+ */
 bool rectangle::in(const cxy &pt) const
 {
     return ((pt.x >= a.x) && (pt.x <= b.x) && (pt.y >= a.y) && (pt.y <= b.y));
 }
 
+
+/**
+ * @brief rectangle::move
+ *      Moves this rectangle to new position by \arg deltapt.
+ * @param deltapt
+ */
 void rectangle::move(const cxy &deltapt)
 {
     a += deltapt;
@@ -490,7 +529,12 @@ void rectangle::move(const cxy &deltapt)
 
 }
 
-
+/**
+ * @brief rectangle::operator ==
+ *      Check if the dimensions are the saame as rhs
+ * @param rhs
+ * @return
+ */
 bool rectangle::operator == (const rectangle& rhs) const
 {
     return rhs.dwh.w == dwh.w && rhs.dwh.h == dwh.h;
@@ -500,7 +544,7 @@ bool rectangle::operator == (const rectangle& rhs) const
 
 /*!
  * \brief rectangle::operator []
- * Test is the xy coord is within the boundaries. Offset must be from the topleft value.
+ * Test if the xy coord is within the boundaries. Offset origin of pt is the same as this
  * \param pt
  * \return true if within, false otherwise.
 
@@ -536,8 +580,8 @@ cxy rectangle::bottom_right() const
 /*!
     @brief intersection between this (a) and r (b).
 
-    @note a & b must be on the same referential offset. undefined behaviour otherwise.
-    @author &copy; 1996, 2023, luxe lussier, (oldlonecoder'@'gmail.com)
+    @note a & b must be of the same offset's origin. Undefined behaviour otherwise.
+    @author &copy; 1996, 2023, Serge Lussier, (oldlonecoder'@'gmail.com)
     @code
    a+==============================+
     |                              |
@@ -556,8 +600,8 @@ cxy rectangle::bottom_right() const
 rectangle rectangle::operator&(const rectangle &r) const
 {
     if(!r) return {};
-    auto topl = r.a - a;
-    auto botr = r.b - b;
+    // auto topl = r.a - a;
+    // auto botr = r.b - b;
     rectangle tmp;
 
     tmp.assign(cxy{
@@ -574,21 +618,25 @@ rectangle rectangle::operator&(const rectangle &r) const
 
 
 /**
- * @brief  Intersect rhs with this. subtract a from result
- * then downscale result to local coordinates so
+ * @brief  Intersect rhs with this.
  *
- * @param rhs => rhs.a must be downscaled to relative coords on calling
- * @return rectangle
+ * @param rhs => rhs.a must be at the same offset as this->a
+ * @return resulting intersection
  */
 rectangle rectangle::operator/(const rectangle &rhs) const
 {
-    rectangle tmp = *this & rhs;
-    tmp -= a;
-
-
-    return tmp;
+    //rectangle tmp = *this & rhs;
+    //tmp -= a;
+    return (*this & rhs) - a;
 }
 
+
+/**
+ * @brief rectangle::operator |
+ *      Union of the two rectangles between this ans \arg r.
+ * @param r
+ * @return
+ */
 rectangle rectangle::operator|(const rectangle &r) const
 {
     rectangle tmp;
@@ -601,6 +649,13 @@ rectangle rectangle::operator|(const rectangle &r) const
     return tmp;
 }
 
+
+/**
+ * @brief rectangle::operator +
+ * moves this rectangle toplevel by \arg pt {x,y} units.
+ * @param pt
+ * @return resulting rectangle
+ */
 rectangle rectangle::operator+(const cxy &pt) const
 {
     rectangle tmp = *this;
@@ -612,7 +667,12 @@ rectangle rectangle::operator+(const cxy &pt) const
     return tmp;
 }
 
-
+/**
+ * @brief rectangle::operator -
+ *      * moves this rectangle toplevel by \arg pt {-x,-y} units.
+ * @param pt
+ * @return
+ */
 rectangle rectangle::operator-(const cxy& pt) const
 {
     rectangle r = *this;
@@ -623,7 +683,12 @@ rectangle rectangle::operator-(const cxy& pt) const
     return r;
 }
 
-
+/**
+ * @brief rectangle::grow
+ *      Grows this recangle from its center, by dxy {a: -x,-y; b: +x, +y} units.
+ * @param dxy
+ * @return resulting rectangle.
+ */
 rectangle rectangle::grow(cxy dxy)
 {
     rectangle r = *this;
@@ -646,11 +711,21 @@ cxy rectangle::local()
     return {cursor.x - a.x, cursor.y - a.y};
 }
 
+
+/**
+ * @brief rectangle::relative
+ * @return the cursor xy values.
+ */
 cxy rectangle::relative()
 {
     return cursor;
 }
 
+/**
+ * @brief rectangle::tolocal
+ *      remove toplevel offset from this rectangle.
+ * @return resulting rectangle.
+ */
 rectangle rectangle::tolocal()
 {
     return {{0,0}, dwh};

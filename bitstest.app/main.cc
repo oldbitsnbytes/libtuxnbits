@@ -34,7 +34,7 @@ rem::cc test::run()
     l << color::yellow << "ready" << l;
     //blk->home();
     blk->set_foreground_color(color::yellow);
-    *blk << "Hello, world!";
+    *blk << "----- Hello, world! -----";
     term.render(blk,{1,1});
 
     // dlog::Test Test("[diagnostic::Test]");
@@ -47,23 +47,28 @@ rem::cc test::run()
     rem::action ac{rem::action::cont};
     do{
         auto r = term.poll_in();
-        if(!r){
-            terminate(rem::type::aborted);
-            return rem::cc::terminate;
-        }
+        if(!r)
+            return terminate(rem::type::aborted);
 
         while(!term.events().empty()){
             auto evc = std::move(term.events().front());
             term.events().pop_front();
             if(evc.is<io::kbhit>()){
-                if(evc.data.kev.mnemonic == io::kbhit::ESCAPE){
-                    l << "ESCAPE KEY hit - Terminating!." << l;
-                    term.events().clear();
-                    ac = rem::action::end;
-                    break;//return rem::cc::terminate;
-                }
-                else{
-                    l << "CHARACTER or command: '" << evc.data.kev.name << "' | (char)'" << (char)evc.data.kev.code << '\'' << l;
+                switch(evc.data.kev.mnemonic){
+                    case io::kbhit::ESCAPE:
+                        return terminate(rem::type::normal);
+                    case io::kbhit::CHARACTER:{
+                        if(evc.data.kev.code == 'c'){
+                            static int col = color::black;
+                            blk->clear({{1,1},ui::size{20,1}},{color::red,static_cast<color::code>(col++)});
+                            *blk << ui::cxy{4,1};
+                            *blk << " clear ";
+                            term.render(blk,{1,1});
+                        }
+                    }
+                    default:
+                        l << "CHARACTER:'" << color::yellow << (char)evc.data.kev.code << color::r << '\'' << l;
+                        break;
                 }
             }
             else if(evc.is<io::mouse>()){
