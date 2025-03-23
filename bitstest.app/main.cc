@@ -60,9 +60,9 @@ rem::cc test::run()
                     case io::kbhit::CHARACTER:{
                         if(evc.data.kev.code == 'c'){
                             static int col = color::black;
-                            blk->clear({{1,1},ui::size{20,1}},{color::red,static_cast<color::code>(col++)});
-                            *blk << ui::cxy{4,1};
-                            *blk << " clear ";
+                            blk->clear({{2,3},ui::size{20,3}},{color::red,static_cast<color::code>(col)});
+                            *blk << ui::cxy{6,4};
+                            *blk << color::name(static_cast<color::code>(col++));
                             term.render(blk,{1,1});
                         }
                     }
@@ -88,7 +88,7 @@ rem::cc test::setup()
     term.begin();
     term.init_stdinput();
     log << "terminal is ready" << log;
-    blk = io::vchar::bloc::create({40,3}, {color::yellow, color::code::blueviolet});
+    blk = io::vchar::bloc::create({40,7}, {color::yellow, color::code::blueviolet});
     return rem::cc::ok;
 }
 

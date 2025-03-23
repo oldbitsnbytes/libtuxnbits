@@ -355,7 +355,6 @@ struct LIBTUXNBITS color {
 
     };
 
-
 }; // struct Color
 
 }

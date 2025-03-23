@@ -181,7 +181,7 @@ rem::action lfd::_read()
     //         ++b;
     //     }
     //     auto s = tux::string::bytes(strv);
-    //     //diagnostic::debug() << color::yellow << nbytes << color::r << " bytes: {" << color::lighcoreateblue << s << color::r << "}" << //diagnostic::eol;
+    //     auto l = diagnostic::debug(1); l << color::yellow << nbytes << color::r << " bytes: {" << color::lighcoreateblue << s << color::r << "}" << l;
     // }
 
     //...

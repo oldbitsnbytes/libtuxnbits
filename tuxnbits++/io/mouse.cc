@@ -49,13 +49,13 @@ rem::cc mouse::parse(lfd &_fd)
     std::vector<int> args{};
     //auto l = diagnostic::status(); l << "csi begin: " << color::yellow << std::format("0x{:02X}",*_fd) << color::z  << l;
     if(_fd >> b;b != 27){
-        auto l = diagnostic::error(); l << rem::cc::expected << color::r << " ESCape start sequence - got '" << color::hotpink4 << (int)b << color::r << " instead." << l;
+        auto l = diagnostic::error(1); l << rem::cc::expected << color::r << " ESCape start sequence - got '" << color::hotpink4 << (int)b << color::r << " instead." << l;
         return rem::cc::rejected;
     }
     _fd >> b;
     //l << "csi seq #2 :['" << color::yellow << (int)b << color::z << "|" << color::hotpink4 << (char)b << color::r << "']" << l;
     if(b != '['){
-        auto l = diagnostic::error(); l << rem::cc::expected << color::r << " CSI sequence - got '" << color::hotpink4 << (int)b << color::r << " instead." << l;
+        auto l = diagnostic::error(1); l << rem::cc::expected << color::r << " CSI sequence - got '" << color::hotpink4 << (int)b << color::r << " instead." << l;
         return rem::cc::rejected;
     }
     do{
@@ -87,10 +87,11 @@ rem::cc mouse::parse(lfd &_fd)
             args.push_back(arg);
             //diagnostic::status() << "end csi sequence on '" << color::yellow << (int)b << color::z << "' :\n";
             switch(b){
-                case 'M' : case 'm':{
+                case 'M' :
                     //auto l = diagnostic::debug(); l << "end of sequence :'" << color::yellow << (char)b << color::r << "' args = [" << color::hotpink4 << tux::string::bytes(args) << color::r << "]" << l;
                     return parse(false,args);
-                }
+                case 'm':
+                    return parse(true,args);
                 case 'R':
                     //diagnostic::warning() <<" R :Caret report - ignored" << //diagnostic::eol;
                     break;
@@ -117,8 +118,8 @@ rem::cc mouse::parse(bool brel, std::vector<int> args_)
 
 
     // pressed 'flag' ignored. Relying on the XTerm Button and meta state byte which reports buttons on the lasts two bits:
-    //auto l = diagnostic::debug();
-    //l << "parsing sequence : " << color::lightskyblue4 << args_.size() << color::r << " arguments [" << color::yellow << tux::string::bytes(args_) << "]" << l;
+    auto l = diagnostic::debug(1);
+    l << "parsing sequence : " << color::lightskyblue4 << args_.size() << color::r << " arguments [" << color::yellow << tux::string::bytes(args_) << "]" << l;
     mouse mev{};
     static mouse prev_mev{};
     if (args_.size() != 3){
@@ -128,16 +129,21 @@ rem::cc mouse::parse(bool brel, std::vector<int> args_)
 
     //////////////////////////////////////////////////////////////////////
     /// Assign the current buttons state, Adjust the button event by the previous mouse data
+    l = diagnostic::status(1); l << "button: " << (args_[0]&3) << l;
     mev.button.left   = (args_[0] & 3) == 0 ? 1 :0;
     mev.button.mid    = (args_[0] & 3) == 1 ? 1 :0;
     mev.button.right  = (args_[0] & 3) == 2 ? 1 :0;
+    if((args_[0] & 3)==3){
+        mev.pressed = false;
+        mev.button = {0};
+    }
     ///@todo Handle the other buttons...
     /// ...
 
     mev.state.shift     = (args_[0] & 4   ) != 0;
     mev.state.alt       = (args_[0] & 8   ) != 0;
     mev.state.win       = (args_[0] & 0x10) != 0;
-
+    mev.pressed = !brel;
     // Subtract 1 from the coords. Because the terminal starts at 1,1 and our ui system starts 0,0
     mev.pos.x = args_[1] - 1; //l << " x coord: " << color::yellow << mev.pos.x << color::r << "|" << args_[1] << l;
     mev.pos.y = args_[2] - 1; //l << " y coord: " << color::yellow << mev.pos.y << color::r << "|" << args_[2] << l;
@@ -192,15 +198,42 @@ std::string mouse::operator()()
          << color::orangered1 << std::format("{:>3d}", pos.x)
          << color::reset << ','
          << color::orangered1 << std::format("{:<3d}", pos.y)
-         << color::reset << "]"
-         << (button.left   ? color::orangered1 : color::reset)  << (button.left     ?'L' : 'l')  << color::r << "|"
-         << (button.mid ? color::lime : color::reset)           << (button.mid      ?'M' : 'm')  << color::r << "|"
-         << (button.right  ? color::red4 : color::reset)        << (button.right    ?'R' : 'r')  << color::r << "|"
+         << color::reset << "]";
+    if(button.left)
+        text << color::lime << (pressed ? 'L' : 'l') << color::r;
+    else
+        text << "l";
+    text << '|';
+    if(button.mid)
+        text << color::yellow << (pressed ? 'M' : 'm') << color::r;
+    else
+        text << "m";
+    text << '|';
+    if(button.right)
+        text << color::hotpink4 << (pressed ? 'R' : 'r') << color::r;
+    else
+        text << "r";
+    text << '|'
          << (dxy != ui::cxy{0,0}          ? color::yellow : color::reset) << get_direction_arrow(dxy)
          << color::reset << "["
          << color::orangered1 << std::format("{:>3d}",dxy.x)
          << color::reset << ','
          << color::orangered1 << std::format("{:<3d}",dxy.y) << color::reset << "]";
+    // text << "["
+    //      << color::orangered1 << std::format("{:>3d}", pos.x)
+    //      << color::reset << ','
+    //      << color::orangered1 << std::format("{:<3d}", pos.y)
+    //      << color::reset << "]";
+
+    // text << (pressed ? color::lime : color::r)
+    //      << (button.left   ? 'L' : 'l')  << color::r << "|"
+    //      << (button.mid    ? 'M' : 'm')  << color::r << "|"
+    //      << (button.right  ? 'R' : 'r')  << color::r << "|"
+    //      << (dxy != ui::cxy{0,0}          ? color::yellow : color::r) << get_direction_arrow(dxy)
+    //      << color::reset << "["
+    //      << color::orangered1 << std::format("{:>3d}",dxy.x)
+    //      << color::reset << ','
+    //      << color::orangered1 << std::format("{:<3d}",dxy.y) << color::reset << "]";
     return text();
 }
 
@@ -208,21 +241,10 @@ std::string mouse::operator()()
 /// \brief mouse::operator &
 /// \param mev
 /// \return
-/// \note This method is called once the latest mouse data is assigned to this instance so we can evaluate the mouse events according to the comparison against mev
+/// \note disabled. Will be removed.
 mouse& mouse::operator &(const mouse &mev)
 {
-    if(std::bitset<2>(mev.button.left) != std::bitset<2>(button.left)){
-        // event on left button:
-        button.left = mev.button.left == 1 ? mouse::BUTTON_PRESSED : mouse::BUTTON_RELEASE;
-    }
-    if(std::bitset<2>(mev.button.right) != std::bitset<2>(button.right)){
-        // event on right button:
-        button.right = mev.button.right == 1 ? mouse::BUTTON_PRESSED : mouse::BUTTON_RELEASE;
-    }
-    if(std::bitset<2>(mev.button.mid) != std::bitset<2>(button.mid)){
-        // event on middle button:
-        button.mid = mev.button.mid == 1 ? mouse::BUTTON_PRESSED : mouse::BUTTON_RELEASE;
-    }
+
     return *this;
 }
 

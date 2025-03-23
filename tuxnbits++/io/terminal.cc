@@ -146,8 +146,8 @@ void terminal::switch_back()
 rem::cc terminal::enable_mouse()
 {
     //std::cout << MOUSE_VT200            << terminal::SET;
-    //std::cout << MOUSE_REPORT_BUTTONS   << SET;
-    std::cout << MOUSE_REPORT_ANY       << SET;
+    std::cout << MOUSE_REPORT_BUTTONS   << SET;
+    //std::cout << MOUSE_REPORT_ANY       << SET << std::flush;
     std::cout << MOUSE_SGR_EXT_MODE     << SET<< std::flush;
     //std::cout << MOUSE_URXVT_MODE       << SET << std::flush;
     _flags |= terminal::use_mouse;
@@ -158,8 +158,8 @@ rem::cc terminal::enable_mouse()
 rem::cc terminal::stop_mouse()
 {
     //std::cout << MOUSE_VT200            << RESET;
-    //std::cout << MOUSE_REPORT_BUTTONS   << RESET;
-    std::cout << MOUSE_REPORT_ANY       << RESET;
+    std::cout << MOUSE_REPORT_BUTTONS   << RESET;
+    //std::cout << MOUSE_REPORT_ANY       << RESET;
     std::cout << MOUSE_SGR_EXT_MODE     << RESET << std::flush;
     //std::cout << MOUSE_URXVT_MODE       << RESET << std::flush;
 

@@ -389,7 +389,10 @@ std::string string::bytes(std::vector<int> a_seq)
     int c = 0;
     for(auto n  : a_seq)
     {
-        outstr += std::format("x{:02x}|u{:d}", n,n);
+        if(std::isprint(n))
+            outstr += std::format("x{:02x}|u{:d}'{}'", n,n, char(n) );
+        else
+            outstr += std::format("x{:02x}|u{:d}", n,n);
         if(c++ < (a_seq.size()-1)) outstr += ',';
     }
 

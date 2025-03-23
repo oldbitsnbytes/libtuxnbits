@@ -6,7 +6,7 @@ namespace tux::ui
 
 pencil::pencil() {}
 
-pencil::pencil(io::vchar::bloc bf, rectangle subregion_): _bf(bf), _rect(subregion_){}
+pencil::pencil(io::vchar::bloc* bf, rectangle subregion_): _bf(bf), _rect(subregion_){}
 
 
 

@@ -63,6 +63,10 @@ struct LIBTUXNBITSIO mouse
         u8 left  : 2; // 0 = up; 1 = down; 2 = pressed event; 3 = released event;
         u8 mid   : 2; // 0 = up; 1 = down; 2 = pressed event; 3 = released event;
         u8 right : 2; // 0 = up; 1 = down; 2 = pressed event; 3 = released event;
+        u8 b4    : 2;
+        u8 b5    : 2;
+        u8 b6    : 2;
+        u8 st    : 2; // 0: noevent; 1: pressed; 2: released;
     }button{0,0,0};
 
     struct LIBTUXNBITSIO
@@ -85,7 +89,7 @@ struct LIBTUXNBITSIO mouse
     operator bool();
     std::string operator()();
     static std::string get_direction_arrow(ui::cxy xy);
-
+    bool pressed = false;
 private:
     static rem::cc parse(bool brel,std::vector<int> args_);
 };
