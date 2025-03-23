@@ -284,13 +284,13 @@ attr_db::themes attr_db::s_data =
 };
 
 
-attr_db::themes::iterator attr_db::get_theme(std::string_view Tname)
+attr_db::themes::iterator attr_db::get_theme(std::string_view theme_name)
 {
     auto it = attr_db::s_data.begin();
     auto it_end = attr_db::s_data.end();
     while (it != it_end)
     {
-        if (it->first == Tname) break;
+        if (it->first == theme_name) break;
         ++it;
     }
     // ReSharper disable once CppDFALocalValueEscapesFunction

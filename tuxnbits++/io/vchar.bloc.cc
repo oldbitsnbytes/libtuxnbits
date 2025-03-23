@@ -8,6 +8,23 @@ namespace tux::io
 // ---------------------------------------------------------------------------------------------------------------------
 
 
+rem::cc vchar::bloc::render(console *con, const rectangle &subrect)
+{
+    // auto r = geometry.tolocal() / subrect;
+    // if(!r){
+    //     auto l = diagnostic::error(1); l << rem::cc::oob << " subrect " << color::hotpink4 << subrect << color::r << "is out of this vchar::bloc boundaries" << l;
+    //     return rem::cc::rejected;
+    // }
+
+    // for(int y = 0; y < *r.height(); y++){
+    //     gotoxy({r.a.x, r.a.y+y});
+    //     for(int x = 0; x < *r.width(); x++){
+    //         terminal::
+    //     }
+    // }
+    return rem::cc::notimplemented;
+}
+
 vchar::bloc& vchar::bloc::cursor(ui::cxy _pos)
 {
     if (!geometry.goto_xy(_pos))
@@ -38,9 +55,9 @@ vchar::bloc& vchar::bloc::operator<<(const std::string& _str)
     if (_str.length() >= (buffer->end() - _c_))
         throw diagnostic::exception()[
             diagnostic::except(1) << rem::type::fatal << rem::cc::oob
-                                                            << rem::fn::endl << "strlen:" << color::yellow << _str.length() << color::r
-                                                            << rem::fn::endl << "buffer length from end() pointer: " << color::yellow << (buffer->end() - buffer->begin())
-                                                            << rem::fn::endl << "logical cursor: " << color::yellow << geometry.cursor
+                << rem::fn::endl << "strlen:" << color::yellow << _str.length() << color::r
+                << rem::fn::endl << "buffer length from end() pointer: " << color::yellow << (buffer->end() - buffer->begin())
+                << rem::fn::endl << "logical cursor: " << color::yellow << geometry.cursor
         ];
 
     for (auto c: _str)
@@ -172,6 +189,11 @@ bool vchar::bloc::operator--()
         return true;
     }
     return false;
+}
+
+rem::cc vchar::bloc::draw_frame()
+{
+    return rem::cc::notimplemented;
 }
 
 
@@ -336,13 +358,26 @@ rectangle vchar::bloc::operator /(const rectangle rhs) { return geometry / rhs; 
 
 vchar::string::iterator vchar::bloc::operator *() { return _c_; }
 
+void vchar::bloc::scroll_up(int nrows)
+{
 
-#pragma endregion colors
+}
 
+void vchar::bloc::scroll_down(int nrows)
+{
 
+}
 
+void vchar::bloc::scroll_left(int nrows)
+{
 
-#pragma endregion char32-bloc
+}
+
+void vchar::bloc::scroll_right(int nrows)
+{
+
+}
+
 
 // ---------------------------------------------------------------------------------------------------------------------
 
