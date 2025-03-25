@@ -83,7 +83,7 @@
         vchar::string::iterator _c_{};
 
         // --- IO STUFF ------------------------------
-        rem::cc             render(console* con, const ui::rectangle& subrect={});
+
         vchar::bloc&        cursor(ui::cxy _pos);
         [[nodiscard]] int   line() const;
         [[nodiscard]] int   column() const;
@@ -129,6 +129,8 @@
         void scroll_down(int nrows);
         void scroll_left(int nrows);
         void scroll_right(int nrows);
+        std::pair<ui::size, vchar::string> copy(rectangle r);
+        rem::cc put(std::pair<ui::size, vchar::string> blk, ui::cxy xy);
     };
 
 

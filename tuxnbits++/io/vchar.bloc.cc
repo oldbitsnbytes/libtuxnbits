@@ -8,23 +8,6 @@ namespace tux::io
 // ---------------------------------------------------------------------------------------------------------------------
 
 
-rem::cc vchar::bloc::render(console *con, const rectangle &subrect)
-{
-    // auto r = geometry.tolocal() / subrect;
-    // if(!r){
-    //     auto l = diagnostic::error(1); l << rem::cc::oob << " subrect " << color::hotpink4 << subrect << color::r << "is out of this vchar::bloc boundaries" << l;
-    //     return rem::cc::rejected;
-    // }
-
-    // for(int y = 0; y < *r.height(); y++){
-    //     gotoxy({r.a.x, r.a.y+y});
-    //     for(int x = 0; x < *r.width(); x++){
-    //         terminal::
-    //     }
-    // }
-    return rem::cc::notimplemented;
-}
-
 vchar::bloc& vchar::bloc::cursor(ui::cxy _pos)
 {
     if (!geometry.goto_xy(_pos))
@@ -358,28 +341,34 @@ rectangle vchar::bloc::operator /(const rectangle rhs) { return geometry / rhs; 
 
 vchar::string::iterator vchar::bloc::operator *() { return _c_; }
 
-void vchar::bloc::scroll_up(int nrows)
-{
+//-----------------------------------------------------------------------------
+// TODO
+void vchar::bloc::scroll_up(int nrows){}
+void vchar::bloc::scroll_down(int nrows){}
+void vchar::bloc::scroll_left(int nrows){}
+void vchar::bloc::scroll_right(int nrows){}
 
+rem::cc vchar::bloc::put(std::pair<size, string> blk, cxy xy)
+{
+    return rem::cc::notimplemented;
 }
 
-void vchar::bloc::scroll_down(int nrows)
+std::pair<size, vchar::string> vchar::bloc::copy(rectangle rect)
 {
+    rectangle r = geometry.tolocal() & rect;
+    if(!r)
+        return {{0,0},{}};
 
+    vchar::string str(r.dwh.area());
+    auto i = str.begin();
+    for(int y = 0; y < *r.height(); y++){
+        gotoxy(r.a + cxy{0,y});
+        for(int x = 0; x < *r.width(); x++) *i++ = *_c_++;
+    }
+    //...
+    return {r.dwh,str};
 }
-
-void vchar::bloc::scroll_left(int nrows)
-{
-
-}
-
-void vchar::bloc::scroll_right(int nrows)
-{
-
-}
-
-
-// ---------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 
 }
