@@ -18,6 +18,7 @@ set(HEADERS
     ${TARGET_DIR}/expect.h
     ${TARGET_DIR}/geometry.h
     ${TARGET_DIR}/glyphes.h
+    ${TARGET_DIR}/databits/databits.h
     ${TARGET_DIR}/diagnostic.h
     ${TARGET_DIR}/diagnostic.inc
     ${TARGET_DIR}/object.h
@@ -32,6 +33,7 @@ add_library( ${PROJECT_NAME} STATIC
     ${HEADERS}
     ${TARGET_DIR}/colors.cc
     ${TARGET_DIR}/geometry.cc
+    ${TARGET_DIR}/databits/databits.cc
     ${TARGET_DIR}/diagnostic.cc
     ${TARGET_DIR}/cadres.cc
     ${TARGET_DIR}/glyphes.cc

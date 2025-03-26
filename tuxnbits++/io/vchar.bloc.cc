@@ -212,7 +212,7 @@ vchar::bloc::operator bool() const
 
 vchar::bloc* vchar::bloc::create(const ui::size& _dim, color::pair _colours)
 {
-    vchar::bloc* blk = new vchar::bloc;
+    const auto blk = new vchar::bloc;
     blk->buffer = std::make_shared<vchar::string>(_dim.area(), vchar(color::pair(_colours)));
     blk->colours = _colours;
     blk->geometry = {{0,0},_dim};
