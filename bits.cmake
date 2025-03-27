@@ -19,6 +19,7 @@ set(HEADERS
     ${TARGET_DIR}/geometry.h
     ${TARGET_DIR}/glyphes.h
     ${TARGET_DIR}/databits/databits.h
+    ${TARGET_DIR}/databits/field.h
     ${TARGET_DIR}/diagnostic.h
     ${TARGET_DIR}/diagnostic.inc
     ${TARGET_DIR}/object.h
@@ -34,6 +35,7 @@ add_library( ${PROJECT_NAME} STATIC
     ${TARGET_DIR}/colors.cc
     ${TARGET_DIR}/geometry.cc
     ${TARGET_DIR}/databits/databits.cc
+    ${TARGET_DIR}/databits/field.cc
     ${TARGET_DIR}/diagnostic.cc
     ${TARGET_DIR}/cadres.cc
     ${TARGET_DIR}/glyphes.cc
@@ -64,7 +66,7 @@ IF (EXISTS "${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json")
 ENDIF ()
 
 
-target_link_libraries(${PROJECT_NAME} ${CMAKE_DL_LIBS} ) # and other system dependencies...
+target_link_libraries(${PROJECT_NAME} ${CMAKE_DL_LIBS} sqlite3) # and other system dependencies...
 
 
 

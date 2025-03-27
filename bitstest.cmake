@@ -20,7 +20,8 @@ add_dependencies(bitstest.app tuxnbits io)
 
 # TABARNAK! j'joubli toujours de linker les librairies dans le bon ordre!!!!!
 target_link_libraries(bitstest.app
-    tuxnbits++.io
     tuxnbits++.bits
+    tuxnbits++.io
     tuxnbits++.tui
+    sqlite3
 )

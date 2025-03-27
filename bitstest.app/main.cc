@@ -1,6 +1,7 @@
 #include <tuxnbits++/bits/appbits.h>
 #include <tuxnbits++/io/terminal.h>
 #include <tuxnbits++/io/vchar.h>
+#include <tuxnbits++/bits/databits/databits.h>
 
 using dlog = diagnostic;
 namespace tux
@@ -11,6 +12,7 @@ class test : public appbits
 {
     io::terminal term{nullptr,"tests",{}};
     io::vchar::bloc *blk{nullptr};
+    sql::databits db{"tuxnbits"};
 public:
     test(const std::string& tname, tux::string::view_list&& vargs);
     ~test() override = default;
@@ -89,6 +91,17 @@ rem::cc test::setup()
     term.init_stdinput();
     log << "terminal is ready" << log;
     blk = io::vchar::bloc::create({40,7}, {color::yellow, color::code::blueviolet});
+    try{
+        log << "testing databits:" << log;
+        db.open();
+        db.set_wal(true);
+        db.close();
+        log << "databits opened and closed gracefully..." << log;
+    }
+    catch (std::runtime_error& e)
+    {
+        auto l = diagnostic::except(0); l << "runtime error: " << e.what() << l;
+    }
     return rem::cc::ok;
 }
 

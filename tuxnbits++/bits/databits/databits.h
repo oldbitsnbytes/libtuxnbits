@@ -28,7 +28,7 @@ namespace tux::sql
 
 
 
-class LIBTUXNBITS databits  
+class LIBTUXNBITS databits
 {
     sqlite3 *db_file{nullptr};
     std::string db_file_name;
@@ -62,7 +62,7 @@ public:
     [[nodiscard]] bool is_open() const { return state.open; }
     [[nodiscard]] bool is_error() const { return state.err; }
 
-    rem::cc set_wal(bool wal);
+    rem::cc init_pragmas(bool wal);
 
 
 private:
