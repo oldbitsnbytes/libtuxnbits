@@ -197,11 +197,14 @@ void terminal::cursor_on()
 
 bool terminal::cursor(ui::cxy xy)
 {
-    auto l = diagnostic::debug(1);
+
     if(_geometry.goto_xy(xy))
         std::cout << "\x1b[" << xy.y+1 << ';' << xy.x+1 << 'H'<< std::flush;
     else
+    {
+        auto l = diagnostic::debug(1);
         l << rem::type::err << color::hotpink3 << " term geometry [" << color::yellow << _geometry << color::hotpink3 << "] rejected positionning at:" << color::yellow << xy << l;
+    }
     return true;
 }
 
@@ -210,10 +213,6 @@ void mv(ui::direction::type dir, int d)
     char ch = dir == ui::direction::right ? 'C': dir==ui::direction::left  ? 'D' : dir==ui::direction::up    ? 'A' : 'B';
     std::cout << "\x1b[" << d << ch;
 }
-
-
-
-
 
 
 terminal::~terminal()

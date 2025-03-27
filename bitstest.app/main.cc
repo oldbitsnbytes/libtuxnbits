@@ -32,7 +32,7 @@ rem::cc test::run()
 {
     (void)setup();
     h = *dlog::new_file("tests");
-    auto l = dlog::message(h) << color::r << " - The Great Beginning of the tux::bitsnbytes++ !\n";
+    auto l = dlog::message(h) << color::r << " - The Grand Beginning of the tux::bitsnbytes++ !\n";
     l << color::yellow << "ready" << l;
     //blk->home();
     blk->set_foreground_color(color::yellow);
@@ -94,7 +94,7 @@ rem::cc test::setup()
     try{
         log << "testing databits:" << log;
         db.open();
-        db.set_wal(true);
+        db.init_pragmas(true);
         db.close();
         log << "databits opened and closed gracefully..." << log;
     }
