@@ -2,6 +2,7 @@
 #include <tuxnbits++/io/terminal.h>
 #include <tuxnbits++/io/vchar.h>
 #include <tuxnbits++/bits/databits/databits.h>
+#include <tuxnbits++/bits/databits/field.h>
 
 using dlog = diagnostic;
 namespace tux
@@ -97,6 +98,11 @@ rem::cc test::setup()
         db.init_pragmas(true);
         db.close();
         log << "databits opened and closed gracefully..." << log;
+        sql::field f = {"id"};
+        f.index_bits = sql::field::PKEY|sql::field::AUTOINC;
+        f.type = sql::field::integer_type;
+        log = diagnostic::test(_dlog); log << " field::to_string: " << log;
+        log << f() << log;
     }
     catch (std::runtime_error& e)
     {

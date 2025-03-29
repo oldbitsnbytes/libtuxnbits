@@ -53,17 +53,24 @@ struct LIBTUXNBITS field
         blob_type
     }type{field::integer_type};
 
-    struct properties
+    static constexpr u16 UNSIGNED   = 0x0001;
+    static constexpr u16 PKEY       = 0x0002;
+    static constexpr u16 AUTOINC    = 0x0004;
+    static constexpr u16 UNIQUE     = 0x0008;
+    static constexpr u16 INDEX      = 0x0010;
+    static constexpr u16 FOREIGN    = 0x0020;
+    u16 index_bits{0};
+
+    std::string name{};
+    struct foreign
     {
-        u8 primary_key :1;
-        u8 autoinc     :1;
-        u8 unique      :1;
-        u8 index       :1;
-    }bits{0,0,0,0};
+        std::string fname{};
+        std::string ftable{};
 
+    };
 
+    std::string fkey{};
 
-    std::string name;
     tux::string::view_list rows{};
     field()=default;
     field(const std::string& name);
@@ -74,6 +81,8 @@ struct LIBTUXNBITS field
 
     field& operator=(const field&) = default;
     field& operator=(field&&) = default;
+
+    std::string operator()() { return to_string(); }
     std::string to_string();
 };
 
