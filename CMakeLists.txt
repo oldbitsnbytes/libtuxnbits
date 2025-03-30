@@ -17,6 +17,11 @@ OPTION(TESTS        "Build the tests................................[bitstest/bi
 if(BITS)
     message(STATUS "Building libtuxnbits++.bits.a")
     include(bits.cmake)
+
+target_sources(tuxnbits
+  PRIVATE
+    tuxnbits++/bits/databits/table.h tuxnbits++/bits/databits/table.cc
+)
 endif()
 
 if(IO)

@@ -15,6 +15,9 @@ namespace tux::sql
 ///
 field::field(const std::string &field_name): name(field_name){}
 
+field::field(const std::string &field_name, sqlite3_types data_type, u16 props, foreign foreign_prop):
+    name(field_name),type(data_type), index_bits(props), fkey(foreign_prop){}
+
 std::string field::to_string()
 {
 

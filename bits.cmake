@@ -20,6 +20,7 @@ set(HEADERS
     ${TARGET_DIR}/glyphes.h
     ${TARGET_DIR}/databits/databits.h
     ${TARGET_DIR}/databits/field.h
+    ${TARGET_DIR}/databits/table.h
     ${TARGET_DIR}/diagnostic.h
     ${TARGET_DIR}/diagnostic.inc
     ${TARGET_DIR}/object.h
@@ -36,6 +37,7 @@ add_library( ${PROJECT_NAME} STATIC
     ${TARGET_DIR}/geometry.cc
     ${TARGET_DIR}/databits/databits.cc
     ${TARGET_DIR}/databits/field.cc
+    ${TARGET_DIR}/databits/table.cc
     ${TARGET_DIR}/diagnostic.cc
     ${TARGET_DIR}/cadres.cc
     ${TARGET_DIR}/glyphes.cc

@@ -67,13 +67,16 @@ struct LIBTUXNBITS field
         std::string fname{};
         std::string ftable{};
 
-    };
+    }fkey{};
 
-    std::string fkey{};
-
+    ///////////////////////////////////////////////////////
+    /// \brief rows
+    /// \note Either char** or std::vector<std::string_view>{argc,data_rows}...
+    ///       nullptr values must still be checked.
     tux::string::view_list rows{};
     field()=default;
     field(const std::string& name);
+    field(const std::string& name, field::sqlite3_types data_type, u16 props, field::foreign foreign_prop={"",""});
     field(const field&) = default;
     field(field&&) = default;
 
@@ -84,6 +87,9 @@ struct LIBTUXNBITS field
 
     std::string operator()() { return to_string(); }
     std::string to_string();
+
+
+    using list = std::map<std::string, field>;
 };
 
 } // tux::sql

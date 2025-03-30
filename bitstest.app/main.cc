@@ -2,7 +2,7 @@
 #include <tuxnbits++/io/terminal.h>
 #include <tuxnbits++/io/vchar.h>
 #include <tuxnbits++/bits/databits/databits.h>
-#include <tuxnbits++/bits/databits/field.h>
+#include <tuxnbits++/bits/databits/table.h>
 
 using dlog = diagnostic;
 namespace tux
@@ -103,6 +103,14 @@ rem::cc test::setup()
         f.type = sql::field::integer_type;
         log = diagnostic::test(_dlog); log << " field::to_string: " << log;
         log << f() << log;
+
+        sql::table tbl;
+        tbl.name = "entry";
+        tbl << sql::field{"id", sql::field::integer_type, sql::field::PKEY|sql::field::AUTOINC|sql::field::UNSIGNED};
+        tbl << sql::field{"class", sql::field::integer_type, 0};
+        tbl << sql::field{"contents", sql::field::blob_type, 0};
+        //...
+
     }
     catch (std::runtime_error& e)
     {
