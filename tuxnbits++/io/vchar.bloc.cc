@@ -113,10 +113,10 @@ rem::cc vchar::bloc::clear(ui::rectangle r, color::pair cp)
         return rem::cc::rejected;
     }
 
-    for(int y=0; y < rw.height<int>(); y++){
+    for(int y=0; y < rw.height(); y++){
         if(auto c = gotoxy({rw.a.x, rw.a.y+y}); !c)
             return c;
-        for(int x=0; x < rw.width<int>(); x++){
+        for(int x=0; x < rw.width(); x++){
             ***this << cp << ' ';
             if(!++*this)
                 return rem::cc::rejected;
@@ -250,7 +250,7 @@ void vchar::bloc::clear()
 void vchar::bloc::sync_cursors()
 {
     const auto  w = _c_ - buffer->begin();
-    geometry.cursor = {static_cast<int>(w) % *geometry.width(), static_cast<int>(w) / *geometry.width()};
+    geometry.cursor = {static_cast<int>(w) % geometry.width(), static_cast<int>(w) / geometry.width()};
     end_pos = geometry.cursor;
 }
 
@@ -271,7 +271,7 @@ void vchar::bloc::home() { geometry.goto_xy({0,0});_c_ = buffer->begin(); }
 rem::cc vchar::bloc::gotoxy(cxy xy)
 {
     if(geometry.goto_xy(xy)){
-        _c_ = buffer->begin() + (*geometry.width() * geometry.cursor.y + geometry.cursor.x);
+        _c_ = buffer->begin() + (geometry.width() * geometry.cursor.y + geometry.cursor.x);
         return rem::cc::accepted;
     }
     return rem::cc::rejected;
@@ -361,9 +361,9 @@ std::pair<size, vchar::string> vchar::bloc::copy(rectangle rect)
 
     vchar::string str(r.dwh.area());
     auto i = str.begin();
-    for(int y = 0; y < *r.height(); y++){
+    for(int y = 0; y < r.height(); y++){
         gotoxy(r.a + cxy{0,y});
-        for(int x = 0; x < *r.width(); x++) *i++ = *_c_++;
+        for(int x = 0; x < r.width(); x++) *i++ = *_c_++;
     }
     //...
     return {r.dwh,str};

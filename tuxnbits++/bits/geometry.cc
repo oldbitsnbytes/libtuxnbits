@@ -785,12 +785,12 @@ string2d &string2d::put(const std::string &txt)
 {
     auto w = r.width();
     if(!w) return *this;
-    auto line_width = *w - r.cursor.x;
+    auto line_width = w - r.cursor.x;
     auto ln = txt.length();
 
     auto dx = line_width <= ln ? line_width : ln;
 
-    std::string::iterator crs = win.begin() + (r.cursor.y * *w + r.cursor.x);
+    std::string::iterator crs = win.begin() + (r.cursor.y * w + r.cursor.x);
     auto p = txt.begin();
     for (size_t x = 0; x < dx; x++)
         *crs++ = *p++;
@@ -805,7 +805,7 @@ void string2d::clear()
     auto w = r.width();
     auto h = r.height();
 
-    win = std::string(*w * *h, ' ');
+    win = std::string(w * h, ' ');
 }
 
 std::string string2d::details()
@@ -826,9 +826,9 @@ string2d::operator std::string()
 
     if(!w||h) return str;
 
-    for (int l = 0; l < *h; l++) {
-        for (int c = 0; c < *w; c++)
-            str += *(win.begin() + (l * *w + c));
+    for (int l = 0; l < h; l++) {
+        for (int c = 0; c < w; c++)
+            str += *(win.begin() + (l * w + c));
         str += '\n';
     }
     return str;
