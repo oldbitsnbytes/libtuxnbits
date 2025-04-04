@@ -20,7 +20,7 @@
 #include <tuxnbits++/tui/export.h>
 #include <tuxnbits++/io/kbhit.h>
 #include <tuxnbits++/io/mouse.h>
-//#include <tuxnbits++/tui/tuins.h>
+#include <tuxnbits++/tui/tuins.h>
 #include <variant>
 
 
@@ -87,6 +87,7 @@ struct LIBTUXNBITSTUI event
     ////////////////////////////////////////////////////////////
     template <typename T> decltype(auto) visit(T&& visitor) const;
 
+    template <typename EVT> event(const EVT& evt);
 
 
 private:

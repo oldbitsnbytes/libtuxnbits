@@ -1,9 +1,4 @@
 
-// Created by oldlonecoder on 8/13/24.
-//
-
-//#ifndef INTUI_GLOBALS_H
-//#define INTUI_GLOBALS_H
 /******************************************************************************************
  *   Copyright (C) ...,2024,... by Serge Lussier                                          *
  *   serge.lussier@oldlonecoder.club                                                      *
@@ -33,40 +28,6 @@ using namespace tux::integers;
 
 namespace tux::ui
 {
-
-
-/**
- * @brief Widget ui justification enums or`ed flags
- * @author &copy; 2008,2022,2023, Serge Lussier, lussier.serge@gmail.com ( oldlonecoder )
- */
-namespace justify
-{
-using Type = u16;
-static constexpr u16 left        = 0x0001; ///< Justify left
-static constexpr u16 right       = 0x0002; ///< Justify right
-static constexpr u16 hcenter     = 0x0004; ///< Justify align horizontally at the center
-static constexpr u16 vcenter     = 0x0008; ///< Justify Align vertically at the center
-static constexpr u16 center      = 0x000C; ///< Justify Vertical and Horizontal center
-static constexpr u16 word_wrap   = 0x0010; ///< Justify word wrap
-static constexpr u16 prefix      = 0x0020; ///< Justify prefix
-static constexpr u16 suffix      = 0x0040; ///< Justify suffix
-static constexpr u16 auto_size   = 0x0080; ///< Justify auto-stretch
-static constexpr u16 auto_size_text   = 0x0100; ///< Justify auto-stretch
-}
-
-
-/**
- * @brief tux::ui::rectangle enums values
- * @author &copy; 2008,2022,2023, Serge Lussier, lussier.serge@gmail.com ( oldlonecoder )
- */
-namespace direction
-{
-using type = I8;
-static constexpr I8 left = -1; ///< to left
-static constexpr I8 right = 1; ///< to right
-static constexpr I8 up = 2;    ///< up
-static constexpr I8 down = -2; ///< down
-}
 
 
 namespace components

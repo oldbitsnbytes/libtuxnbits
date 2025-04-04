@@ -23,7 +23,10 @@
 
 namespace tux::ui
 {
-
+/**
+ * @brief Widget ui justification enums or`ed flags
+ * @author &copy; 2008,2022,2023, Serge Lussier, lussier.serge@gmail.com ( oldlonecoder )
+ */
 namespace justify
 {
 using Type = u16;
