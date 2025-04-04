@@ -308,4 +308,4 @@ attr_db::themes &tux::ui::colors::attr_db::theme()
     return attr_db::s_data;
 }
 
-}
+} // namespace tux::ui::colors

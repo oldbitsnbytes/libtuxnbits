@@ -18,6 +18,8 @@ set(HEADERS
     ${TARGET_DIR}/export.h
     ${TARGET_DIR}/tuins.h
     ${TARGET_DIR}/pencil.h
+    ${TARGET_DIR}/event.h
+    ${TARGET_DIR}/event.inline
 )
 
 #set(OUT ${FRAME}_${WORK})
@@ -26,6 +28,7 @@ add_library(${TARGETNAME} STATIC
     ${HEADERS}
     ${TARGET_DIR}/tuins.cc
     ${TARGET_DIR}/pencil.cc
+    ${TARGET_DIR}/event.cc
 )
 
 

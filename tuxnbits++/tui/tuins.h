@@ -174,4 +174,4 @@ struct LIBTUXNBITSTUI attr_db
 };
 } // namespace colors;
 
-}
+} // namespace tux::ui
