@@ -21,6 +21,7 @@ pencil::~pencil()
 
 rem::cc pencil::draw_text(const std::string &txt)
 {
+    auto sz = std::min(txt.length(), static_cast<size_t>(_rect.width()));
 
     return rem::cc::notimplemented;
 }
