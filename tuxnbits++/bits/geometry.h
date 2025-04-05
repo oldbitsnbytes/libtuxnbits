@@ -121,52 +121,7 @@ struct LIBTUXNBITS size {
     bool has_max_size();
     int width() { return w; }
     int height() { return h; }
-    // template<typename T=int> std::optional<T> width() const
-    // {
-    //     if constexpr (std::is_same_v<T, float>)             return static_cast<float>(w         );
-    //     else if constexpr (std::is_same_v<T, double>)       return static_cast<double>(w        );
-    //     else if constexpr (std::is_same_v<T, int>)          return static_cast<int>(w           );
-    //     else if constexpr (std::is_same_v<T, unsigned int>) return static_cast<unsigned int>(w  );
-    //     else if constexpr (std::is_same_v<T, char>)         return static_cast<char>(w          );
-    //     else if constexpr (std::is_same_v<T, unsigned char>)return static_cast<unsigned char>(w );
-    //     else if constexpr (std::is_same_v<T, bool>)         return static_cast<bool>(w          );
-    //     else if constexpr (std::is_same_v<T, i8>)           return static_cast<i8>(w            );
-    //     else if constexpr (std::is_same_v<T, u8>)           return static_cast<u8>(w            );
-    //     else if constexpr (std::is_same_v<T, u16>)          return static_cast<u16>(w           );
-    //     else if constexpr (std::is_same_v<T, u32>)          return static_cast<u32>(w           );
-    //     else if constexpr (std::is_same_v<T, u64>)          return static_cast<u64>(w           );
-    //     else if constexpr (std::is_same_v<T, size_t>)       return static_cast<size_t>(w        );// like u64
-    //     else if constexpr (std::is_same_v<T, i16>)          return static_cast<i16>(w           );
-    //     else if constexpr (std::is_same_v<T, u16>)          return static_cast<u16>(w           );
-    //     else if constexpr (std::is_same_v<T, u32>)          return static_cast<u32>(w           );
-    //     else if constexpr (std::is_same_v<T, i64>)          return static_cast<u64>(w           );
-    //     else if constexpr (std::is_same_v<T, std::string>)  return std::to_string(w             );
-    //     ////diagnostic::error() << //diagnostic::cc::expected << " compatible left-value type";
-    //     return {};
-    // }
-    // template<typename T=int> std::optional<T> height() const
-    // {
-    //     if constexpr (std::is_same_v<T, float>)             return static_cast<float>(h);
-    //     else if constexpr (std::is_same_v<T, double>)       return static_cast<double>(h);
-    //     else if constexpr (std::is_same_v<T, int>)          return static_cast<int>(h);
-    //     else if constexpr (std::is_same_v<T, unsigned int>) return static_cast<unsigned int>(h);
-    //     else if constexpr (std::is_same_v<T, char>)         return static_cast<char>(h);
-    //     else if constexpr (std::is_same_v<T, unsigned char>)return static_cast<unsigned char>(h);
-    //     else if constexpr (std::is_same_v<T, bool>)         return static_cast<bool>(h);
-    //     else if constexpr (std::is_same_v<T, i8>)           return static_cast<i8>(h);
-    //     else if constexpr (std::is_same_v<T, u8>)           return static_cast<u8>(h);
-    //     else if constexpr (std::is_same_v<T, u16>)          return static_cast<u16>(h);
-    //     else if constexpr (std::is_same_v<T, u32>)          return static_cast<u32>(h);
-    //     else if constexpr (std::is_same_v<T, u64>)          return static_cast<u64>(h);  // like u64
-    //     else if constexpr (std::is_same_v<T, size_t>)       return static_cast<size_t>(h);
-    //     else if constexpr (std::is_same_v<T, i16>)          return static_cast<i16>(h);
-    //     else if constexpr (std::is_same_v<T, u16>)          return static_cast<u16>(h);
-    //     else if constexpr (std::is_same_v<T, u32>)          return static_cast<u32>(h);
-    //     else if constexpr (std::is_same_v<T, i64>)          return static_cast<u64>(h);
-    //     else if constexpr (std::is_same_v<T, std::string>)  return std::to_string(h);
-    //     ////diagnostic::error() << //diagnostic::cc::expected << " compatible left-value type";
-    //     return {};
-    // }
+
 };
 
 
@@ -188,7 +143,7 @@ struct LIBTUXNBITS rectangle {
 
     size dwh;
     bool nowrap = true;
-
+    direction::type scroll_dir{0};
     //static constexpr std::string_view    string_format = R"((\{3d},\{-3d})-[a:(\{3d},\{-3d}) b:(\{3d},\{-3d})]-[w:\{3d} h:\{-3d}])";  Disabled;
 
     using array = std::vector<rectangle>;
@@ -224,56 +179,6 @@ struct LIBTUXNBITS rectangle {
     std::tuple<cxy,cxy,ui::size> components() const { return {a, b,dwh}; }
     int width() { return dwh.w; }
     int height() { return dwh.h; }
-
-    // [[nodiscard]] int width() const { return dwh.w; }
-    // [[nodiscard]] int height() const { return dwh.h; }
-    // template<typename T=int> std::optional<T> width() const
-    // {
-    //     if constexpr (std::is_same_v<T, float>)             return static_cast<float>(dwh.w         );
-    //     else if constexpr (std::is_same_v<T, double>)       return static_cast<double>(dwh.w        );
-    //     else if constexpr (std::is_same_v<T, int>)          return static_cast<int>(dwh.w           );
-    //     else if constexpr (std::is_same_v<T, unsigned int>) return static_cast<unsigned int>(dwh.w  );
-    //     else if constexpr (std::is_same_v<T, char>)         return static_cast<char>(dwh.w          );
-    //     else if constexpr (std::is_same_v<T, unsigned char>)return static_cast<unsigned char>(dwh.w );
-    //     else if constexpr (std::is_same_v<T, bool>)         return static_cast<bool>(dwh.w          );
-    //     else if constexpr (std::is_same_v<T, i8>)           return static_cast<i8>(dwh.w            );
-    //     else if constexpr (std::is_same_v<T, u8>)           return static_cast<u8>(dwh.w            );
-    //     else if constexpr (std::is_same_v<T, u16>)          return static_cast<u16>(dwh.w           );
-    //     else if constexpr (std::is_same_v<T, u32>)          return static_cast<u32>(dwh.w           );
-    //     else if constexpr (std::is_same_v<T, u64>)          return static_cast<u64>(dwh.w           );
-    //     else if constexpr (std::is_same_v<T, size_t>)       return static_cast<size_t>(dwh.w        );// like u64
-    //     else if constexpr (std::is_same_v<T, i16>)          return static_cast<i16>(dwh.w           );
-    //     else if constexpr (std::is_same_v<T, u16>)          return static_cast<u16>(dwh.w           );
-    //     else if constexpr (std::is_same_v<T, u32>)          return static_cast<u32>(dwh.w           );
-    //     else if constexpr (std::is_same_v<T, i64>)          return static_cast<u64>(dwh.w           );
-    //     else if constexpr (std::is_same_v<T, std::string>)  return std::to_string(dwh.w             );
-    //     ////diagnostic::error() << //diagnostic::cc::expected << " compatible left-value type";
-    //     return {};
-    // }
-    // template<typename T=int> std::optional<T> height() const
-    // {
-    //     if constexpr (std::is_same_v<T, float>)             return static_cast<float>(dwh.h);
-    //     else if constexpr (std::is_same_v<T, double>)       return static_cast<double>(dwh.h);
-    //     else if constexpr (std::is_same_v<T, int>)          return static_cast<int>(dwh.h);
-    //     else if constexpr (std::is_same_v<T, unsigned int>) return static_cast<unsigned int>(dwh.h);
-    //     else if constexpr (std::is_same_v<T, char>)         return static_cast<char>(dwh.h);
-    //     else if constexpr (std::is_same_v<T, unsigned char>)return static_cast<unsigned char>(dwh.h);
-    //     else if constexpr (std::is_same_v<T, bool>)         return static_cast<bool>(dwh.h);
-    //     else if constexpr (std::is_same_v<T, i8>)           return static_cast<i8>(dwh.h);
-    //     else if constexpr (std::is_same_v<T, u8>)           return static_cast<u8>(dwh.h);
-    //     else if constexpr (std::is_same_v<T, u16>)          return static_cast<u16>(dwh.h);
-    //     else if constexpr (std::is_same_v<T, u32>)          return static_cast<u32>(dwh.h);
-    //     else if constexpr (std::is_same_v<T, u64>)          return static_cast<u64>(dwh.h);  // like u64
-    //     else if constexpr (std::is_same_v<T, size_t>)       return static_cast<size_t>(dwh.h);
-    //     else if constexpr (std::is_same_v<T, i16>)          return static_cast<i16>(dwh.h);
-    //     else if constexpr (std::is_same_v<T, u16>)          return static_cast<u16>(dwh.h);
-    //     else if constexpr (std::is_same_v<T, u32>)          return static_cast<u32>(dwh.h);
-    //     else if constexpr (std::is_same_v<T, i64>)          return static_cast<u64>(dwh.h);
-    //     else if constexpr (std::is_same_v<T, std::string>)  return std::to_string(dwh.h);
-    //     ////diagnostic::error() << //diagnostic::cc::expected << " compatible left-value type";
-    //     return {};
-    // }
-
     bool operator[](const cxy &pt) const;
     cxy top_left()const;
     cxy top_right()const;

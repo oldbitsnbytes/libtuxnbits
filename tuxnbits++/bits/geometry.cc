@@ -294,21 +294,21 @@ void rectangle::home()
  */
 bool rectangle::operator++()
 {
+    scroll_dir = 0;
     ++cursor.x;
-    if (cursor.x > b.x) {
+    if (cursor.x >= dwh.w) {
         if (nowrap) {
             --cursor.x;
             return false;
         }
+        cursor.x = 0;
         ++cursor.y;
-        if (cursor.y > b.y) {
-            cursor.y = b.y;
-            //cursor.x = dwh.w-1;
+        if (cursor.y >= dwh.h) {
+            --cursor.y;
+            scroll_dir = direction::down;
             ////diagnostic::status() << " cursor wraps to home.";
-            //cursor = a;
             return false;
         }
-        cursor.x = a.x;
     }
     return true;
 }
@@ -319,32 +319,34 @@ bool rectangle::operator++()
  */
 bool rectangle::operator++(int)
 {
+    scroll_dir = 0;
     ++cursor.y;
-    if (cursor.y > b.y) {
-        if (nowrap) {
-            --cursor.y;
-            return false;
-        }
-        cursor.y = a.y;
+    if (cursor.y >= dwh.h) {
+        cursor.y=dwh.h-1;
+        scroll_dir = direction::down;
+        return false;
     }
     return true;
 }
 
 bool rectangle::operator--()
 {
+    scroll_dir = 0;
     --cursor.x;
-    if (cursor.x < a.x) {
+    if (cursor.x < 0) {
         if (nowrap) {
-            ++cursor.x;
+            cursor.x = 0;
+            scroll_dir = direction::left;
             return false;
         }
+        cursor.x = dwh.w-1;
         --cursor.y;
-        if (cursor.y < a.y) {
-            cursor.y = a.y;
-            cursor.x = a.x;
+        if (cursor.y < 0) {
+            cursor.y=0;
+            scroll_dir = direction::up;
+            ////diagnostic::status() << " cursor wraps to home.";
             return false;
         }
-        cursor.x = b.x;
     }
     return true;
 }
@@ -352,13 +354,15 @@ bool rectangle::operator--()
 
 bool rectangle::operator--(int)
 {
+    scroll_dir = 0;
     --cursor.y;
-    if (cursor.y < a.y) {
+    if (cursor.y < 0) {
         if (nowrap) {
-            ++cursor.y;
+            cursor.y = 0;
+            scroll_dir = direction::up;
             return false;
         }
-        cursor.y = b.y;
+        cursor.y = dwh.h - 1;
     }
     return true;
 }
