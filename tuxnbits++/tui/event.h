@@ -60,7 +60,7 @@ struct LIBTUXNBITSTUI event
     ////////////////////////////////////////////////////////////
     /// \brief Check current event_type
     ///
-    /// \tparam `EVT` Type of the event_type to check against
+    /// \tparam `EVT` Type of the event data to check against
     ///
     /// \return `true` if the current event_type matches given template parameter
     ///
@@ -70,9 +70,9 @@ struct LIBTUXNBITSTUI event
     ////////////////////////////////////////////////////////////
     /// \brief Attempt to get specified event event_type
     ///
-    /// \tparam `event_type` Type of the desired event event_type
+    /// \tparam `EVT` Type of the desired event data
     ///
-    /// \return Address of current event event_type, otherwise `nullptr`
+    /// \return Address of current event data, otherwise `nullptr`
     ///
     ////////////////////////////////////////////////////////////
     template <typename EVT> [[nodiscard]] const EVT* get() const;
@@ -87,6 +87,10 @@ struct LIBTUXNBITSTUI event
     ////////////////////////////////////////////////////////////
     template <typename T> decltype(auto) visit(T&& visitor) const;
 
+    ////////////////////////////////////////////////////////////
+    /// \brief Instanciates a new event data of type EVT
+    /// \param EVT Event's data type.
+    ///
     template <typename EVT> event(const EVT& evt);
 
 
@@ -108,4 +112,4 @@ private:
 
 } // namespace tux::ui
 
-//#include <tuxnbits++/tui/event.inline>
+#include <tuxnbits++/tui/event.inline>
