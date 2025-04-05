@@ -29,12 +29,31 @@ class pencil : public object
 {
     io::vchar::bloc* _bf{nullptr}; ///< drawing canva.
     rectangle        _rect{};      ///< For now it is the bloc's subregion ( by default it is the same dimensions, local/relative to the bloc's geometry )..
-    color::pair      _colors{};    ///< Current colors. ( fallback/reset colors are stored in _bf ).
+    color::pair      _colors{};    ///< Stored current bloc buffers colors. The bloc buffer colors are restored with this _colors when this painter/pencil terminates.
 
 public:
-    pencil();
+    pencil()=default;
     pencil(io::vchar::bloc* bf, rectangle subregion_);
     ~pencil();
+
+    rem::cc draw_text(const std::string& txt);
+    rem::cc draw_glyph(glyph::type ic);
+    rem::cc gotoxy(const ui::cxy& xy);
+
+    void set_foreground_color(color::code fg);
+    void set_background_color(color::code bg);
+    void set_colors(color::pair cp);
+
+    pencil& clear(const ui::rectangle& r={}, color::pair cp = {color::reset,color::reset});
+
+    pencil& operator ++();      // ++x
+    pencil& operator ++(int);   // ++y
+    pencil& operator --();      // --x
+    pencil& operator --(int);   // --y
+
+    pencil& draw_frame(cadre::frame_matrix frmat={2,2,2,1});
+
+
 
 
 };
