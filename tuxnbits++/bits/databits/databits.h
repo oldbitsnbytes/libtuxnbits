@@ -45,8 +45,7 @@ class LIBTUXNBITS databits
     // SQLITE_API int sqlite3_exec(sqlite3 *db, const char *sql, int (*callback)(void*,int,char**,char**), void *arg, char **errmsg);
 
     tux::signals::notify<rem::cc, tux::string::view_list, tux::string::view_list> query_callback{"databits_system_callback_signal"};
-    //                                  objptr  argc   rows   colnames
-    static  int sqlite3_callback(void*,int,   char**,  char**);
+    static  int sqlite3_callback(void* _this, int argc , char** data_rows, char** columns_name);
 public:
 
 

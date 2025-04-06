@@ -27,25 +27,29 @@ set(HEADERS
     ${TARGET_DIR}/rem.h
     ${TARGET_DIR}/string.h
     ${TARGET_DIR}/appbits.h
+    tuxnbits++/tui/twidgets/twidget.cc
+    tuxnbits++/tui/twidgets/twidget.h
 )
 
 
-add_library( ${PROJECT_NAME} STATIC
+add_library(${PROJECT_NAME} STATIC
 
-    ${HEADERS}
-    ${TARGET_DIR}/colors.cc
-    ${TARGET_DIR}/geometry.cc
-    ${TARGET_DIR}/databits/databits.cc
-    ${TARGET_DIR}/databits/field.cc
-    ${TARGET_DIR}/databits/table.cc
-    ${TARGET_DIR}/diagnostic.cc
-    ${TARGET_DIR}/cadres.cc
-    ${TARGET_DIR}/glyphes.cc
-    ${TARGET_DIR}/object.cc
-    ${TARGET_DIR}/rem.cc
-    ${TARGET_DIR}/cmdargs.cc
-    ${TARGET_DIR}/string.cc
-    ${TARGET_DIR}/appbits.cc
+            ${HEADERS}
+            ${TARGET_DIR}/colors.cc
+            ${TARGET_DIR}/geometry.cc
+            ${TARGET_DIR}/databits/databits.cc
+            ${TARGET_DIR}/databits/field.cc
+            ${TARGET_DIR}/databits/table.cc
+            ${TARGET_DIR}/diagnostic.cc
+            ${TARGET_DIR}/cadres.cc
+            ${TARGET_DIR}/glyphes.cc
+            ${TARGET_DIR}/object.cc
+            ${TARGET_DIR}/rem.cc
+            ${TARGET_DIR}/cmdargs.cc
+            ${TARGET_DIR}/string.cc
+            ${TARGET_DIR}/appbits.cc
+            tuxnbits++/tui/twidgets/twidget.cc
+            tuxnbits++/tui/twidgets/twidget.h
 
 )
 target_include_directories(${PROJECT_NAME} PUBLIC

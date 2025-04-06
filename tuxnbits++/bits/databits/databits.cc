@@ -5,6 +5,10 @@
 
 namespace tux::sql
 {
+
+
+
+
 int databits::sqlite3_callback(void* _this, int argc , char** data_rows, char** columns_name)
 {
     auto l = diagnostic::message(0); l << " args: " << color::yellow << argc << color::r << l;
@@ -52,6 +56,8 @@ void databits::close()
     if (!state.open) return;
     sqlite3_close(db_file);
 }
+
+
 
 
 /*!

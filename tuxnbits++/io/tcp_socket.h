@@ -18,7 +18,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/wait.h>
-#include <signal.h>
+//#include <signal.h>
 
 #include <netdb.h>
 #include <syslog.h>

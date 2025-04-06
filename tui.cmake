@@ -20,6 +20,7 @@ set(HEADERS
     ${TARGET_DIR}/pencil.h
     ${TARGET_DIR}/event.h
     ${TARGET_DIR}/event.inline
+    ${TARGET_DIR}/twidgets/twidget.h
 )
 
 #set(OUT ${FRAME}_${WORK})
@@ -29,6 +30,7 @@ add_library(${TARGETNAME} STATIC
     ${TARGET_DIR}/tuins.cc
     ${TARGET_DIR}/pencil.cc
     ${TARGET_DIR}/event.cc
+    ${TARGET_DIR}/twidgets/twidget.cc
 )
 
 

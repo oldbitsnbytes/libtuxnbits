@@ -20,7 +20,7 @@
 
 #include <tuxnbits++/bits/diagnostic.h>
 #include <tuxnbits++/bits/notify.h>
-#include <arpa/inet.h>
+//#include <arpa/inet.h>
 #include <tuxnbits++/io/export.h>
 #include <sys/ioctl.h>
 

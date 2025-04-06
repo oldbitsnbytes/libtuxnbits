@@ -17,19 +17,12 @@ OPTION(TESTS        "Build the tests................................[bitstest/bi
 if(BITS)
     message(STATUS "Building libtuxnbits++.bits.a")
     include(bits.cmake)
-
-target_sources(tuxnbits
-  PRIVATE
-    tuxnbits++/bits/databits/table.h tuxnbits++/bits/databits/table.cc
-)
 endif()
 
 if(IO)
     message(STATUS "Building libtuxnbits++.io.a")
     include(io.cmake)
 endif()
-
-
 
 if(LEXER)
     message(STATUS "Building libtuxnbits++.lexer.a")
@@ -44,11 +37,6 @@ endif()
 if(TUI)
     message(STATUS "Building libtuxnbits++.tui.a")
     include(tui.cmake)
-
-target_sources(tui
-  PRIVATE
-  tuxnbits++/tui/pencil.h tuxnbits++/tui/pencil.cc
-)
 endif()
 
 if(TESTS)

@@ -21,20 +21,20 @@
 #include <tuxnbits++/bits/object.h>
 #include <tuxnbits++/bits/geometry.h>
 #include <tuxnbits++/io/vchar.h>
-
+#include <tuxnbits++/tui/export.h>
 namespace tux::ui
 {
 
-class pencil : public object
+class LIBTUXNBITSTUI pencil : public object
 {
     io::vchar::bloc* _bf{nullptr}; ///< drawing canva.
     rectangle        _rect{};      ///< For now it is the bloc's subregion ( by default it is the same dimensions, local/relative to the bloc's geometry )..
     color::pair      _colors{};    ///< Stored current bloc buffers colors. The bloc buffer colors are restored with this _colors when this painter/pencil terminates.
-
+    bool             _valid{false};
 public:
     pencil()=default;
     pencil(io::vchar::bloc* bf, rectangle subregion_);
-    ~pencil();
+    ~pencil() override;
 
     rem::cc draw_text(const std::string& txt);
     rem::cc draw_glyph(glyph::type ic);
@@ -60,5 +60,3 @@ public:
 
 
 } // namespace tux::ui
-
-

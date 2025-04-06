@@ -3,7 +3,7 @@
 //
 
 #include <tuxnbits++/io/lfd.h>
-#include <sys/ioctl.h>
+//#include <sys/ioctl.h>
 
 //#include <utility>
 
