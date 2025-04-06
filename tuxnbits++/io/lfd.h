@@ -85,10 +85,10 @@ public:
     u8*  head() { return _head;}
     u8*  tail() { return _tail; }
     void sync_tail(u8* b);
-    integers::i16 ntohs() const { return ::ntohs(static_cast<integers::i16>(*_tail)); }
-    integers::i32 ntohl() const { return ::ntohl(static_cast<integers::i32>(*_tail)); }
-    integers::i16 htons() const { return ::htons(static_cast<integers::i16>(*_tail)); }
-    integers::i32 htonl() const { return ::htonl(static_cast<integers::i32>(*_tail)); }
+    //integers::i16 ntohs() const { return ::ntohs(static_cast<integers::i16>(*_tail)); }
+    //integers::i32 ntohl() const { return ::ntohl(static_cast<integers::i32>(*_tail)); }
+    //integers::i16 htons() const { return ::htons(static_cast<integers::i16>(*_tail)); }
+    //integers::i32 htonl() const { return ::htonl(static_cast<integers::i32>(*_tail)); }
 
     lfd& operator << (u8 u);
     lfd& operator >> (u8& u);
