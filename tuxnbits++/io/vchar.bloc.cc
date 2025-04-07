@@ -343,13 +343,64 @@ vchar::string::iterator vchar::bloc::operator *() { return _c_; }
 
 //-----------------------------------------------------------------------------
 // TODO
-void vchar::bloc::scroll_up(int nrows){}
+
+/*
+ *  +==================================================+
+ *  |         ======================================== | ->
+ *  |         ======================================== |  |
+ * =|        ========================================  | <- nrows = 2
+ *  |        ========================================  |
+ *  |        ========================================  |
+ *  |        ========================================  |
+ *  |        ========================================  |
+ *  |        ========================================  |
+ *  |        ========================================  |       ->
+ *  |        ========================================  |    ->  |
+ *  |        ========================================  | ->  | <-
+ *  |        ========================================  |    <-
+ *  |        ========================================  | <-
+ *  +==================================================+
+ */
+rem::cc vchar::bloc::scroll_up(int nrows, rectangle rv)
+{
+    auto  area = rv;
+    if(!area)
+        area = geometry.tolocal();
+    else
+    {
+        area = geometry.tolocal() / rv;
+        if(!area)
+        {
+            auto l = diagnostic::error(); l << rem::cc::rejected << rem::cc::oob << color::hotpink4 << rv << l;
+            return rem::cc::rejected;
+        }
+
+    }
+
+    auto bottom_begin = area.height()-nrows;
+    if(bottom_begin <=0 )
+    {
+        clear(area,colours);
+        return rem::cc::accepted;
+    }
+
+    for(int y = 0; y < area.height()-nrows; y++)
+    {
+
+    }
+
+    clear({area.a,ui::size{area.width(),nrows}},colours);
+    return rem::cc::notimplemented;
+}
+
+
 void vchar::bloc::scroll_down(int nrows){}
 void vchar::bloc::scroll_left(int nrows){}
 void vchar::bloc::scroll_right(int nrows){}
 
 rem::cc vchar::bloc::put(std::pair<size, string> blk, cxy xy)
 {
+
     return rem::cc::notimplemented;
 }
 

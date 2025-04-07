@@ -125,7 +125,7 @@
         rectangle operator / (const rectangle rhs);
         vchar::string::iterator operator *();
 
-        void scroll_up(int nrows);
+        rem::cc scroll_up(int nrows, rectangle rv={});
         void scroll_down(int nrows);
         void scroll_left(int nrows);
         void scroll_right(int nrows);
