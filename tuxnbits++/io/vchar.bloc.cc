@@ -361,35 +361,10 @@ vchar::string::iterator vchar::bloc::operator *() { return _c_; }
  *  |        ========================================  | <-
  *  +==================================================+
  */
-rem::cc vchar::bloc::scroll_up(int nrows, rectangle rv)
+rem::cc vchar::bloc::scroll_up(int nrows)
 {
-    auto  area = rv;
-    if(!area)
-        area = geometry.tolocal();
-    else
-    {
-        area = geometry.tolocal() / rv;
-        if(!area)
-        {
-            auto l = diagnostic::error(); l << rem::cc::rejected << rem::cc::oob << color::hotpink4 << rv << l;
-            return rem::cc::rejected;
-        }
 
-    }
 
-    auto bottom_begin = area.height()-nrows;
-    if(bottom_begin <=0 )
-    {
-        clear(area,colours);
-        return rem::cc::accepted;
-    }
-
-    for(int y = 0; y < area.height()-nrows; y++)
-    {
-
-    }
-
-    clear({area.a,ui::size{area.width(),nrows}},colours);
     return rem::cc::notimplemented;
 }
 
