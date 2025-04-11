@@ -363,6 +363,10 @@ vchar::string::iterator vchar::bloc::operator *() { return _c_; }
  */
 rem::cc vchar::bloc::scroll_up(int nrows)
 {
+    auto rect = rectangle{{0,0},ui::size{geometry.width(),geometry.height()-nrows}};
+    auto [sz,blk] = copy(rect);
+
+    put(sz,blk,ui::cxy{0,nrows});
 
 
     return rem::cc::notimplemented;
@@ -373,9 +377,25 @@ void vchar::bloc::scroll_down(int nrows){}
 void vchar::bloc::scroll_left(int nrows){}
 void vchar::bloc::scroll_right(int nrows){}
 
-rem::cc vchar::bloc::put(std::pair<size, string> blk, cxy xy)
+
+
+/////////////////////////////////////////////////////////////////////////////////
+/// \brief vchar::bloc::put
+///
+///     Puts (2d bloc to linear) vchar::string  into this bloc at the given coords.
+/// \param sz  width-height of the vhcar::string
+/// \param blk the vhcar::string
+/// \param xy destination coords.
+/// \return always accepted as of now.
+///
+rem::cc vchar::bloc::put(ui::size sz, const vchar::string& blk, cxy xy)
 {
 
+    for(int y = 0; y < sz.h; y++){
+        gotoxy({xy.x,xy.y+y});
+        auto sline = blk.begin() + y*sz.w;
+        std::copy(sline, sline+sz.w ,_c_);
+    }
     return rem::cc::notimplemented;
 }
 

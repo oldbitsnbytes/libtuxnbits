@@ -141,6 +141,6 @@ rem::cc test::terminate(rem::type reason)
 auto main(int argc, char** argv, char** env) -> int
 {
     std::cout << "Hello, World\n";
-    tux::test tests("obb tests", tux::string::string_view_list(argc,argv,1));
+    tux::test tests("tuxnbits app", tux::string::string_view_list(argc,argv,1));
     return static_cast<int>(tests.run());
 }

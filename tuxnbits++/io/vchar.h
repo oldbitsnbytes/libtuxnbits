@@ -130,7 +130,7 @@
         void scroll_left(int nrows);
         void scroll_right(int nrows);
         std::pair<ui::size, vchar::string> copy(rectangle r);
-        rem::cc put(std::pair<ui::size, vchar::string> blk, ui::cxy xy);
+        rem::cc put(ui::size, const vchar::string& blk, ui::cxy xy);
     };
 
 
