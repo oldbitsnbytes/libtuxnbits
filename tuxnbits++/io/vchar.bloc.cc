@@ -368,11 +368,22 @@ rem::cc vchar::bloc::scroll_up(int nrows)
     put(sz,blk,ui::cxy{0,nrows});
     clear(rectangle{{0,0},ui::size{geometry.width(),nrows}},colours);
 
-    return rem::cc::notimplemented;
+    return rem::cc::done;
 }
 
+/////////////////////////////////////////////////////////////////////////////////
+/// \brief vchar::bloc::scroll_down
+/// \param nrows
+///
+void vchar::bloc::scroll_down(int nrows)
+{
+    auto rect = rectangle{{0,nrows},ui::size{geometry.width(),geometry.height()-nrows}};
+    auto [sz,blk] = copy(rect);
+    put(sz,blk,ui::cxy{0,0});
+    rect.move({0,nrows+1});
+    clear(rect,colours);
+}
 
-void vchar::bloc::scroll_down(int nrows){}
 void vchar::bloc::scroll_left(int nrows){}
 void vchar::bloc::scroll_right(int nrows){}
 

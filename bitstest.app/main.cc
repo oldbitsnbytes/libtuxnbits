@@ -42,7 +42,7 @@ rem::cc test::run()
     *blk << "--------------------";
     term.render(blk,{1,1});
     term.poll_in();
-    blk->scroll_up(1);
+    blk->scroll_down(2);
     term.render(blk,{1,1});
 
     // dlog::Test Test("[diagnostic::Test]");
