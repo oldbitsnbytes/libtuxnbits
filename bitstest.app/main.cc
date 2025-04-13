@@ -37,7 +37,10 @@ rem::cc test::run()
     l << color::yellow << "ready" << l;
     //blk->home();
     blk->set_foreground_color(color::yellow);
-    *blk << "----- Hello, world! -----";
+    *blk << "-- scrollme (up) test! --";
+    term.render(blk,{1,1});
+    term.poll_in();
+    blk->scroll_up(1);
     term.render(blk,{1,1});
 
     // dlog::Test Test("[diagnostic::Test]");

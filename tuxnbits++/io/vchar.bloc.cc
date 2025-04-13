@@ -365,9 +365,8 @@ rem::cc vchar::bloc::scroll_up(int nrows)
 {
     auto rect = rectangle{{0,0},ui::size{geometry.width(),geometry.height()-nrows}};
     auto [sz,blk] = copy(rect);
-
     put(sz,blk,ui::cxy{0,nrows});
-
+    clear(rectangle{{0,0},ui::size{geometry.width(),nrows}},colours);
 
     return rem::cc::notimplemented;
 }
@@ -399,6 +398,13 @@ rem::cc vchar::bloc::put(ui::size sz, const vchar::string& blk, cxy xy)
     return rem::cc::notimplemented;
 }
 
+
+//////////////////////////////////////////////////////////////////////////////////
+/// \brief vchar::bloc::copy
+/// \param rect
+/// \return
+/// \todo Clip the rect.
+///
 std::pair<size, vchar::string> vchar::bloc::copy(rectangle rect)
 {
     rectangle r = geometry.tolocal() & rect;
@@ -407,9 +413,13 @@ std::pair<size, vchar::string> vchar::bloc::copy(rectangle rect)
 
     vchar::string str(r.dwh.area());
     auto i = str.begin();
-    for(int y = 0; y < r.height(); y++){
+
+    auto sz = r.dwh;
+    for(int y = 0; y < sz.h; y++){
         gotoxy(r.a + cxy{0,y});
-        for(int x = 0; x < r.width(); x++) *i++ = *_c_++;
+        auto sline = i + y*sz.w;
+        std::copy(_c_, _c_ + sz.w, sline);
+        //for(int x = 0; x < r.width(); x++) *i++ = *_c_++;
     }
     //...
     return {r.dwh,str};
