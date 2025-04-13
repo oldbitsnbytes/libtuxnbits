@@ -38,6 +38,8 @@ rem::cc test::run()
     //blk->home();
     blk->set_foreground_color(color::yellow);
     *blk << "-- scrollme (up) test! --";
+    blk->gotoxy({1,blk->geometry.height()-1});
+    *blk << "--------------------";
     term.render(blk,{1,1});
     term.poll_in();
     blk->scroll_up(1);
