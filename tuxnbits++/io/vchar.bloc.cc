@@ -383,8 +383,30 @@ void vchar::bloc::scroll_down(int nrows)
     put(sz,blk,ui::cxy{0,0});
 }
 
-void vchar::bloc::scroll_left(int nrows){}
-void vchar::bloc::scroll_right(int nrows){}
+
+////////////////////////////////////////////////////////////////////////////////////
+/// \brief vchar::bloc::scroll_left
+/// \param nrows
+///
+void vchar::bloc::scroll_left(int nrows)
+{
+    auto rect = rectangle{{nrows,0},ui::size{geometry.width()-nrows,geometry.height()}};
+    auto [sz,blk] = copy(rect);
+    clear();
+    put(sz,blk,ui::cxy{0,0});
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief vchar::bloc::scroll_right
+/// \param nrows
+///
+void vchar::bloc::scroll_right(int nrows)
+{
+    auto rect = rectangle{{0,0},ui::size{geometry.width()-nrows,geometry.height()}};
+    auto [sz,blk] = copy(rect);
+    clear();
+    put(sz,blk,ui::cxy{nrows,0});
+}
 
 
 
