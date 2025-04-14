@@ -379,9 +379,8 @@ void vchar::bloc::scroll_down(int nrows)
 {
     auto rect = rectangle{{0,nrows},ui::size{geometry.width(),geometry.height()-nrows}};
     auto [sz,blk] = copy(rect);
+    clear();
     put(sz,blk,ui::cxy{0,0});
-    rect.move({0,nrows+1});
-    clear(rect,colours);
 }
 
 void vchar::bloc::scroll_left(int nrows){}
