@@ -427,7 +427,7 @@ rem::cc vchar::bloc::put(ui::size sz, const vchar::string& blk, cxy xy)
         auto sline = blk.begin() + y*sz.w;
         std::copy(sline, sline+sz.w ,_c_);
     }
-    return rem::cc::notimplemented;
+    return rem::cc::done;
 }
 
 
