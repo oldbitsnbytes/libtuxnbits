@@ -53,6 +53,13 @@ rem::cc pencil::draw_glyph(glyph::type ic)
     return draw_text(glyph::data[ic]);
 }
 
+rem::cc pencil::draw_cadre(cadre::frame_matrix frame_model)
+{
+    home(true);
+
+    return rem::cc::done;
+}
+
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -103,6 +110,12 @@ pencil& pencil::clear(const ui::rectangle& r, color::pair cp)
             *_bf->_c_++ = io::vchar(color::pair(_bf->colours));
 
     }
+    return *this;
+}
+
+pencil &pencil::home(bool abs)
+{
+    gotoxy({0,abs? 0: _rect.cursor.y});
     return *this;
 }
 

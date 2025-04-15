@@ -30,6 +30,7 @@ class LIBTUXNBITSTUI twidget: public object
     std::string _element{}; ///< It is important to assign the proper component name to this element...
     colors::attr_db::elements* _theme{nullptr};
 
+    rectangle upd_rect{}; ///< Union of agregation of dirty local subrects;
 
 public:
     twidget(twidget* _parent_widget, const std::string& twid);

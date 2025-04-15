@@ -38,6 +38,7 @@ public:
 
     rem::cc draw_text(const std::string& txt);
     rem::cc draw_glyph(glyph::type ic);
+    rem::cc draw_cadre(cadre::frame_matrix frame_model);
     rem::cc gotoxy(const ui::cxy& xy);
 
     void set_foreground_color(color::code fg);
@@ -45,7 +46,7 @@ public:
     void set_colors(color::pair cp);
 
     pencil& clear(const ui::rectangle& r={}, color::pair cp = {color::reset,color::reset});
-
+    pencil& home(bool);
     pencil& operator ++();      // ++x
     pencil& operator ++(int);   // ++y
     pencil& operator --();      // --x
