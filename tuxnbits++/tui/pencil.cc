@@ -75,6 +75,11 @@ rem::cc pencil::gotoxy(const cxy &xy)
 }
 
 
+io::vchar::iterator pencil::at(const cxy& xy)
+{
+    gotoxy(xy);
+    return _bf->_c_;
+}
 
 
 void pencil::set_foreground_color(color::code fg)
@@ -119,6 +124,12 @@ pencil &pencil::home(bool abs)
     return *this;
 }
 
+pencil &pencil::operator << (const cxy& xy)
+{
+    gotoxy(xy);
+    return *this;
+}
+
 
 /*!
  * @brief Prefix increment operator : applies to the x coord.
@@ -152,6 +163,40 @@ pencil& pencil::operator++(int)
 pencil& pencil::operator--()
 {
     if (! --_rect) return *this;
+    _bf->gotoxy(_rect.cursor + _rect.a);
     return *this;
 }
+
+
+pencil& pencil::operator--(int)
+{
+    if (! _rect--) return *this;
+    return *this;
+
+}
+
+
+pencil &pencil::draw_frame(cadre::frame_matrix frmat)
+{
+    home() << cadre::TopLeft
+             << _rect.top_right() << cadre::TopRight
+             << _rect.bottom_right() << cadre::BottomRight
+             << _rect.bottom_left() << cadre::BottomLeft;
+
+    auto l = diagnostic::debug(); l << pretty_id() << " les hosizontaux :" << l;
+    auto pos = at(ui::cxy{1,0}); // Real assign from here.
+    std::fill(pos, pos + _rect.dwh.w-2, io::vchar(_colors) << cadre::Horizontal);
+    pos = at(ui::cxy{1,_rect.b.y});
+    std::fill(pos, pos + _rect.dwh.w-2, io::vchar(_colors) << cadre::Horizontal);
+
+    l << pretty_id() << " la verticalité :" << l;
+    for(int y=1; y < _rect.dwh.h-1; y++)
+        *this << ui::cxy{0,y} << cadre::Vertical << ui::cxy{_rect.b.x,y} << cadre::Vertical;
+
+    l << rem::cc::done << l;
+    return *this;
+}
+
+
+
 } // namespace tux::ui

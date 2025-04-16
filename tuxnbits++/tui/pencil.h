@@ -38,21 +38,33 @@ public:
 
     rem::cc draw_text(const std::string& txt);
     rem::cc draw_glyph(glyph::type ic);
-    rem::cc draw_cadre(cadre::frame_matrix frame_model);
+    pencil& draw_frame(cadre::frame_matrix frmat={2,2,2,1});
     rem::cc gotoxy(const ui::cxy& xy);
+
+    io::vchar::iterator at(const cxy& xy);
 
     void set_foreground_color(color::code fg);
     void set_background_color(color::code bg);
     void set_colors(color::pair cp);
 
     pencil& clear(const ui::rectangle& r={}, color::pair cp = {color::reset,color::reset});
-    pencil& home(bool);
+    pencil& home(bool h=true);
+    pencil& operator << (const cxy& xy);
     pencil& operator ++();      // ++x
     pencil& operator ++(int);   // ++y
     pencil& operator --();      // --x
     pencil& operator --(int);   // --y
 
-    pencil& draw_frame(cadre::frame_matrix frmat={2,2,2,1});
+
+    pencil& operator << (char c);
+    pencil& operator << (const char* str);
+    pencil& operator << (const std::string& str);
+    pencil& operator << (cadre::index ci);
+    pencil& operator | (cadre::index ci);
+    pencil& operator - (cadre::index ci);
+
+
+
 
 
 

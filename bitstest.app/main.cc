@@ -37,8 +37,9 @@ rem::cc test::run()
     l << color::yellow << "ready" << l;
     //blk->home();
     blk->set_foreground_color(color::yellow);
+    blk->gotoxy({1,1});
     *blk << "-- scrollme (up) test! --";
-    blk->gotoxy({1,blk->geometry.height()-1});
+    blk->gotoxy({1,blk->geometry.height()-2});
     *blk << "--------------------";
     term.render(blk,{1,1});
     term.poll_in();
@@ -83,7 +84,8 @@ rem::cc test::run()
                 l << "mouse event: " << evc.data.mev() << l;
             }
         }
-    }while(ac == rem::action::cont);
+    }while(ac == rem::action::cont); // Condition always true - of course! this project is in heavy dev!
+                                     // The only exit condition is by pressing the ESC key!
 
     l = dlog::status(h) << color::lime << " - " << glyph::rust_crab << " fin." << l;
     return terminate(rem::type::normal);
