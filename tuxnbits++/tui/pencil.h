@@ -60,8 +60,6 @@ public:
     pencil& operator << (const char* str);
     pencil& operator << (const std::string& str);
     pencil& operator << (cadre::index ci);
-    pencil& operator | (cadre::index ci);
-    pencil& operator - (cadre::index ci);
 
 
 

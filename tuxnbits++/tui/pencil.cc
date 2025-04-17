@@ -53,12 +53,6 @@ rem::cc pencil::draw_glyph(glyph::type ic)
     return draw_text(glyph::data[ic]);
 }
 
-rem::cc pencil::draw_cadre(cadre::frame_matrix frame_model)
-{
-    home(true);
-
-    return rem::cc::done;
-}
 
 
 
@@ -173,6 +167,36 @@ pencil& pencil::operator--(int)
     if (! _rect--) return *this;
     return *this;
 
+}
+
+
+pencil& pencil::operator<<(char c)
+{
+    *_bf->_c_ << c;
+    ++(*this);
+    return *this;
+}
+
+
+pencil& pencil::operator<<(const char* str)
+{
+    draw_text(str);
+    return *this;
+}
+
+
+pencil& pencil::operator<<(const std::string&str)
+{
+    draw_text(str);
+    return *this;
+}
+
+
+pencil& pencil::operator<<(cadre::index ci)
+{
+    *_bf->_c_ << ci;
+    ++(*this);
+    return *this;
 }
 
 
