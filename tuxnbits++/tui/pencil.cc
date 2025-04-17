@@ -37,7 +37,9 @@ rem::cc pencil::draw_text(const std::string &txt)
     ///@todo Check boudaries and set scroll flag if scrolling enabled...
     if (!sz)
         return rem::cc::rejected;
-
+    for (int x=0;x<sz;x++)
+        *_bf->_c_ << _colors << txt[x];
+    
     return rem::cc::notimplemented;
 }
 
