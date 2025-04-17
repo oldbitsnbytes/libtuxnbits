@@ -15,7 +15,7 @@ target_include_directories(bitstest.app PUBLIC
 message("Build dir : build/")
 
 target_link_directories(bitstest.app PUBLIC build)
-add_dependencies(bitstest.app tuxnbits io)
+add_dependencies(bitstest.app tuxnbits io tui)
 
 
 # TABARNAK! j'joubli toujours de linker les librairies dans le bon ordre!!!!!

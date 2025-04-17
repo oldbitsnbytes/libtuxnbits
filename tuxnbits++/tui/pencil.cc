@@ -38,8 +38,11 @@ rem::cc pencil::draw_text(const std::string &txt)
     if (!sz)
         return rem::cc::rejected;
     for (int x=0;x<sz;x++)
+    {
         *_bf->_c_ << _colors << txt[x];
-    
+        ++(*this);
+
+    }
     return rem::cc::notimplemented;
 }
 
