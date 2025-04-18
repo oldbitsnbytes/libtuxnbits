@@ -36,8 +36,12 @@ public:
     twidget(twidget* _parent_widget, const std::string& twid);
     ~twidget() override;
 
-    pencil& begin_paint();
-    rem::cc end_paint(pencil&);
+    pencil&  begin_paint();
+    twidget& end_paint(pencil&);
+    rem::cc  set_theme(const std::string& theme_name);
+    twidget& set_geometry(const rectangle& r);
+    twidget& set_geometry(const cxy& xy, const ui::size& wh);
+
 };
 
 } // namespace tux::ui
